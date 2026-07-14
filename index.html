@@ -2,9 +2,9 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petualangan Robo-Code: Master Logika</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Petualangan Robo-Code: Master Logika Kelas 6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
@@ -20,31 +20,31 @@
             --code-text: #a6accd;
         }
 
-        * {
-            box-sizing: border-box;
-            user-select: none;
-        }
+        * { box-sizing: border-box; user-select: none; }
 
-        body {
+        html, body {
             font-family: 'Nunito', sans-serif;
             background-color: var(--bg);
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            overflow: hidden;
             background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
             background-size: 20px 20px;
         }
 
-        /* Container Utama */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 16px;
+        }
+
+        /* Container Utama - responsif: HP sempit, Tablet, Laptop */
         .app-container {
             width: 100%;
             max-width: 500px;
-            height: 95vh;
-            max-height: 850px;
+            min-height: 640px;
+            max-height: 92vh;
             background: var(--card-bg);
             border-radius: 24px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.15);
@@ -53,6 +53,11 @@
             overflow: hidden;
             position: relative;
             border: 4px solid #fff;
+            margin: auto;
+        }
+
+        @media (min-width: 760px) {
+            .app-container { max-width: 880px; min-height: 600px; }
         }
 
         /* Screens Management */
@@ -67,42 +72,31 @@
             transition: transform 0.4s ease-in-out;
             padding: 20px;
             z-index: 1;
+            overflow-y: auto;
         }
 
-        .screen.hidden {
-            transform: translateX(100%);
-            z-index: 0;
-        }
-
-        .screen.active {
-            transform: translateX(0);
-        }
-
-        .screen.left {
-            transform: translateX(-100%);
-        }
+        .screen.hidden { transform: translateX(100%); z-index: 0; }
+        .screen.active { transform: translateX(0); }
+        .screen.left { transform: translateX(-100%); }
 
         /* Intro Screen */
-        .intro-img {
-            font-size: 6rem;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
-        }
+        .intro-img { font-size: 6rem; margin-bottom: 16px; animation: bounce 2s infinite; }
 
         h1 {
             font-family: 'Fredoka', sans-serif;
             color: var(--primary);
-            font-size: 2.2rem;
+            font-size: 2rem;
             margin: 0;
             text-align: center;
             line-height: 1.2;
         }
 
-        p {
-            color: #64748b;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
+        p { color: #64748b; text-align: center; margin-bottom: 24px; font-size: 1.05rem; }
+
+        .badge-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom: 20px; }
+        .mini-badge {
+            background:#e0e7ff; color:var(--primary); font-weight:800; font-size:0.75rem;
+            padding:5px 12px; border-radius: 20px; letter-spacing: 0.3px;
         }
 
         .btn-start {
@@ -110,20 +104,18 @@
             color: white;
             border: none;
             padding: 15px 40px;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             border-radius: 50px;
             cursor: pointer;
             font-family: 'Fredoka', sans-serif;
             box-shadow: 0 6px 0 var(--primary-dark);
             transition: all 0.1s;
         }
+        .btn-start:active { transform: translateY(6px); box-shadow: none; }
 
-        .btn-start:active {
-            transform: translateY(6px);
-            box-shadow: none;
-        }
+        /* GAME SCREEN LAYOUT */
+        #gameScreen { justify-content: flex-start; padding: 16px; }
 
-        /* Game Screen Header */
         .game-header {
             width: 100%;
             display: flex;
@@ -132,23 +124,30 @@
             margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 2px solid #f1f5f9;
+            flex-shrink: 0;
         }
 
-        .level-pill {
-            background: #e0e7ff;
-            color: var(--primary);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
+        .level-pill { background: #e0e7ff; color: var(--primary); padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; }
+        .topic-pill { background: #fce7f3; color: var(--secondary); padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.78rem; }
+        .score-pill { background: #fef3c7; color: #d97706; padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; }
+
+        .game-body {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 0;
+            overflow-y: auto;
         }
 
-        .score-pill {
-            background: #fef3c7;
-            color: #d97706;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
+        .left-panel, .right-panel { display: flex; flex-direction: column; width: 100%; }
+        .right-panel { flex: 1; }
+
+        @media (min-width: 760px) {
+            .game-body { flex-direction: row; align-items: stretch; gap: 20px; }
+            .left-panel { flex: 0 0 38%; }
+            .right-panel { flex: 1; justify-content: center; }
         }
 
         /* Visualization Area */
@@ -162,31 +161,23 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            margin-bottom: 15px;
             border: 2px dashed #cbd5e1;
-            min-height: 180px;
+            min-height: 170px;
+            padding: 14px;
         }
 
-        .scene-emoji {
-            font-size: 4rem;
-            z-index: 2;
-        }
-
-        .robot-avatar {
-            font-size: 2.5rem;
-            margin-top: 10px;
-            transition: all 0.3s;
-        }
+        .scene-emoji { font-size: 3.6rem; z-index: 2; }
+        .robot-avatar { font-size: 2.4rem; margin-top: 8px; transition: all 0.3s; }
 
         .condition-label {
             margin-top: 10px;
-            font-weight: bold;
+            font-weight: 800;
             color: #475569;
             background: white;
-            padding: 5px 15px;
+            padding: 6px 14px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             text-align: center;
         }
 
@@ -195,91 +186,68 @@
             width: 100%;
             background: var(--code-bg);
             border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
             font-family: 'Consolas', 'Monaco', monospace;
             color: var(--code-text);
-            position: relative;
             box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            overflow-x: auto;
         }
 
-        .line {
-            line-height: 1.6;
-            white-space: nowrap;
-        }
+        .line { line-height: 1.65; white-space: pre; }
 
-        .kw-if { color: #c678dd; font-weight: bold; } /* Ungu */
-        .kw-else { color: #e06c75; font-weight: bold; } /* Merah */
-        .kw-var { color: #e5c07b; } /* Kuning */
-        .kw-func { color: #61afef; } /* Biru */
-        .kw-val { color: #98c379; } /* Hijau */
+        .kw-if { color: #c678dd; font-weight: bold; }
+        .kw-elif { color: #f59e0b; font-weight: bold; }
+        .kw-else { color: #e06c75; font-weight: bold; }
+        .kw-and { color: #56b6c2; font-weight: bold; }
+        .kw-or { color: #56b6c2; font-weight: bold; }
+        .kw-not { color: #d19a66; font-weight: bold; }
+        .kw-var { color: #e5c07b; }
+        .kw-func { color: #61afef; }
+        .kw-val { color: #98c379; }
 
         .answer-slot {
             display: inline-block;
-            min-width: 110px;
-            height: 28px;
+            min-width: 130px;
+            height: 26px;
             background: rgba(255,255,255,0.1);
             border: 2px dashed #5c6370;
             border-radius: 5px;
             color: #fff;
             text-align: center;
-            line-height: 24px;
-            padding: 0 5px;
+            line-height: 22px;
+            padding: 0 6px;
             vertical-align: middle;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
-
-        .answer-slot.filled {
-            border: 2px solid var(--success);
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-        }
-
-        .answer-slot.wrong {
-            border: 2px solid var(--danger);
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-        }
+        .answer-slot.filled { border: 2px solid var(--success); background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .answer-slot.wrong { border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.2); color: var(--danger); }
 
         /* Options Area */
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            width: 100%;
-        }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
 
         .option-btn {
             background: white;
             border: 2px solid #e2e8f0;
-            padding: 12px;
+            padding: 12px 8px;
             border-radius: 12px;
             color: var(--text);
-            font-weight: bold;
+            font-weight: 800;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             box-shadow: 0 4px 0 #e2e8f0;
         }
-
-        .option-btn:hover {
-            background: #f8fafc;
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        .option-btn:active {
-            transform: translateY(4px);
-            box-shadow: none;
-        }
+        .option-btn:hover { background: #f8fafc; border-color: var(--primary); color: var(--primary); }
+        .option-btn:active { transform: translateY(4px); box-shadow: none; }
 
         /* Feedback Modal */
         .feedback-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.94);
             backdrop-filter: blur(5px);
             display: flex;
             flex-direction: column;
@@ -289,100 +257,89 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s;
+            padding: 24px;
         }
-
-        .feedback-overlay.show {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .feedback-icon {
-            font-size: 5rem;
-            margin-bottom: 10px;
-        }
-
-        .feedback-title {
-            font-size: 2rem;
-            font-family: 'Fredoka', sans-serif;
-            margin-bottom: 10px;
-        }
-
-        .feedback-text {
-            text-align: center;
-            max-width: 80%;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
+        .feedback-overlay.show { opacity: 1; pointer-events: all; }
+        .feedback-icon { font-size: 4.5rem; margin-bottom: 10px; }
+        .feedback-title { font-size: 1.8rem; font-family: 'Fredoka', sans-serif; margin-bottom: 8px; }
+        .feedback-text { text-align: center; max-width: 90%; margin-bottom: 20px; font-size: 1.05rem; }
+        .feedback-hint {
+            text-align: center; max-width: 90%; margin: -12px 0 20px; font-size: 0.85rem;
+            color: #64748b; background: #f1f5f9; padding: 8px 14px; border-radius: 10px;
         }
 
         .btn-next {
             background: var(--success);
             color: white;
             border: none;
-            padding: 12px 30px;
+            padding: 12px 28px;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 5px 0 #059669;
         }
-        
         .btn-next:active { transform: translateY(5px); box-shadow: none; }
 
-        /* Animations */
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } 100% { transform: translateX(0); } }
         .shake-anim { animation: shake 0.4s ease-in-out; }
 
-        /* Confetti */
-        .confetti {
-            position: absolute;
-            width: 10px; height: 10px;
-            background: #f00;
-            top: -10px;
+        .confetti { position: absolute; width: 10px; height: 10px; background: #f00; top: -10px; }
+
+        @media (max-width: 380px) {
+            h1 { font-size: 1.6rem; }
+            .code-editor { font-size: 0.75rem; }
+            .answer-slot { min-width: 100px; font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    
+
     <!-- Screen 1: Intro -->
     <div id="introScreen" class="screen active">
         <div class="intro-img">🤖</div>
-        <h1>Master Logika<br>Level 5 SD</h1>
-        <p>15 Tantangan Koding: If & Else<br>Siapkah kamu?</p>
+        <h1>Master Logika<br>Kelas 6 SD</h1>
+        <p>18 Tantangan Koding Tingkat Lanjut</p>
+        <div class="badge-row">
+            <span class="mini-badge">DAN (AND)</span>
+            <span class="mini-badge">ATAU (OR)</span>
+            <span class="mini-badge">BUKAN (NOT)</span>
+            <span class="mini-badge">JIKA Bertingkat</span>
+        </div>
         <button class="btn-start" onclick="startGame()">Mulai Misi ▶</button>
     </div>
 
     <!-- Screen 2: Game -->
     <div id="gameScreen" class="screen hidden">
         <div class="game-header">
-            <div class="level-pill" id="levelIndicator">Level 1/15</div>
-            <div class="score-pill" id="scoreIndicator">Benar: 0</div>
+            <div class="level-pill" id="levelIndicator">Level 1/18</div>
+            <div class="topic-pill" id="topicIndicator">DAN (AND)</div>
+            <div class="score-pill" id="scoreIndicator">Skor: 0</div>
         </div>
 
-        <!-- Visual Scene -->
-        <div class="visual-stage">
-            <div class="scene-emoji" id="sceneEmoji">🌧️</div>
-            <div class="condition-label" id="conditionLabel">Cuaca sedang Hujan</div>
-            <div class="robot-avatar" id="robotAvatar">🤖</div>
+        <div class="game-body">
+            <div class="left-panel">
+                <div class="visual-stage">
+                    <div class="scene-emoji" id="sceneEmoji">🌧️</div>
+                    <div class="condition-label" id="conditionLabel">Cuaca sedang Hujan</div>
+                    <div class="robot-avatar" id="robotAvatar">🤖</div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="code-editor" id="codeEditorArea"></div>
+                <div class="options-grid" id="optionsContainer"></div>
+            </div>
         </div>
 
-        <!-- Code Editor (Isinya akan berubah dinamis via JS) -->
-        <div class="code-editor" id="codeEditorArea">
-            <!-- Dynamic Content -->
-        </div>
-
-        <!-- Options -->
-        <div class="options-grid" id="optionsContainer">
-            <!-- Buttons injected by JS -->
-        </div>
-
-        <!-- Feedback Overlay (Hidden by default) -->
         <div class="feedback-overlay" id="feedbackOverlay">
             <div class="feedback-icon" id="fbIcon">🎉</div>
             <h2 class="feedback-title" id="fbTitle">Hebat!</h2>
             <p class="feedback-text" id="fbText">Logikamu benar.</p>
+            <div class="feedback-hint" id="fbHint" style="display:none;"></div>
             <button class="btn-next" onclick="nextLevel()">Lanjut Level ➡</button>
         </div>
     </div>
@@ -391,7 +348,7 @@
     <div id="resultScreen" class="screen hidden">
         <div style="font-size: 5rem; margin-bottom: 20px;">🏆</div>
         <h1>Misi Selesai!</h1>
-        <p>Kamu telah menyelesaikan 15 level logika tingkat lanjut.</p>
+        <p>Kamu telah menyelesaikan 18 level logika tingkat lanjut kelas 6.</p>
         <div style="background: #f1f5f9; padding: 20px; border-radius: 15px; width: 100%; text-align: center; margin-bottom: 20px;">
             <h3 style="margin:0; color:#64748b;">Skor Akhir</h3>
             <h1 style="margin:10px 0; color:var(--primary); font-size: 3rem;" id="finalScore">100</h1>
@@ -402,243 +359,237 @@
 </div>
 
 <script>
-    /* --- DATA SOAL (15 LEVEL - HARDER) --- */
-    /* slotPos: 'if' (mengisi blok IF), 'else' (mengisi blok ELSE) */
+    /* ================= DATA SOAL — 18 LEVEL KELAS 6 SD ================= */
+    /* Setiap level punya "branches": daftar cabang JIKA / ATAU JIKA / JIKA TIDAK
+       Salah satu branch memiliki blank:true -> harus diisi pemain dari "options" */
     const levels = [
         {
-            id: 1,
-            scene: "🌧️",
-            desc: "Cuaca Hujan Deras",
-            codeCond: "hujan == benar",
-            slotPos: "if",
-            fixedAction: "Main_Bola",
-            options: [
-                { text: "Pakai_Payung", correct: true },
-                { text: "Siram_Tanaman", correct: false }
+            id: 1, topic: "DAN (AND)", scene: "📚",
+            desc: "Nilai Matematika: 85, Nilai IPA: 90 (KKM keduanya 75)",
+            branches: [
+                { kw: "JIKA", cond: "nilai_mtk >= 75 DAN nilai_ipa >= 75", blank: true,
+                  options: [ {text:"Lulus_Kedua_Mapel", correct:true}, {text:"Remedial_IPA", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Remedial" }
             ],
-            feedbackOk: "Benar! Fokus pada kondisi IF (Jika Hujan).",
-            feedbackNo: "Salah. Kalau hujan kita butuh payung."
+            feedbackOk: "Betul! Operator DAN artinya SEMUA syarat harus benar sekaligus.",
+            feedbackNo: "DAN artinya kedua nilai harus lulus KKM, bukan cuma salah satu."
         },
         {
-            id: 2,
-            scene: "🤤",
-            desc: "Perut KENYANG (Tidak Lapar)",
-            codeCond: "lapar == benar",
-            slotPos: "else", /* Tantangan: Mengisi ELSE */
-            fixedAction: "Makan_Nasi",
-            options: [
-                { text: "Minum_Obat", correct: false },
-                { text: "Lanjut_Main", correct: true }
+            id: 2, topic: "DAN (AND)", scene: "📚",
+            desc: "Nilai Matematika: 85, Nilai IPA: 60 (KKM keduanya 75)",
+            branches: [
+                { kw: "JIKA", cond: "nilai_mtk >= 75 DAN nilai_ipa >= 75", action: "Lulus_Kedua_Mapel" },
+                { kw: "JIKA TIDAK", cond: null, blank: true,
+                  options: [ {text:"Remedial_IPA", correct:true}, {text:"Naik_Kelas", correct:false} ] }
             ],
-            feedbackOk: "Tepat! Karena TIDAK lapar (Else), kita bisa lanjut main.",
-            feedbackNo: "Ups! Blok ELSE artinya kondisi 'lapar' itu SALAH (kenyang)."
+            feedbackOk: "Tepat! Karena IPA belum mencapai KKM, syarat DAN gagal, jadi masuk JIKA TIDAK.",
+            feedbackNo: "Ingat, DAN butuh SEMUA syarat benar. IPA di bawah KKM membuat kondisinya salah."
         },
         {
-            id: 3,
-            scene: "🔋",
-            desc: "Baterai Kritis (5%)",
-            codeCond: "baterai < 10",
-            slotPos: "if",
-            fixedAction: "Main_Game",
-            options: [
-                { text: "Cari_Charger", correct: true },
-                { text: "Nyalakan_Senter", correct: false }
+            id: 3, topic: "DAN (AND)", scene: "🛒",
+            desc: "Uang: Rp15.000, Harga Buku: Rp12.000, Stok: Tersedia",
+            branches: [
+                { kw: "JIKA", cond: "uang >= harga DAN stok == tersedia", blank: true,
+                  options: [ {text:"Beli_Buku", correct:true}, {text:"Menabung_Dulu", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Menabung_Dulu" }
             ],
-            feedbackOk: "Pintar! Prioritas utama saat lowbat adalah charging.",
-            feedbackNo: "Jangan nyalakan fitur lain, nanti mati total!"
+            feedbackOk: "Benar! Uang cukup DAN barangnya ada, jadi transaksi bisa dilakukan.",
+            feedbackNo: "Cek lagi: uang cukup DAN stok tersedia, keduanya sudah terpenuhi."
         },
         {
-            id: 4,
-            scene: "🎓",
-            desc: "Nilai Ujian: 80 (KKM: 75)",
-            codeCond: "nilai < 75", /* Perhatikan logikanya: Jika Kurang dari 75 */
-            slotPos: "else",
-            fixedAction: "Remedial",
-            options: [
-                { text: "Naik_Kelas", correct: true },
-                { text: "Nangis", correct: false }
+            id: 4, topic: "ATAU (OR)", scene: "🏫",
+            desc: "Hari ini: Minggu",
+            branches: [
+                { kw: "JIKA", cond: "hari == Sabtu ATAU hari == Minggu", blank: true,
+                  options: [ {text:"Libur_Sekolah", correct:true}, {text:"Belajar_di_Kelas", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Belajar_di_Kelas" }
             ],
-            feedbackOk: "Hebat! 80 itu TIDAK kurang dari 75, jadi masuk blok ELSE (Naik Kelas).",
-            feedbackNo: "Perhatikan tandanya '< 75'. Nilai 80 itu lebih besar, jadi masuk ELSE."
+            feedbackOk: "Betul! ATAU hanya butuh SALAH SATU syarat benar. Minggu sudah cukup untuk libur.",
+            feedbackNo: "ATAU artinya cukup satu syarat saja benar. Hari Minggu sudah memenuhi."
         },
         {
-            id: 5,
-            scene: "🚶",
-            desc: "Lantai Basah & Licin",
-            codeCond: "lantai == licin",
-            slotPos: "if",
-            fixedAction: "Lari_Kencang",
-            options: [
-                { text: "Jalan_Pelan", correct: true },
-                { text: "Lompat_Tali", correct: false }
+            id: 5, topic: "ATAU (OR)", scene: "💻",
+            desc: "Baterai: 45%, Sinyal Wifi: Kuat",
+            branches: [
+                { kw: "JIKA", cond: "baterai < 20 ATAU sinyal == lemah", action: "Cari_Charger" },
+                { kw: "JIKA TIDAK", cond: null, blank: true,
+                  options: [ {text:"Lanjut_Belajar_Online", correct:true}, {text:"Matikan_Laptop", correct:false} ] }
             ],
-            feedbackOk: "Safety First! Kalau licin harus hati-hati.",
-            feedbackNo: "Bahaya! Jangan aktivitas berat di lantai licin."
+            feedbackOk: "Tepat! Kedua syarat ATAU tidak ada yang benar, jadi masuk JIKA TIDAK.",
+            feedbackNo: "Baterai masih 45% dan sinyal kuat, berarti kondisi ATAU-nya salah semua."
         },
         {
-            id: 6,
-            scene: "📩",
-            desc: "Tidak Ada Pesan Masuk",
-            codeCond: "ada_pesan == benar",
-            slotPos: "else",
-            fixedAction: "Baca_Pesan",
-            options: [
-                { text: "Balas_Chat", correct: false },
-                { text: "Tunggu", correct: true }
+            id: 6, topic: "ATAU (OR)", scene: "🛵",
+            desc: "Cuaca: Cerah, Jalanan: Macet Parah",
+            branches: [
+                { kw: "JIKA", cond: "hujan == benar ATAU macet == benar", blank: true,
+                  options: [ {text:"Naik_Ojek_Online", correct:true}, {text:"Jalan_Kaki_Santai", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Jalan_Kaki_Santai" }
             ],
-            feedbackOk: "Benar. Karena tidak ada pesan (Else), kita menunggu saja.",
-            feedbackNo: "Tidak ada pesan kok mau balas chat? :)"
+            feedbackOk: "Benar! Macet parah saja sudah cukup memenuhi ATAU, walau tidak hujan.",
+            feedbackNo: "Ingat, ATAU cukup satu syarat benar. Macet == benar sudah cukup."
         },
         {
-            id: 7,
-            scene: "🚦",
-            desc: "Lampu Hijau Menyala",
-            codeCond: "lampu == hijau",
-            slotPos: "if",
-            fixedAction: "Berhenti",
-            options: [
-                { text: "Menyeberang", correct: true },
-                { text: "Tidur_di_Jalan", correct: false }
+            id: 7, topic: "BUKAN (NOT)", scene: "🦷",
+            desc: "Gigi TIDAK berlubang (sehat)",
+            branches: [
+                { kw: "JIKA", cond: "BUKAN gigi_berlubang", blank: true,
+                  options: [ {text:"Sikat_Gigi_Rutin", correct:true}, {text:"Segera_ke_Dokter", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Segera_ke_Dokter" }
             ],
-            feedbackOk: "Bagus! Hijau waktunya pejalan kaki menyeberang.",
-            feedbackNo: "Waduh bahaya sekali!"
+            feedbackOk: "Betul! BUKAN membalik nilai. Karena gigi tidak berlubang, kondisinya jadi benar.",
+            feedbackNo: "BUKAN artinya kebalikan. Gigi_berlubang = salah, maka BUKAN gigi_berlubang = benar."
         },
         {
-            id: 8,
-            scene: "🚪",
-            desc: "Ada Tamu Mengetuk",
-            codeCond: "ada_tamu == benar",
-            slotPos: "if",
-            fixedAction: "Kunci_Pintu",
-            options: [
-                { text: "Buka_Pintu", correct: true },
-                { text: "Teriak", correct: false }
+            id: 8, topic: "BUKAN + DAN", scene: "⛈️",
+            desc: "Tidak Hujan, tapi Ada Petir Menyambar",
+            branches: [
+                { kw: "JIKA", cond: "BUKAN hujan DAN BUKAN petir", action: "Main_di_Luar" },
+                { kw: "JIKA TIDAK", cond: null, blank: true,
+                  options: [ {text:"Tetap_di_Dalam_Rumah", correct:true}, {text:"Main_Layangan", correct:false} ] }
             ],
-            feedbackOk: "Sopan santun! Ada tamu harus dibukakan pintu.",
-            feedbackNo: "Jangan teriak, nanti tamunya kaget."
+            feedbackOk: "Pintar! Walau tidak hujan, ada petir membuat BUKAN petir menjadi salah, jadi syarat DAN gagal.",
+            feedbackNo: "Cermati: petir sedang ada, jadi 'BUKAN petir' bernilai salah dan syarat DAN tidak terpenuhi."
         },
         {
-            id: 9,
-            scene: "💰",
-            desc: "Uang Kurang (Harga 10rb, Uang 5rb)",
-            codeCond: "uang >= harga",
-            slotPos: "else",
-            fixedAction: "Beli_Barang",
-            options: [
-                { text: "Menabung", correct: true },
-                { text: "Ambil_Paksa", correct: false }
+            id: 9, topic: "JIKA Bertingkat", scene: "📝",
+            desc: "Nilai Ulangan: 95",
+            branches: [
+                { kw: "JIKA", cond: "nilai >= 90", blank: true,
+                  options: [ {text:"Nilai_A", correct:true}, {text:"Nilai_B", correct:false} ] },
+                { kw: "ATAU JIKA", cond: "nilai >= 75", action: "Nilai_B" },
+                { kw: "JIKA TIDAK", cond: null, action: "Nilai_C" }
             ],
-            feedbackOk: "Bijak! Kalau uang kurang (Else), tabung dulu.",
-            feedbackNo: "Tidak boleh mengambil barang tanpa membayar!"
+            feedbackOk: "Tepat! 95 memenuhi cabang JIKA pertama (>= 90), jadi dapat Nilai A.",
+            feedbackNo: "Cabang pertama dicek dulu. 95 >= 90, jadi seharusnya masuk Nilai A."
         },
         {
-            id: 10,
-            scene: "☀️",
-            desc: "Cuaca Sangat Panas",
-            codeCond: "suhu > 30",
-            slotPos: "if",
-            fixedAction: "Pakai_Jaket",
-            options: [
-                { text: "Nyalakan_AC", correct: true },
-                { text: "Jemur_Diri", correct: false }
+            id: 10, topic: "JIKA Bertingkat", scene: "📝",
+            desc: "Nilai Ulangan: 80",
+            branches: [
+                { kw: "JIKA", cond: "nilai >= 90", action: "Nilai_A" },
+                { kw: "ATAU JIKA", cond: "nilai >= 75", blank: true,
+                  options: [ {text:"Nilai_B", correct:true}, {text:"Nilai_A", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Nilai_C" }
             ],
-            feedbackOk: "Adem! AC membantu mendinginkan suhu panas.",
-            feedbackNo: "Nanti kepanasan kalau jemur diri."
+            feedbackOk: "Benar! 80 tidak lolos cabang pertama (>=90) tapi lolos cabang kedua (>=75).",
+            feedbackNo: "80 gagal di cabang pertama (harus >= 90), lalu dicek cabang ATAU JIKA (>= 75) — itu cocok."
         },
         {
-            id: 11,
-            scene: "⏰",
-            desc: "Jam 06:00 Pagi",
-            codeCond: "pagi == benar",
-            slotPos: "if",
-            fixedAction: "Tidur_Lagi",
-            options: [
-                { text: "Bangun_Pagi", correct: true },
-                { text: "Nonton_TV", correct: false }
+            id: 11, topic: "JIKA Bertingkat", scene: "📝",
+            desc: "Nilai Ulangan: 60",
+            branches: [
+                { kw: "JIKA", cond: "nilai >= 90", action: "Nilai_A" },
+                { kw: "ATAU JIKA", cond: "nilai >= 75", action: "Nilai_B" },
+                { kw: "JIKA TIDAK", cond: null, blank: true,
+                  options: [ {text:"Nilai_C", correct:true}, {text:"Nilai_B", correct:false} ] }
             ],
-            feedbackOk: "Semangat pagi! Waktunya bangun.",
-            feedbackNo: "Jangan nonton TV pagi-pagi, siap-siap sekolah dulu."
+            feedbackOk: "Betul! 60 gagal di semua cabang JIKA/ATAU JIKA, jadi jatuh ke JIKA TIDAK.",
+            feedbackNo: "60 tidak memenuhi >=90 maupun >=75, sehingga jatuh ke cabang paling akhir."
         },
         {
-            id: 12,
-            scene: "🦷",
-            desc: "Gigi Sehat (Tidak Sakit)",
-            codeCond: "sakit_gigi == benar",
-            slotPos: "else",
-            fixedAction: "Ke_Dokter",
-            options: [
-                { text: "Makan_Apel", correct: true },
-                { text: "Cabut_Gigi", correct: false }
+            id: 12, topic: "JIKA Bertingkat", scene: "🌬️",
+            desc: "Kecepatan Angin: 45 km/jam",
+            branches: [
+                { kw: "JIKA", cond: "kecepatan >= 60", action: "Waspada_Bahaya" },
+                { kw: "ATAU JIKA", cond: "kecepatan >= 30", blank: true,
+                  options: [ {text:"Waspada_Sedang", correct:true}, {text:"Aman", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Aman" }
             ],
-            feedbackOk: "Enak! Kalau tidak sakit (Else), bisa makan apel renyah.",
-            feedbackNo: "Gigi sehat kok mau dicabut?"
+            feedbackOk: "Tepat! 45 km/jam tidak sampai 60, tapi sudah di atas 30, jadi Waspada Sedang.",
+            feedbackNo: "45 gagal di cabang pertama (>=60) tapi lolos cabang kedua (>=30)."
         },
         {
-            id: 13,
-            scene: "🔒",
-            desc: "Password Benar",
-            codeCond: "password_ok == benar",
-            slotPos: "if",
-            fixedAction: "Alarm_Bunyi",
-            options: [
-                { text: "Buka_Kunci", correct: true },
-                { text: "Lapor_Polisi", correct: false }
+            id: 13, topic: "Bertingkat + DAN", scene: "🌡️",
+            desc: "Suhu Tubuh: 38.5°C",
+            branches: [
+                { kw: "JIKA", cond: "suhu >= 38 DAN suhu < 39", blank: true,
+                  options: [ {text:"Demam_Sedang", correct:true}, {text:"Demam_Tinggi", correct:false} ] },
+                { kw: "ATAU JIKA", cond: "suhu >= 39", action: "Demam_Tinggi" },
+                { kw: "JIKA TIDAK", cond: null, action: "Normal" }
             ],
-            feedbackOk: "Akses diterima! Kunci terbuka.",
-            feedbackNo: "Kenapa lapor polisi? Passwordnya kan benar."
+            feedbackOk: "Benar! 38.5 berada di antara 38 dan 39, jadi kedua syarat DAN terpenuhi.",
+            feedbackNo: "Cek rentangnya: 38.5 memenuhi suhu>=38 DAN suhu<39, artinya Demam Sedang."
         },
         {
-            id: 14,
-            scene: "👾",
-            desc: "Nyawa Masih Ada (Nyawa = 3)",
-            codeCond: "nyawa == 0",
-            slotPos: "else",
-            fixedAction: "Game_Over",
-            options: [
-                { text: "Lanjut_Main", correct: true },
-                { text: "Menangis", correct: false }
+            id: 14, topic: "DAN & ATAU", scene: "🏬",
+            desc: "Total Belanja: Rp120.000, Status Member: Ya",
+            branches: [
+                { kw: "JIKA", cond: "total >= 100000 ATAU member == benar", blank: true,
+                  options: [ {text:"Dapat_Diskon_10persen", correct:true}, {text:"Bayar_Penuh", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Bayar_Penuh" }
             ],
-            feedbackOk: "Gaspol! Nyawa tidak 0 (Else), jadi game belum berakhir.",
-            feedbackNo: "Jangan menyerah, nyawa masih ada!"
+            feedbackOk: "Hebat! Total belanja saja sudah lebih dari Rp100.000, jadi ATAU sudah terpenuhi.",
+            feedbackNo: "ATAU hanya butuh satu syarat benar. Total >= 100000 sudah cukup untuk diskon."
         },
         {
-            id: 15,
-            scene: "🦠",
-            desc: "Virus Komputer Terdeteksi!",
-            codeCond: "ada_virus == benar",
-            slotPos: "if",
-            fixedAction: "Aman",
-            options: [
-                { text: "Scan_Antivirus", correct: true },
-                { text: "Matikan_Layar", correct: false }
+            id: 15, topic: "Logika Terapan", scene: "🏊",
+            desc: "Kedalaman Kolam: 150 cm, Tinggi Badan: 140 cm",
+            branches: [
+                { kw: "JIKA", cond: "kedalaman > tinggi_badan", blank: true,
+                  options: [ {text:"Pakai_Pelampung", correct:true}, {text:"Berenang_Bebas", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Berenang_Bebas" }
             ],
-            feedbackOk: "Misi Selesai! Keamanan komputer terjaga.",
-            feedbackNo: "Mematikan layar tidak menghapus virusnya!"
+            feedbackOk: "Tepat! 150 cm lebih dalam dari tinggi badan (140 cm), jadi perlu pelampung demi keselamatan.",
+            feedbackNo: "Bandingkan angkanya: kedalaman (150) lebih besar dari tinggi badan (140), jadi kondisinya benar."
+        },
+        {
+            id: 16, topic: "Gabungan Kompleks", scene: "🏅",
+            desc: "Nilai Try Out: 85, Ikut Ekskul: Ya, Jumlah Absen: 2 hari",
+            branches: [
+                { kw: "JIKA", cond: "(nilai >= 80 DAN ikut_ekskul == benar) ATAU absen == 0", blank: true,
+                  options: [ {text:"Lolos_Seleksi", correct:true}, {text:"Tidak_Lolos", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Tidak_Lolos" }
+            ],
+            feedbackOk: "Keren! Bagian dalam kurung (nilai>=80 DAN ikut_ekskul) sudah benar, jadi seluruh syarat ATAU terpenuhi.",
+            feedbackNo: "Selesaikan dulu tanda kurung: nilai>=80 DAN ikut_ekskul==benar bernilai BENAR, itu cukup untuk ATAU."
+        },
+        {
+            id: 17, topic: "Bertingkat + Uang", scene: "🏦",
+            desc: "Saldo Tabungan: Rp750.000",
+            branches: [
+                { kw: "JIKA", cond: "saldo >= 1000000", action: "Bunga_5persen" },
+                { kw: "ATAU JIKA", cond: "saldo >= 500000", blank: true,
+                  options: [ {text:"Bunga_3persen", correct:true}, {text:"Bunga_5persen", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Bunga_1persen" }
+            ],
+            feedbackOk: "Betul! Rp750.000 tidak sampai Rp1.000.000 tapi sudah di atas Rp500.000, jadi Bunga 3%.",
+            feedbackNo: "Saldo 750.000 gagal di cabang pertama (>=1.000.000), lalu cocok di cabang kedua (>=500.000)."
+        },
+        {
+            id: 18, topic: "Final: DAN + BUKAN", scene: "🏠",
+            desc: "Pintu Terkunci, Alarm TIDAK Aktif, Ada Gerakan Terdeteksi",
+            branches: [
+                { kw: "JIKA", cond: "gerakan_terdeteksi == benar DAN BUKAN alarm_aktif", blank: true,
+                  options: [ {text:"Nyalakan_Alarm_Otomatis", correct:true}, {text:"Diam_Saja", correct:false} ] },
+                { kw: "JIKA TIDAK", cond: null, action: "Diam_Saja" }
+            ],
+            feedbackOk: "Misi Selesai! Ada gerakan DAN alarm belum aktif, sistem keamanan otomatis harus menyala.",
+            feedbackNo: "Cermati: gerakan terdeteksi BENAR dan alarm memang belum aktif (BUKAN alarm_aktif = benar)."
         }
     ];
 
-    /* --- GAME LOGIC --- */
+    /* ================= GAME LOGIC ================= */
     let currentLevelIndex = 0;
     let correctCount = 0;
-    
-    // Elements
+
     const introScreen = document.getElementById('introScreen');
     const gameScreen = document.getElementById('gameScreen');
     const resultScreen = document.getElementById('resultScreen');
-    
+
     const sceneEmoji = document.getElementById('sceneEmoji');
     const conditionLabel = document.getElementById('conditionLabel');
     const codeEditorArea = document.getElementById('codeEditorArea');
     const optionsContainer = document.getElementById('optionsContainer');
     const robotAvatar = document.getElementById('robotAvatar');
     const feedbackOverlay = document.getElementById('feedbackOverlay');
-    let currentAnswerSlot = null; // Will store the dynamic DOM element
+    let currentAnswerSlot = null;
 
     function startGame() {
         currentLevelIndex = 0;
         correctCount = 0;
-        introScreen.classList.add('left'); 
-        gameScreen.classList.remove('hidden'); 
+        introScreen.classList.add('left');
+        gameScreen.classList.remove('hidden');
         setTimeout(() => {
             introScreen.classList.add('hidden');
             gameScreen.classList.add('active');
@@ -646,61 +597,64 @@
         }, 100);
     }
 
-    function loadLevel() {
-        if(currentLevelIndex >= levels.length) {
-            endGame();
-            return;
-        }
+    // Mewarnai kata kunci logika DAN / ATAU / BUKAN di dalam teks kondisi
+    function highlightCond(condStr) {
+        let s = condStr
+            .replace(/\(/g, '<span style="color:#8a93b0">(</span>')
+            .replace(/\)/g, '<span style="color:#8a93b0">)</span>');
+        s = s.replace(/\bDAN\b/g, '<span class="kw-and">DAN</span>');
+        s = s.replace(/\bATAU\b/g, '<span class="kw-or">ATAU</span>');
+        s = s.replace(/\bBUKAN\b/g, '<span class="kw-not">BUKAN</span>');
+        return s;
+    }
 
+    function loadLevel() {
+        if (currentLevelIndex >= levels.length) { endGame(); return; }
         const data = levels[currentLevelIndex];
 
-        // Update UI Info
-        document.getElementById('levelIndicator').innerText = `Level ${data.id}/15`;
+        document.getElementById('levelIndicator').innerText = `Level ${data.id}/${levels.length}`;
+        document.getElementById('topicIndicator').innerText = data.topic;
         document.getElementById('scoreIndicator').innerText = `Skor: ${correctCount * 10}`;
-        
+
         sceneEmoji.innerText = data.scene;
         conditionLabel.innerText = data.desc;
         robotAvatar.innerText = "🤖";
         robotAvatar.style.transform = "scale(1)";
 
-        // Hide Feedback
         feedbackOverlay.classList.remove('show');
 
-        // --- DYNAMIC CODE RENDERING ---
-        // Kita bangun HTML code editor berdasarkan posisi slot (IF atau ELSE)
+        // --- RENDER KODE DINAMIS BERDASARKAN JUMLAH CABANG ---
         let htmlCode = '';
+        data.branches.forEach((branch, idx) => {
+            const isElse = branch.kw === 'JIKA TIDAK';
+            const isElif = branch.kw === 'ATAU JIKA';
+            const kwClass = isElse ? 'kw-else' : (isElif ? 'kw-elif' : 'kw-if');
 
-        htmlCode += `<div class="line"><span class="kw-if">JIKA</span> (<span class="kw-var">${data.codeCond}</span>) {</div>`;
-        
-        // Blok IF
-        htmlCode += `<div class="line" style="padding-left: 20px;">`;
-        if (data.slotPos === 'if') {
-            htmlCode += `<span class="kw-func">lakukan</span>(<span id="dynamicSlot" class="answer-slot">???</span>);`;
-        } else {
-            htmlCode += `<span class="kw-func">lakukan</span>(<span class="kw-val">${data.fixedAction}</span>);`;
-        }
-        htmlCode += `</div>`;
+            let headLine = '';
+            if (idx > 0) headLine += '} ';
+            headLine += `<span class="${kwClass}">${branch.kw}</span>`;
+            if (!isElse) headLine += ` (${highlightCond(branch.cond)})`;
+            headLine += ' {';
+            htmlCode += `<div class="line">${headLine}</div>`;
 
-        // Blok ELSE
-        htmlCode += `<div class="line">} <span class="kw-else">JIKA TIDAK</span> {</div>`;
-        htmlCode += `<div class="line" style="padding-left: 20px;">`;
-        if (data.slotPos === 'else') {
-            htmlCode += `<span class="kw-func">lakukan</span>(<span id="dynamicSlot" class="answer-slot">???</span>);`;
-        } else {
-            htmlCode += `<span class="kw-func">lakukan</span>(<span class="kw-val">${data.fixedAction}</span>);`;
-        }
-        htmlCode += `</div>`;
+            let actionHtml = '';
+            if (branch.blank) {
+                actionHtml = `<span class="kw-func">lakukan</span>(<span id="dynamicSlot" class="answer-slot">???</span>);`;
+            } else {
+                actionHtml = `<span class="kw-func">lakukan</span>(<span class="kw-val">${branch.action}</span>);`;
+            }
+            htmlCode += `<div class="line" style="padding-left: 20px;">${actionHtml}</div>`;
+        });
         htmlCode += `<div class="line">}</div>`;
 
         codeEditorArea.innerHTML = htmlCode;
-        
-        // Simpan referensi ke slot jawaban yang baru dibuat
         currentAnswerSlot = document.getElementById('dynamicSlot');
 
-        // Generate Buttons (Shuffle)
+        // Cari cabang yang punya opsi jawaban
+        const blankBranch = data.branches.find(b => b.blank);
+
         optionsContainer.innerHTML = '';
-        const shuffledOptions = [...data.options].sort(() => Math.random() - 0.5);
-        
+        const shuffledOptions = [...blankBranch.options].sort(() => Math.random() - 0.5);
         shuffledOptions.forEach(opt => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
@@ -711,37 +665,27 @@
     }
 
     function checkAnswer(selectedOption, levelData) {
-        // Update slot text
-        if(currentAnswerSlot) {
-            currentAnswerSlot.innerText = selectedOption.text;
-        }
-        
-        if (selectedOption.correct) {
-            handleCorrect(levelData);
-        } else {
-            handleWrong(levelData);
-        }
+        if (currentAnswerSlot) currentAnswerSlot.innerText = selectedOption.text;
+
+        if (selectedOption.correct) handleCorrect(levelData);
+        else handleWrong(levelData);
     }
 
     function handleCorrect(data) {
-        if(currentAnswerSlot) currentAnswerSlot.classList.add('filled');
+        if (currentAnswerSlot) currentAnswerSlot.classList.add('filled');
         correctCount++;
-        
         robotAvatar.style.transform = "translateY(-20px) scale(1.2)";
         robotAvatar.innerText = "🤩";
-        
         showFeedback(true, data.feedbackOk);
         createConfetti();
     }
 
     function handleWrong(data) {
-        if(currentAnswerSlot) currentAnswerSlot.classList.add('wrong');
-        
+        if (currentAnswerSlot) currentAnswerSlot.classList.add('wrong');
         robotAvatar.innerText = "😵";
         const visualStage = document.querySelector('.visual-stage');
         visualStage.classList.add('shake-anim');
         setTimeout(() => visualStage.classList.remove('shake-anim'), 500);
-
         showFeedback(false, data.feedbackNo);
     }
 
@@ -751,7 +695,7 @@
         const text = document.getElementById('fbText');
         const btn = document.querySelector('.btn-next');
 
-        if(isSuccess) {
+        if (isSuccess) {
             title.innerText = "Hebat!";
             title.style.color = "var(--success)";
             icon.innerText = "🎉";
@@ -766,10 +710,7 @@
         }
 
         text.innerText = message;
-        
-        setTimeout(() => {
-            feedbackOverlay.classList.add('show');
-        }, 600);
+        setTimeout(() => { feedbackOverlay.classList.add('show'); }, 600);
     }
 
     function nextLevel() {
@@ -781,17 +722,16 @@
         gameScreen.classList.add('hidden');
         resultScreen.classList.remove('hidden');
         setTimeout(() => resultScreen.classList.add('active'), 100);
-        
+
         const finalScore = Math.round((correctCount / levels.length) * 100);
         document.getElementById('finalScore').innerText = finalScore;
-        
-        if(finalScore > 80) {
+
+        if (finalScore > 80) {
             createConfetti();
             setTimeout(createConfetti, 500);
         }
     }
 
-    /* --- UTILS: CONFETTI EFFECT --- */
     function createConfetti() {
         const colors = ['#ec4899', '#6366f1', '#10b981', '#f59e0b'];
         for (let i = 0; i < 40; i++) {
@@ -813,7 +753,6 @@
         }
     `;
     document.head.appendChild(styleSheet);
-
 </script>
 
 </body>
