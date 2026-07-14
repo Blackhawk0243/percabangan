@@ -39,11 +39,10 @@
             padding: 16px;
         }
 
-        /* Container Utama - responsif: HP sempit, Tablet, Laptop */
         .app-container {
             width: 100%;
             max-width: 500px;
-            min-height: 640px;
+            min-height: 660px;
             max-height: 92vh;
             background: var(--card-bg);
             border-radius: 24px;
@@ -57,10 +56,9 @@
         }
 
         @media (min-width: 760px) {
-            .app-container { max-width: 880px; min-height: 600px; }
+            .app-container { max-width: 880px; min-height: 620px; }
         }
 
-        /* Screens Management */
         .screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -79,7 +77,6 @@
         .screen.active { transform: translateX(0); }
         .screen.left { transform: translateX(-100%); }
 
-        /* Intro Screen */
         .intro-img { font-size: 6rem; margin-bottom: 16px; animation: bounce 2s infinite; }
 
         h1 {
@@ -91,13 +88,16 @@
             line-height: 1.2;
         }
 
-        p { color: #64748b; text-align: center; margin-bottom: 24px; font-size: 1.05rem; }
+        p { color: #64748b; text-align: center; margin-bottom: 18px; font-size: 1.05rem; }
 
-        .badge-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom: 20px; }
-        .mini-badge {
-            background:#e0e7ff; color:var(--primary); font-weight:800; font-size:0.75rem;
-            padding:5px 12px; border-radius: 20px; letter-spacing: 0.3px;
+        .tier-list { width: 100%; max-width: 340px; margin-bottom: 22px; }
+        .tier-row {
+            display: flex; align-items: center; gap: 10px;
+            background: #f8fafc; border-radius: 12px; padding: 8px 12px; margin-bottom: 8px;
+            font-size: 0.85rem; font-weight: 800;
         }
+        .tier-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+        .tier-row span.range { color: #94a3b8; font-weight: 700; margin-left: auto; }
 
         .btn-start {
             background: var(--primary);
@@ -113,7 +113,6 @@
         }
         .btn-start:active { transform: translateY(6px); box-shadow: none; }
 
-        /* GAME SCREEN LAYOUT */
         #gameScreen { justify-content: flex-start; padding: 16px; }
 
         .game-header {
@@ -121,15 +120,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 6px;
             margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 2px solid #f1f5f9;
             flex-shrink: 0;
+            flex-wrap: wrap;
         }
 
-        .level-pill { background: #e0e7ff; color: var(--primary); padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; }
-        .topic-pill { background: #fce7f3; color: var(--secondary); padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.78rem; }
-        .score-pill { background: #fef3c7; color: #d97706; padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; }
+        .level-pill { background: #e0e7ff; color: var(--primary); padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; }
+        .topic-pill { background: #fce7f3; color: var(--secondary); padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.75rem; }
+        .score-pill { background: #fef3c7; color: #d97706; padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.82rem; }
+
+        .diff-pill { padding: 5px 14px; border-radius: 20px; font-weight: 800; font-size: 0.75rem; }
+        .diff-sedang { background: #dcfce7; color: #16a34a; }
+        .diff-sulit { background: #ffedd5; color: #ea580c; }
+        .diff-sangat { background: #fee2e2; color: #dc2626; }
 
         .game-body {
             width: 100%;
@@ -150,7 +156,6 @@
             .right-panel { flex: 1; justify-content: center; }
         }
 
-        /* Visualization Area */
         .visual-stage {
             flex: 1;
             width: 100%;
@@ -177,11 +182,10 @@
             padding: 6px 14px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             text-align: center;
         }
 
-        /* Coding Area */
         .code-editor {
             width: 100%;
             background: var(--code-bg);
@@ -225,7 +229,6 @@
         .answer-slot.filled { border: 2px solid var(--success); background: rgba(16, 185, 129, 0.2); color: var(--success); }
         .answer-slot.wrong { border: 2px solid var(--danger); background: rgba(239, 68, 68, 0.2); color: var(--danger); }
 
-        /* Options Area */
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
 
         .option-btn {
@@ -243,7 +246,6 @@
         .option-btn:hover { background: #f8fafc; border-color: var(--primary); color: var(--primary); }
         .option-btn:active { transform: translateY(4px); box-shadow: none; }
 
-        /* Feedback Modal */
         .feedback-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -263,10 +265,6 @@
         .feedback-icon { font-size: 4.5rem; margin-bottom: 10px; }
         .feedback-title { font-size: 1.8rem; font-family: 'Fredoka', sans-serif; margin-bottom: 8px; }
         .feedback-text { text-align: center; max-width: 90%; margin-bottom: 20px; font-size: 1.05rem; }
-        .feedback-hint {
-            text-align: center; max-width: 90%; margin: -12px 0 20px; font-size: 0.85rem;
-            color: #64748b; background: #f1f5f9; padding: 8px 14px; border-radius: 10px;
-        }
 
         .btn-next {
             background: var(--success);
@@ -302,12 +300,11 @@
     <div id="introScreen" class="screen active">
         <div class="intro-img">🤖</div>
         <h1>Master Logika<br>Kelas 6 SD</h1>
-        <p>18 Tantangan Koding Tingkat Lanjut</p>
-        <div class="badge-row">
-            <span class="mini-badge">DAN (AND)</span>
-            <span class="mini-badge">ATAU (OR)</span>
-            <span class="mini-badge">BUKAN (NOT)</span>
-            <span class="mini-badge">JIKA Bertingkat</span>
+        <p>30 Tantangan Koding &middot; 3 Tingkat Kesulitan</p>
+        <div class="tier-list">
+            <div class="tier-row"><span class="tier-dot" style="background:#16a34a"></span> Sedang, kondisi sederhana <span class="range">1&ndash;10</span></div>
+            <div class="tier-row"><span class="tier-dot" style="background:#ea580c"></span> Sulit, sedikit kompleks <span class="range">11&ndash;20</span></div>
+            <div class="tier-row"><span class="tier-dot" style="background:#dc2626"></span> Sangat sulit &amp; kompleks <span class="range">21&ndash;30</span></div>
         </div>
         <button class="btn-start" onclick="startGame()">Mulai Misi ▶</button>
     </div>
@@ -315,8 +312,9 @@
     <!-- Screen 2: Game -->
     <div id="gameScreen" class="screen hidden">
         <div class="game-header">
-            <div class="level-pill" id="levelIndicator">Level 1/18</div>
-            <div class="topic-pill" id="topicIndicator">DAN (AND)</div>
+            <div class="level-pill" id="levelIndicator">Level 1/30</div>
+            <div class="diff-pill" id="diffIndicator">Sedang</div>
+            <div class="topic-pill" id="topicIndicator">IF-ELSE Dasar</div>
             <div class="score-pill" id="scoreIndicator">Skor: 0</div>
         </div>
 
@@ -339,7 +337,6 @@
             <div class="feedback-icon" id="fbIcon">🎉</div>
             <h2 class="feedback-title" id="fbTitle">Hebat!</h2>
             <p class="feedback-text" id="fbText">Logikamu benar.</p>
-            <div class="feedback-hint" id="fbHint" style="display:none;"></div>
             <button class="btn-next" onclick="nextLevel()">Lanjut Level ➡</button>
         </div>
     </div>
@@ -348,7 +345,7 @@
     <div id="resultScreen" class="screen hidden">
         <div style="font-size: 5rem; margin-bottom: 20px;">🏆</div>
         <h1>Misi Selesai!</h1>
-        <p>Kamu telah menyelesaikan 18 level logika tingkat lanjut kelas 6.</p>
+        <p>Kamu telah menyelesaikan 30 level logika, dari sedang sampai sangat sulit.</p>
         <div style="background: #f1f5f9; padding: 20px; border-radius: 15px; width: 100%; text-align: center; margin-bottom: 20px;">
             <h3 style="margin:0; color:#64748b;">Skor Akhir</h3>
             <h1 style="margin:10px 0; color:var(--primary); font-size: 3rem;" id="finalScore">100</h1>
@@ -359,214 +356,231 @@
 </div>
 
 <script>
-    /* ================= DATA SOAL — 18 LEVEL KELAS 6 SD ================= */
-    /* Setiap level punya "branches": daftar cabang JIKA / ATAU JIKA / JIKA TIDAK
-       Salah satu branch memiliki blank:true -> harus diisi pemain dari "options" */
+    /* ================= DATA SOAL — 30 LEVEL, 3 TINGKAT KESULITAN ================= */
+    /* diff: "sedang" (1-10, if-else sederhana, satu kondisi)
+             "sulit"  (11-20, DAN/ATAU/BUKAN, satu kondisi majemuk, tetap if-else)
+             "sangat" (21-30, JIKA bertingkat / kurung bersarang / gabungan operator) */
     const levels = [
-        {
-            id: 1, topic: "DAN (AND)", scene: "📚",
-            desc: "Nilai Matematika: 85, Nilai IPA: 90 (KKM keduanya 75)",
-            branches: [
-                { kw: "JIKA", cond: "nilai_mtk >= 75 DAN nilai_ipa >= 75", blank: true,
-                  options: [ {text:"Lulus_Kedua_Mapel", correct:true}, {text:"Remedial_IPA", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Remedial" }
-            ],
-            feedbackOk: "Betul! Operator DAN artinya SEMUA syarat harus benar sekaligus.",
-            feedbackNo: "DAN artinya kedua nilai harus lulus KKM, bukan cuma salah satu."
-        },
-        {
-            id: 2, topic: "DAN (AND)", scene: "📚",
-            desc: "Nilai Matematika: 85, Nilai IPA: 60 (KKM keduanya 75)",
-            branches: [
-                { kw: "JIKA", cond: "nilai_mtk >= 75 DAN nilai_ipa >= 75", action: "Lulus_Kedua_Mapel" },
-                { kw: "JIKA TIDAK", cond: null, blank: true,
-                  options: [ {text:"Remedial_IPA", correct:true}, {text:"Naik_Kelas", correct:false} ] }
-            ],
-            feedbackOk: "Tepat! Karena IPA belum mencapai KKM, syarat DAN gagal, jadi masuk JIKA TIDAK.",
-            feedbackNo: "Ingat, DAN butuh SEMUA syarat benar. IPA di bawah KKM membuat kondisinya salah."
-        },
-        {
-            id: 3, topic: "DAN (AND)", scene: "🛒",
-            desc: "Uang: Rp15.000, Harga Buku: Rp12.000, Stok: Tersedia",
-            branches: [
-                { kw: "JIKA", cond: "uang >= harga DAN stok == tersedia", blank: true,
-                  options: [ {text:"Beli_Buku", correct:true}, {text:"Menabung_Dulu", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Menabung_Dulu" }
-            ],
-            feedbackOk: "Benar! Uang cukup DAN barangnya ada, jadi transaksi bisa dilakukan.",
-            feedbackNo: "Cek lagi: uang cukup DAN stok tersedia, keduanya sudah terpenuhi."
-        },
-        {
-            id: 4, topic: "ATAU (OR)", scene: "🏫",
-            desc: "Hari ini: Minggu",
-            branches: [
-                { kw: "JIKA", cond: "hari == Sabtu ATAU hari == Minggu", blank: true,
-                  options: [ {text:"Libur_Sekolah", correct:true}, {text:"Belajar_di_Kelas", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Belajar_di_Kelas" }
-            ],
-            feedbackOk: "Betul! ATAU hanya butuh SALAH SATU syarat benar. Minggu sudah cukup untuk libur.",
-            feedbackNo: "ATAU artinya cukup satu syarat saja benar. Hari Minggu sudah memenuhi."
-        },
-        {
-            id: 5, topic: "ATAU (OR)", scene: "💻",
-            desc: "Baterai: 45%, Sinyal Wifi: Kuat",
-            branches: [
-                { kw: "JIKA", cond: "baterai < 20 ATAU sinyal == lemah", action: "Cari_Charger" },
-                { kw: "JIKA TIDAK", cond: null, blank: true,
-                  options: [ {text:"Lanjut_Belajar_Online", correct:true}, {text:"Matikan_Laptop", correct:false} ] }
-            ],
-            feedbackOk: "Tepat! Kedua syarat ATAU tidak ada yang benar, jadi masuk JIKA TIDAK.",
-            feedbackNo: "Baterai masih 45% dan sinyal kuat, berarti kondisi ATAU-nya salah semua."
-        },
-        {
-            id: 6, topic: "ATAU (OR)", scene: "🛵",
-            desc: "Cuaca: Cerah, Jalanan: Macet Parah",
-            branches: [
-                { kw: "JIKA", cond: "hujan == benar ATAU macet == benar", blank: true,
-                  options: [ {text:"Naik_Ojek_Online", correct:true}, {text:"Jalan_Kaki_Santai", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Jalan_Kaki_Santai" }
-            ],
-            feedbackOk: "Benar! Macet parah saja sudah cukup memenuhi ATAU, walau tidak hujan.",
-            feedbackNo: "Ingat, ATAU cukup satu syarat benar. Macet == benar sudah cukup."
-        },
-        {
-            id: 7, topic: "BUKAN (NOT)", scene: "🦷",
-            desc: "Gigi TIDAK berlubang (sehat)",
-            branches: [
-                { kw: "JIKA", cond: "BUKAN gigi_berlubang", blank: true,
-                  options: [ {text:"Sikat_Gigi_Rutin", correct:true}, {text:"Segera_ke_Dokter", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Segera_ke_Dokter" }
-            ],
-            feedbackOk: "Betul! BUKAN membalik nilai. Karena gigi tidak berlubang, kondisinya jadi benar.",
-            feedbackNo: "BUKAN artinya kebalikan. Gigi_berlubang = salah, maka BUKAN gigi_berlubang = benar."
-        },
-        {
-            id: 8, topic: "BUKAN + DAN", scene: "⛈️",
-            desc: "Tidak Hujan, tapi Ada Petir Menyambar",
-            branches: [
-                { kw: "JIKA", cond: "BUKAN hujan DAN BUKAN petir", action: "Main_di_Luar" },
-                { kw: "JIKA TIDAK", cond: null, blank: true,
-                  options: [ {text:"Tetap_di_Dalam_Rumah", correct:true}, {text:"Main_Layangan", correct:false} ] }
-            ],
-            feedbackOk: "Pintar! Walau tidak hujan, ada petir membuat BUKAN petir menjadi salah, jadi syarat DAN gagal.",
-            feedbackNo: "Cermati: petir sedang ada, jadi 'BUKAN petir' bernilai salah dan syarat DAN tidak terpenuhi."
-        },
-        {
-            id: 9, topic: "JIKA Bertingkat", scene: "📝",
-            desc: "Nilai Ulangan: 95",
-            branches: [
-                { kw: "JIKA", cond: "nilai >= 90", blank: true,
-                  options: [ {text:"Nilai_A", correct:true}, {text:"Nilai_B", correct:false} ] },
-                { kw: "ATAU JIKA", cond: "nilai >= 75", action: "Nilai_B" },
-                { kw: "JIKA TIDAK", cond: null, action: "Nilai_C" }
-            ],
-            feedbackOk: "Tepat! 95 memenuhi cabang JIKA pertama (>= 90), jadi dapat Nilai A.",
-            feedbackNo: "Cabang pertama dicek dulu. 95 >= 90, jadi seharusnya masuk Nilai A."
-        },
-        {
-            id: 10, topic: "JIKA Bertingkat", scene: "📝",
-            desc: "Nilai Ulangan: 80",
-            branches: [
-                { kw: "JIKA", cond: "nilai >= 90", action: "Nilai_A" },
-                { kw: "ATAU JIKA", cond: "nilai >= 75", blank: true,
-                  options: [ {text:"Nilai_B", correct:true}, {text:"Nilai_A", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Nilai_C" }
-            ],
-            feedbackOk: "Benar! 80 tidak lolos cabang pertama (>=90) tapi lolos cabang kedua (>=75).",
-            feedbackNo: "80 gagal di cabang pertama (harus >= 90), lalu dicek cabang ATAU JIKA (>= 75) — itu cocok."
-        },
-        {
-            id: 11, topic: "JIKA Bertingkat", scene: "📝",
-            desc: "Nilai Ulangan: 60",
-            branches: [
-                { kw: "JIKA", cond: "nilai >= 90", action: "Nilai_A" },
-                { kw: "ATAU JIKA", cond: "nilai >= 75", action: "Nilai_B" },
-                { kw: "JIKA TIDAK", cond: null, blank: true,
-                  options: [ {text:"Nilai_C", correct:true}, {text:"Nilai_B", correct:false} ] }
-            ],
-            feedbackOk: "Betul! 60 gagal di semua cabang JIKA/ATAU JIKA, jadi jatuh ke JIKA TIDAK.",
-            feedbackNo: "60 tidak memenuhi >=90 maupun >=75, sehingga jatuh ke cabang paling akhir."
-        },
-        {
-            id: 12, topic: "JIKA Bertingkat", scene: "🌬️",
-            desc: "Kecepatan Angin: 45 km/jam",
-            branches: [
-                { kw: "JIKA", cond: "kecepatan >= 60", action: "Waspada_Bahaya" },
-                { kw: "ATAU JIKA", cond: "kecepatan >= 30", blank: true,
-                  options: [ {text:"Waspada_Sedang", correct:true}, {text:"Aman", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Aman" }
-            ],
-            feedbackOk: "Tepat! 45 km/jam tidak sampai 60, tapi sudah di atas 30, jadi Waspada Sedang.",
-            feedbackNo: "45 gagal di cabang pertama (>=60) tapi lolos cabang kedua (>=30)."
-        },
-        {
-            id: 13, topic: "Bertingkat + DAN", scene: "🌡️",
-            desc: "Suhu Tubuh: 38.5°C",
-            branches: [
-                { kw: "JIKA", cond: "suhu >= 38 DAN suhu < 39", blank: true,
-                  options: [ {text:"Demam_Sedang", correct:true}, {text:"Demam_Tinggi", correct:false} ] },
-                { kw: "ATAU JIKA", cond: "suhu >= 39", action: "Demam_Tinggi" },
-                { kw: "JIKA TIDAK", cond: null, action: "Normal" }
-            ],
-            feedbackOk: "Benar! 38.5 berada di antara 38 dan 39, jadi kedua syarat DAN terpenuhi.",
-            feedbackNo: "Cek rentangnya: 38.5 memenuhi suhu>=38 DAN suhu<39, artinya Demam Sedang."
-        },
-        {
-            id: 14, topic: "DAN & ATAU", scene: "🏬",
-            desc: "Total Belanja: Rp120.000, Status Member: Ya",
-            branches: [
-                { kw: "JIKA", cond: "total >= 100000 ATAU member == benar", blank: true,
-                  options: [ {text:"Dapat_Diskon_10persen", correct:true}, {text:"Bayar_Penuh", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Bayar_Penuh" }
-            ],
-            feedbackOk: "Hebat! Total belanja saja sudah lebih dari Rp100.000, jadi ATAU sudah terpenuhi.",
-            feedbackNo: "ATAU hanya butuh satu syarat benar. Total >= 100000 sudah cukup untuk diskon."
-        },
-        {
-            id: 15, topic: "Logika Terapan", scene: "🏊",
-            desc: "Kedalaman Kolam: 150 cm, Tinggi Badan: 140 cm",
-            branches: [
-                { kw: "JIKA", cond: "kedalaman > tinggi_badan", blank: true,
-                  options: [ {text:"Pakai_Pelampung", correct:true}, {text:"Berenang_Bebas", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Berenang_Bebas" }
-            ],
-            feedbackOk: "Tepat! 150 cm lebih dalam dari tinggi badan (140 cm), jadi perlu pelampung demi keselamatan.",
-            feedbackNo: "Bandingkan angkanya: kedalaman (150) lebih besar dari tinggi badan (140), jadi kondisinya benar."
-        },
-        {
-            id: 16, topic: "Gabungan Kompleks", scene: "🏅",
-            desc: "Nilai Try Out: 85, Ikut Ekskul: Ya, Jumlah Absen: 2 hari",
-            branches: [
-                { kw: "JIKA", cond: "(nilai >= 80 DAN ikut_ekskul == benar) ATAU absen == 0", blank: true,
-                  options: [ {text:"Lolos_Seleksi", correct:true}, {text:"Tidak_Lolos", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Tidak_Lolos" }
-            ],
-            feedbackOk: "Keren! Bagian dalam kurung (nilai>=80 DAN ikut_ekskul) sudah benar, jadi seluruh syarat ATAU terpenuhi.",
-            feedbackNo: "Selesaikan dulu tanda kurung: nilai>=80 DAN ikut_ekskul==benar bernilai BENAR, itu cukup untuk ATAU."
-        },
-        {
-            id: 17, topic: "Bertingkat + Uang", scene: "🏦",
-            desc: "Saldo Tabungan: Rp750.000",
-            branches: [
-                { kw: "JIKA", cond: "saldo >= 1000000", action: "Bunga_5persen" },
-                { kw: "ATAU JIKA", cond: "saldo >= 500000", blank: true,
-                  options: [ {text:"Bunga_3persen", correct:true}, {text:"Bunga_5persen", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Bunga_1persen" }
-            ],
-            feedbackOk: "Betul! Rp750.000 tidak sampai Rp1.000.000 tapi sudah di atas Rp500.000, jadi Bunga 3%.",
-            feedbackNo: "Saldo 750.000 gagal di cabang pertama (>=1.000.000), lalu cocok di cabang kedua (>=500.000)."
-        },
-        {
-            id: 18, topic: "Final: DAN + BUKAN", scene: "🏠",
-            desc: "Pintu Terkunci, Alarm TIDAK Aktif, Ada Gerakan Terdeteksi",
-            branches: [
-                { kw: "JIKA", cond: "gerakan_terdeteksi == benar DAN BUKAN alarm_aktif", blank: true,
-                  options: [ {text:"Nyalakan_Alarm_Otomatis", correct:true}, {text:"Diam_Saja", correct:false} ] },
-                { kw: "JIKA TIDAK", cond: null, action: "Diam_Saja" }
-            ],
-            feedbackOk: "Misi Selesai! Ada gerakan DAN alarm belum aktif, sistem keamanan otomatis harus menyala.",
-            feedbackNo: "Cermati: gerakan terdeteksi BENAR dan alarm memang belum aktif (BUKAN alarm_aktif = benar)."
-        }
+
+        /* ---------- TIER 1: SEDANG, TIDAK KOMPLEKS (1-10) ---------- */
+        { id:1, diff:"sedang", topic:"IF-ELSE Dasar", scene:"🌧️", desc:"Cuaca Hujan Deras",
+          branches:[
+            { kw:"JIKA", cond:"hujan == benar", blank:true, options:[{text:"Pakai_Payung",correct:true},{text:"Siram_Tanaman",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Siram_Tanaman" }
+          ],
+          feedbackOk:"Benar! Kalau hujan, kita butuh payung.", feedbackNo:"Kalau sedang hujan, bawa payung ya, bukan menyiram tanaman." },
+
+        { id:2, diff:"sedang", topic:"Perbandingan <", scene:"🔋", desc:"Baterai Kritis: 5%",
+          branches:[
+            { kw:"JIKA", cond:"baterai < 10", blank:true, options:[{text:"Cari_Charger",correct:true},{text:"Nyalakan_Senter",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Main_Game" }
+          ],
+          feedbackOk:"Pintar! 5 memang kurang dari 10, jadi harus cari charger.", feedbackNo:"5 < 10 itu benar, prioritasnya cari charger dulu." },
+
+        { id:3, diff:"sedang", topic:"Kesetaraan ==", scene:"🚶", desc:"Lantai Basah & Licin",
+          branches:[
+            { kw:"JIKA", cond:"lantai == licin", blank:true, options:[{text:"Jalan_Pelan",correct:true},{text:"Lompat_Tali",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Lari_Kencang" }
+          ],
+          feedbackOk:"Tepat! Lantai licin itu benar, jadi harus hati-hati.", feedbackNo:"Kalau lantai licin, jalan pelan-pelan supaya tidak jatuh." },
+
+        { id:4, diff:"sedang", topic:"Kesetaraan ==", scene:"🚦", desc:"Lampu Hijau Menyala",
+          branches:[
+            { kw:"JIKA", cond:"lampu == hijau", blank:true, options:[{text:"Menyeberang",correct:true},{text:"Tidur_di_Jalan",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Berhenti" }
+          ],
+          feedbackOk:"Benar! Hijau memang tandanya boleh menyeberang.", feedbackNo:"Lampu hijau berarti boleh menyeberang dengan aman." },
+
+        { id:5, diff:"sedang", topic:"Kesetaraan ==", scene:"🚪", desc:"Ada Tamu Mengetuk",
+          branches:[
+            { kw:"JIKA", cond:"ada_tamu == benar", blank:true, options:[{text:"Buka_Pintu",correct:true},{text:"Teriak",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Kunci_Pintu" }
+          ],
+          feedbackOk:"Sopan! Kondisinya benar, jadi pintu harus dibuka.", feedbackNo:"Kalau ada_tamu == benar, sebaiknya buka pintu, bukan berteriak." },
+
+        { id:6, diff:"sedang", topic:"Cabang ELSE", scene:"🎓", desc:"Nilai Ujian: 80 (KKM: 75)",
+          branches:[
+            { kw:"JIKA", cond:"nilai < 75", action:"Remedial" },
+            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Naik_Kelas",correct:true},{text:"Nangis",correct:false}] }
+          ],
+          feedbackOk:"Hebat! 80 tidak kurang dari 75, jadi kondisinya salah dan masuk JIKA TIDAK.", feedbackNo:"Perhatikan tandanya '< 75'. Nilai 80 lebih besar, jadi masuk JIKA TIDAK (Naik Kelas)." },
+
+        { id:7, diff:"sedang", topic:"Cabang ELSE", scene:"🤤", desc:"Perut Kenyang (Tidak Lapar)",
+          branches:[
+            { kw:"JIKA", cond:"lapar == benar", action:"Makan_Nasi" },
+            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Lanjut_Main",correct:true},{text:"Minum_Obat",correct:false}] }
+          ],
+          feedbackOk:"Tepat! Karena kenyang, kondisi lapar==benar itu salah, jadi masuk JIKA TIDAK.", feedbackNo:"Kalau sedang kenyang, kondisi 'lapar' bernilai salah, jadi seharusnya masuk JIKA TIDAK." },
+
+        { id:8, diff:"sedang", topic:"Cabang IF", scene:"⏰", desc:"Jam 06:00 Pagi",
+          branches:[
+            { kw:"JIKA", cond:"pagi == benar", blank:true, options:[{text:"Bangun_Pagi",correct:true},{text:"Nonton_TV",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Tidur_Lagi" }
+          ],
+          feedbackOk:"Semangat pagi! Kondisinya benar, waktunya bangun.", feedbackNo:"Jam segini pagi==benar, jadi waktunya bangun bukan nonton TV." },
+
+        { id:9, diff:"sedang", topic:"Cabang ELSE", scene:"🦷", desc:"Gigi Sehat (Tidak Sakit)",
+          branches:[
+            { kw:"JIKA", cond:"sakit_gigi == benar", action:"Ke_Dokter" },
+            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Makan_Apel",correct:true},{text:"Cabut_Gigi",correct:false}] }
+          ],
+          feedbackOk:"Enak! Karena gigi tidak sakit, kondisinya salah, jadi masuk JIKA TIDAK.", feedbackNo:"Gigi sehat berarti sakit_gigi==benar itu salah, harusnya masuk JIKA TIDAK." },
+
+        { id:10, diff:"sedang", topic:"Perbandingan >=", scene:"💰", desc:"Uang Kurang (Harga 10rb, Uang 5rb)",
+          branches:[
+            { kw:"JIKA", cond:"uang >= harga", action:"Beli_Barang" },
+            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Menabung",correct:true},{text:"Ambil_Paksa",correct:false}] }
+          ],
+          feedbackOk:"Bijak! 5rb tidak >= 10rb, jadi kondisinya salah, masuk JIKA TIDAK.", feedbackNo:"5.000 bukan >= 10.000, jadi kondisinya salah dan masuk JIKA TIDAK (Menabung)." },
+
+        /* ---------- TIER 2: SULIT, SEDIKIT KOMPLEKS (11-20) ---------- */
+        { id:11, diff:"sulit", topic:"DAN (AND)", scene:"📚", desc:"Nilai Matematika: 85, Nilai IPA: 90 (KKM keduanya 75)",
+          branches:[
+            { kw:"JIKA", cond:"nilai_mtk >= 75 DAN nilai_ipa >= 75", blank:true, options:[{text:"Lulus_Kedua_Mapel",correct:true},{text:"Remedial",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Remedial" }
+          ],
+          feedbackOk:"Betul! DAN artinya SEMUA syarat harus benar sekaligus, dan keduanya lulus.", feedbackNo:"DAN butuh semua syarat benar. Di sini nilai_mtk dan nilai_ipa sudah >= 75 semua." },
+
+        { id:12, diff:"sulit", topic:"DAN (AND)", scene:"📚", desc:"Nilai Matematika: 85, Nilai IPA: 60 (KKM keduanya 75)",
+          branches:[
+            { kw:"JIKA", cond:"nilai_mtk >= 75 DAN nilai_ipa >= 75", action:"Lulus_Kedua_Mapel" },
+            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Remedial_IPA",correct:true},{text:"Naik_Kelas",correct:false}] }
+          ],
+          feedbackOk:"Tepat! IPA belum mencapai KKM, jadi syarat DAN gagal dan masuk JIKA TIDAK.", feedbackNo:"DAN butuh SEMUA syarat benar. IPA di bawah KKM membuat kondisinya salah." },
+
+        { id:13, diff:"sulit", topic:"ATAU (OR)", scene:"🏫", desc:"Hari ini: Minggu",
+          branches:[
+            { kw:"JIKA", cond:"hari == Sabtu ATAU hari == Minggu", blank:true, options:[{text:"Libur_Sekolah",correct:true},{text:"Belajar_di_Kelas",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Belajar_di_Kelas" }
+          ],
+          feedbackOk:"Betul! ATAU cukup satu syarat benar, dan hari Minggu sudah memenuhi.", feedbackNo:"ATAU artinya cukup satu syarat saja benar. Hari Minggu sudah memenuhi." },
+
+        { id:14, diff:"sulit", topic:"ATAU (OR)", scene:"💻", desc:"Baterai: 45%, Sinyal Wifi: Kuat",
+          branches:[
+            { kw:"JIKA", cond:"baterai < 20 ATAU sinyal == lemah", action:"Cari_Charger" },
+            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Lanjut_Belajar_Online",correct:true},{text:"Matikan_Laptop",correct:false}] }
+          ],
+          feedbackOk:"Tepat! Kedua syarat ATAU tidak ada yang benar, jadi masuk JIKA TIDAK.", feedbackNo:"Baterai masih 45% dan sinyal kuat, kondisi ATAU-nya salah semua, harusnya JIKA TIDAK." },
+
+        { id:15, diff:"sulit", topic:"BUKAN (NOT)", scene:"🦷", desc:"Gigi TIDAK Berlubang (Sehat)",
+          branches:[
+            { kw:"JIKA", cond:"BUKAN gigi_berlubang", blank:true, options:[{text:"Sikat_Gigi_Rutin",correct:true},{text:"Segera_ke_Dokter",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Segera_ke_Dokter" }
+          ],
+          feedbackOk:"Betul! BUKAN membalik nilai. Gigi tidak berlubang membuat kondisinya benar.", feedbackNo:"BUKAN artinya kebalikan. gigi_berlubang salah, maka BUKAN gigi_berlubang benar." },
+
+        { id:16, diff:"sulit", topic:"BUKAN + DAN", scene:"⛈️", desc:"Tidak Hujan, tapi Ada Petir Menyambar",
+          branches:[
+            { kw:"JIKA", cond:"BUKAN hujan DAN BUKAN petir", action:"Main_di_Luar" },
+            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Tetap_di_Dalam_Rumah",correct:true},{text:"Main_Layangan",correct:false}] }
+          ],
+          feedbackOk:"Pintar! Petir membuat 'BUKAN petir' salah, jadi syarat DAN gagal dan masuk JIKA TIDAK.", feedbackNo:"Petir sedang ada, jadi 'BUKAN petir' bernilai salah dan syarat DAN tidak terpenuhi." },
+
+        { id:17, diff:"sulit", topic:"DAN (AND)", scene:"🛒", desc:"Uang: Rp15.000, Harga Buku: Rp12.000, Stok: Tersedia",
+          branches:[
+            { kw:"JIKA", cond:"uang >= harga DAN stok == tersedia", blank:true, options:[{text:"Beli_Buku",correct:true},{text:"Menabung_Dulu",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Menabung_Dulu" }
+          ],
+          feedbackOk:"Benar! Uang cukup DAN barangnya ada, jadi transaksi bisa dilakukan.", feedbackNo:"Cek lagi: uang cukup DAN stok tersedia, keduanya sudah terpenuhi." },
+
+        { id:18, diff:"sulit", topic:"ATAU (OR)", scene:"🛵", desc:"Cuaca Cerah, Jalanan Macet Parah",
+          branches:[
+            { kw:"JIKA", cond:"hujan == benar ATAU macet == benar", blank:true, options:[{text:"Naik_Ojek_Online",correct:true},{text:"Jalan_Kaki_Santai",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Jalan_Kaki_Santai" }
+          ],
+          feedbackOk:"Benar! Macet parah saja sudah cukup memenuhi ATAU, walau tidak hujan.", feedbackNo:"ATAU cukup satu syarat benar. macet == benar saja sudah cukup." },
+
+        { id:19, diff:"sulit", topic:"DAN Rentang", scene:"🌡️", desc:"Suhu Tubuh: 38.5°C",
+          branches:[
+            { kw:"JIKA", cond:"suhu >= 38 DAN suhu < 39", blank:true, options:[{text:"Demam_Sedang",correct:true},{text:"Demam_Tinggi",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Pantau_Suhu_Berkala" }
+          ],
+          feedbackOk:"Benar! 38.5 berada di antara 38 dan 39, jadi kedua syarat DAN terpenuhi.", feedbackNo:"Cek rentangnya: 38.5 memenuhi suhu>=38 DAN suhu<39, artinya Demam Sedang." },
+
+        { id:20, diff:"sulit", topic:"DAN + ATAU", scene:"🏬", desc:"Total Belanja: Rp120.000, Status Member: Ya",
+          branches:[
+            { kw:"JIKA", cond:"total >= 100000 ATAU member == benar", blank:true, options:[{text:"Dapat_Diskon_10persen",correct:true},{text:"Bayar_Penuh",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Bayar_Penuh" }
+          ],
+          feedbackOk:"Hebat! Total belanja saja sudah lebih dari Rp100.000, ATAU sudah terpenuhi.", feedbackNo:"ATAU hanya butuh satu syarat benar. total >= 100000 sudah cukup untuk diskon." },
+
+        /* ---------- TIER 3: SANGAT SULIT & KOMPLEKS (21-30) ---------- */
+        { id:21, diff:"sangat", topic:"JIKA Bertingkat", scene:"📝", desc:"Nilai Ulangan: 95",
+          branches:[
+            { kw:"JIKA", cond:"nilai >= 90", blank:true, options:[{text:"Nilai_A",correct:true},{text:"Nilai_B",correct:false}] },
+            { kw:"ATAU JIKA", cond:"nilai >= 75", action:"Nilai_B" },
+            { kw:"JIKA TIDAK", cond:null, action:"Nilai_C" }
+          ],
+          feedbackOk:"Tepat! 95 memenuhi cabang JIKA pertama (>= 90), jadi dapat Nilai A.", feedbackNo:"Cabang pertama dicek dulu. 95 >= 90, seharusnya masuk Nilai A." },
+
+        { id:22, diff:"sangat", topic:"JIKA Bertingkat", scene:"📝", desc:"Nilai Ulangan: 80",
+          branches:[
+            { kw:"JIKA", cond:"nilai >= 90", action:"Nilai_A" },
+            { kw:"ATAU JIKA", cond:"nilai >= 75", blank:true, options:[{text:"Nilai_B",correct:true},{text:"Nilai_A",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Nilai_C" }
+          ],
+          feedbackOk:"Benar! 80 gagal di cabang pertama (>=90) tapi lolos cabang kedua (>=75).", feedbackNo:"80 gagal di cabang pertama (harus >= 90), lalu cocok di cabang ATAU JIKA (>= 75)." },
+
+        { id:23, diff:"sangat", topic:"JIKA Bertingkat", scene:"📝", desc:"Nilai Ulangan: 60",
+          branches:[
+            { kw:"JIKA", cond:"nilai >= 90", action:"Nilai_A" },
+            { kw:"ATAU JIKA", cond:"nilai >= 75", action:"Nilai_B" },
+            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Nilai_C",correct:true},{text:"Nilai_B",correct:false}] }
+          ],
+          feedbackOk:"Betul! 60 gagal di semua cabang JIKA/ATAU JIKA, jadi jatuh ke JIKA TIDAK.", feedbackNo:"60 tidak memenuhi >=90 maupun >=75, sehingga jatuh ke cabang paling akhir." },
+
+        { id:24, diff:"sangat", topic:"Bertingkat + DAN", scene:"🌡️", desc:"Suhu Tubuh: 38.5°C",
+          branches:[
+            { kw:"JIKA", cond:"suhu >= 39", action:"Demam_Tinggi" },
+            { kw:"ATAU JIKA", cond:"suhu >= 38", blank:true, options:[{text:"Demam_Sedang",correct:true},{text:"Normal",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Normal" }
+          ],
+          feedbackOk:"Keren! Karena cabang pertama sudah dicek dan gagal (38.5 < 39), 'suhu >= 38' otomatis berarti Demam Sedang.", feedbackNo:"Pada JIKA bertingkat, cabang kedua hanya dicek jika cabang pertama gagal. 38.5 gagal di >=39 tapi cocok di >=38." },
+
+        { id:25, diff:"sangat", topic:"Bertingkat + ATAU", scene:"🌬️", desc:"Kecepatan Angin: 45 km/jam, Hujan Deras: Tidak",
+          branches:[
+            { kw:"JIKA", cond:"kecepatan >= 60", action:"Waspada_Bahaya" },
+            { kw:"ATAU JIKA", cond:"kecepatan >= 30 ATAU hujan_deras == benar", blank:true, options:[{text:"Waspada_Sedang",correct:true},{text:"Aman",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Aman" }
+          ],
+          feedbackOk:"Tepat! 45 gagal di cabang pertama (>=60), tapi 45>=30 membuat ATAU di cabang kedua benar.", feedbackNo:"Cabang kedua pakai ATAU: kecepatan>=30 saja sudah cukup benar walau tidak hujan deras." },
+
+        { id:26, diff:"sangat", topic:"Gabungan Kurung", scene:"🏅", desc:"Nilai Try Out: 85, Ikut Ekskul: Ya, Jumlah Absen: 2 hari",
+          branches:[
+            { kw:"JIKA", cond:"(nilai >= 80 DAN ikut_ekskul == benar) ATAU absen == 0", blank:true, options:[{text:"Lolos_Seleksi",correct:true},{text:"Tidak_Lolos",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Tidak_Lolos" }
+          ],
+          feedbackOk:"Keren! Isi kurung (nilai>=80 DAN ikut_ekskul) sudah benar, jadi seluruh syarat ATAU terpenuhi.", feedbackNo:"Selesaikan dulu tanda kurung: nilai>=80 DAN ikut_ekskul==benar bernilai BENAR, itu cukup untuk ATAU." },
+
+        { id:27, diff:"sangat", topic:"Bertingkat + Uang", scene:"🏦", desc:"Saldo Tabungan: Rp750.000",
+          branches:[
+            { kw:"JIKA", cond:"saldo >= 1000000", action:"Bunga_5persen" },
+            { kw:"ATAU JIKA", cond:"saldo >= 500000", blank:true, options:[{text:"Bunga_3persen",correct:true},{text:"Bunga_5persen",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Bunga_1persen" }
+          ],
+          feedbackOk:"Betul! Rp750.000 gagal di cabang pertama (>=1.000.000) tapi cocok di cabang kedua (>=500.000).", feedbackNo:"Saldo 750.000 gagal di cabang pertama, lalu cocok di cabang ATAU JIKA (>=500.000), jadi Bunga 3%." },
+
+        { id:28, diff:"sangat", topic:"DAN + BUKAN", scene:"🏠", desc:"Pintu Terkunci, Alarm TIDAK Aktif, Ada Gerakan Terdeteksi",
+          branches:[
+            { kw:"JIKA", cond:"gerakan_terdeteksi == benar DAN BUKAN alarm_aktif", blank:true, options:[{text:"Nyalakan_Alarm_Otomatis",correct:true},{text:"Diam_Saja",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Diam_Saja" }
+          ],
+          feedbackOk:"Misi Selesai! Ada gerakan DAN alarm belum aktif, sistem keamanan otomatis harus menyala.", feedbackNo:"Gerakan terdeteksi BENAR dan alarm memang belum aktif (BUKAN alarm_aktif = benar), jadi syarat DAN terpenuhi." },
+
+        { id:29, diff:"sangat", topic:"Hitung + DAN", scene:"🧮", desc:"Harga Satuan: Rp15.000 × Jumlah: 8 = Total Belanja Rp120.000, Member: Ya",
+          branches:[
+            { kw:"JIKA", cond:"total_belanja >= 100000 DAN member == benar", blank:true, options:[{text:"Dapat_Diskon_Besar",correct:true},{text:"Bayar_Penuh",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Bayar_Penuh" }
+          ],
+          feedbackOk:"Hebat, hitunganmu tepat! 15.000 × 8 = 120.000, itu >= 100.000, DAN member juga benar.", feedbackNo:"Hitung dulu: 15.000 × 8 = 120.000. Itu memenuhi total_belanja>=100000, ditambah member==benar, jadi DAN terpenuhi." },
+
+        { id:30, diff:"sangat", topic:"Bertingkat Kompleks", scene:"📶", desc:"Kecepatan Internet: 80 Mbps, Koneksi Stabil: Tidak, Mode Prioritas: Ya",
+          branches:[
+            { kw:"JIKA", cond:"(kecepatan >= 100 DAN stabil == benar)", action:"Sangat_Cepat" },
+            { kw:"ATAU JIKA", cond:"(kecepatan >= 50 ATAU prioritas == benar)", blank:true, options:[{text:"Cepat",correct:true},{text:"Sangat_Cepat",correct:false}] },
+            { kw:"JIKA TIDAK", cond:null, action:"Lambat" }
+          ],
+          feedbackOk:"Luar biasa! Cabang pertama gagal karena stabil==benar salah (walau kecepatan tinggi). Cabang kedua benar karena kecepatan>=50 ATAU prioritas==benar.", feedbackNo:"Cabang pertama butuh DAN (kecepatan>=100 DAN stabil), tapi stabil salah jadi gagal. Cabang kedua pakai ATAU, dan kecepatan>=50 saja sudah cukup benar." }
     ];
 
     /* ================= GAME LOGIC ================= */
@@ -585,6 +599,9 @@
     const feedbackOverlay = document.getElementById('feedbackOverlay');
     let currentAnswerSlot = null;
 
+    const diffLabel = { sedang: "Sedang", sulit: "Sulit", sangat: "Sangat Sulit" };
+    const diffClass = { sedang: "diff-sedang", sulit: "diff-sulit", sangat: "diff-sangat" };
+
     function startGame() {
         currentLevelIndex = 0;
         correctCount = 0;
@@ -597,7 +614,6 @@
         }, 100);
     }
 
-    // Mewarnai kata kunci logika DAN / ATAU / BUKAN di dalam teks kondisi
     function highlightCond(condStr) {
         let s = condStr
             .replace(/\(/g, '<span style="color:#8a93b0">(</span>')
@@ -613,6 +629,9 @@
         const data = levels[currentLevelIndex];
 
         document.getElementById('levelIndicator').innerText = `Level ${data.id}/${levels.length}`;
+        const diffEl = document.getElementById('diffIndicator');
+        diffEl.innerText = diffLabel[data.diff];
+        diffEl.className = 'diff-pill ' + diffClass[data.diff];
         document.getElementById('topicIndicator').innerText = data.topic;
         document.getElementById('scoreIndicator').innerText = `Skor: ${correctCount * 10}`;
 
@@ -623,7 +642,6 @@
 
         feedbackOverlay.classList.remove('show');
 
-        // --- RENDER KODE DINAMIS BERDASARKAN JUMLAH CABANG ---
         let htmlCode = '';
         data.branches.forEach((branch, idx) => {
             const isElse = branch.kw === 'JIKA TIDAK';
@@ -650,7 +668,6 @@
         codeEditorArea.innerHTML = htmlCode;
         currentAnswerSlot = document.getElementById('dynamicSlot');
 
-        // Cari cabang yang punya opsi jawaban
         const blankBranch = data.branches.find(b => b.blank);
 
         optionsContainer.innerHTML = '';
@@ -666,7 +683,6 @@
 
     function checkAnswer(selectedOption, levelData) {
         if (currentAnswerSlot) currentAnswerSlot.innerText = selectedOption.text;
-
         if (selectedOption.correct) handleCorrect(levelData);
         else handleWrong(levelData);
     }
