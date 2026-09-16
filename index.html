@@ -2,57 +2,42 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Petualangan Robo-Code: Master Logika Kelas 6</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Petualangan Robo-Code: Master Logika SD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Modern, vibrant color palette for kids */
-            --primary: #8b5cf6;      /* Violet */
-            --primary-dark: #7c3aed;
-            --primary-light: #a78bfa;
-            --secondary: #ec4899;    /* Pink */
-            --secondary-dark: #db2777;
-            --tertiary: #0ea5e9;     /* Sky Blue */
-            
-            --success: #10b981;      /* Emerald */
+            /* Modern Color Palette */
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary: #ec4899;
+            --success: #10b981;
             --success-dark: #059669;
-            --danger: #ef4444;       /* Red */
+            --danger: #ef4444;
             --danger-dark: #dc2626;
-            --warning: #f59e0b;      /* Amber */
+            --warning: #f59e0b;
             
-            --bg-gradient-1: #c4b5fd;
+            --bg-gradient-1: #e0e7ff;
             --bg-gradient-2: #fbcfe8;
-            --bg-gradient-3: #bae6fd;
-            
             --card-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #1e293b;
+            --text: #1e293b;
             --text-muted: #64748b;
             
             --code-bg: #1e1e2e;
             --code-text: #a6accd;
-            
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.4);
         }
 
-        * { 
-            box-sizing: border-box; 
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         html, body {
             font-family: 'Nunito', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            color: var(--text-main);
-            overflow: hidden; /* Prevent scrolling on body */
-            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2), var(--bg-gradient-3));
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
+            color: var(--text);
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             display: flex;
@@ -60,286 +45,144 @@
             align-items: center;
         }
 
-        /* Animated grid overlay */
+        /* Grid Pattern Overlay */
         body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background-image: 
-                linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px);
+                linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px);
             background-size: 30px 30px;
-            z-index: 0;
-            pointer-events: none;
+            z-index: 0; pointer-events: none;
         }
 
         .app-container {
-            width: 100%;
-            max-width: 480px;
-            height: 100vh;
+            width: 100%; max-width: 900px; height: 100%;
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: var(--shadow-lg), 0 0 0 4px rgba(255,255,255,0.5) inset;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; flex-direction: column;
+            position: relative; z-index: 1; overflow: hidden;
         }
 
-        @media (min-width: 500px) {
+        @media (min-width: 600px) {
             .app-container {
-                height: 85vh;
-                max-height: 850px;
-                border-radius: 32px;
+                height: 90vh; max-height: 850px;
+                width: 95%; border-radius: 32px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 4px rgba(255,255,255,0.5) inset;
                 border: 2px solid rgba(255,255,255,0.8);
             }
         }
 
-        @media (min-width: 850px) {
-            .app-container { max-width: 900px; height: 80vh; flex-direction: row; }
-        }
-
         .screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex;
-            flex-direction: column;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column;
             background: transparent;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 24px;
-            z-index: 1;
-            overflow-y: auto;
-            opacity: 1;
-            transform: scale(1) translateX(0);
+            padding: 24px; z-index: 1; overflow-y: auto; overflow-x: hidden;
+            opacity: 1; transform: scale(1) translateX(0);
         }
 
-        .screen.hidden { 
-            transform: scale(0.95) translateX(120%); 
-            opacity: 0;
-            pointer-events: none;
-            z-index: 0; 
-        }
-        
-        .screen.active { 
-            transform: scale(1) translateX(0); 
-            opacity: 1;
-            pointer-events: auto;
-        }
-        
-        .screen.left { 
-            transform: scale(0.95) translateX(-120%); 
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Hide scrollbar for neatness */
-        .screen::-webkit-scrollbar { width: 6px; }
+        .screen::-webkit-scrollbar { width: 8px; }
         .screen::-webkit-scrollbar-track { background: transparent; }
-        .screen::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        .screen::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
 
-        h1 {
-            font-family: 'Fredoka', sans-serif;
-            color: var(--primary-dark);
-            font-size: 2.5rem;
-            margin: 0;
-            text-align: center;
-            line-height: 1.1;
-            text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
-        }
+        .screen.hidden { transform: scale(0.9) translateX(120%); opacity: 0; pointer-events: none; z-index: 0; }
+        .screen.active { transform: scale(1) translateX(0); opacity: 1; pointer-events: auto; }
+        .screen.left { transform: scale(0.9) translateX(-120%); opacity: 0; pointer-events: none; }
 
+        h1 { font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 2.5rem; margin: 0; text-align: center; line-height: 1.1; }
+        h2 { font-family: 'Fredoka', sans-serif; color: var(--primary); font-size: 1.8rem; margin: 20px 0 10px; }
         p { color: var(--text-muted); text-align: center; margin-bottom: 24px; font-size: 1.1rem; font-weight: 600; }
-
-        .intro-img { 
-            font-size: 7rem; 
-            margin-bottom: 20px; 
-            animation: floatRobot 3s ease-in-out infinite;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.15));
-        }
-
-        /* Tier List Badges */
-        .tier-list { width: 100%; max-width: 360px; margin: 0 auto 30px; display: flex; flex-direction: column; gap: 12px; }
-        .tier-row {
-            display: flex; align-items: center; gap: 12px;
-            background: white; 
-            border-radius: 16px; 
-            padding: 12px 16px;
-            font-size: 0.95rem; font-weight: 800;
-            box-shadow: var(--shadow-sm);
-            border: 2px solid transparent;
-            transition: transform 0.2s;
-        }
-        .tier-row:hover { transform: translateY(-2px); }
-        .tier-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
-        .tier-row span.range { color: var(--primary); font-family: 'Fredoka'; font-size: 1.1rem; margin-left: auto; background: var(--bg-gradient-1); padding: 2px 10px; border-radius: 10px; }
-
-        /* 3D Button Style */
-        .btn-start {
-            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            padding: 16px 48px;
-            font-size: 1.4rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'Fredoka', sans-serif;
-            box-shadow: 0 8px 0 #5b21b6, 0 15px 20px rgba(124, 58, 237, 0.4);
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            margin: auto auto 20px;
-            display: block;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-start::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: skewX(-20deg);
-            animation: shine 3s infinite;
-        }
-        .btn-start:active { 
-            transform: translateY(8px); 
-            box-shadow: 0 0px 0 #5b21b6, 0 5px 10px rgba(124, 58, 237, 0.4); 
-        }
-
-        #gameScreen { padding: 20px 16px; flex-direction: column; justify-content: flex-start; }
-
-        .game-header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 3px dashed rgba(203, 213, 225, 0.5);
-            flex-shrink: 0;
-            flex-wrap: wrap;
-        }
-
-        .pill {
-            padding: 6px 16px; 
-            border-radius: 20px; 
-            font-weight: 800; 
-            font-size: 0.85rem;
-            box-shadow: var(--shadow-sm);
-            font-family: 'Nunito', sans-serif;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .level-pill { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); color: var(--primary-dark); }
-        .topic-pill { background: linear-gradient(135deg, #fce7f3, #fbcfe8); color: var(--secondary-dark); }
-        .score-pill { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #b45309; }
-
-        .diff-pill { padding: 6px 16px; border-radius: 20px; font-weight: 800; font-size: 0.8rem; box-shadow: var(--shadow-sm); }
-        .diff-sedang { background: linear-gradient(135deg, #dcfce7, #bbf7d0); color: #15803d; }
-        .diff-sulit { background: linear-gradient(135deg, #ffedd5, #fed7aa); color: #c2410c; }
-        .diff-sangat { background: linear-gradient(135deg, #fee2e2, #fecaca); color: #b91c1c; }
-
-        .game-body {
-            width: 100%;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            min-height: 0;
-        }
-
-        .left-panel, .right-panel { display: flex; flex-direction: column; width: 100%; height: 100%; }
         
-        @media (min-width: 850px) {
+        .intro-img { font-size: 6rem; margin-bottom: 10px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.15)); animation: floatRobot 3s ease-in-out infinite; text-align: center;}
+        
+        .btn-main {
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark)); color: white;
+            border: none; padding: 16px 40px; font-size: 1.3rem; border-radius: 50px;
+            cursor: pointer; font-family: 'Fredoka', sans-serif;
+            box-shadow: 0 8px 0 #4338ca, 0 15px 20px rgba(79, 70, 229, 0.4);
+            transition: all 0.15s; margin: 10px; position: relative; overflow: hidden;
+        }
+        .btn-main:active { transform: translateY(8px); box-shadow: 0 0px 0 #4338ca; }
+        
+        .btn-secondary { background: linear-gradient(to bottom, var(--secondary), #db2777); box-shadow: 0 8px 0 #be185d, 0 15px 20px rgba(236, 72, 153, 0.4); }
+        .btn-secondary:active { box-shadow: 0 0px 0 #be185d; }
+
+        .btn-back {
+            background: #e2e8f0; color: #475569; border: none;
+            padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 0 #cbd5e1; align-self: flex-start; margin-bottom: 15px;
+        }
+        .btn-back:active { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
+
+        .materi-card {
+            background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border: 2px solid #f1f5f9; text-align: left;
+        }
+        .materi-card p { text-align: left; font-weight: normal; color: #334155; line-height: 1.6; }
+        .materi-card ul { margin-left: 20px; color: #334155; margin-bottom: 20px; line-height: 1.6;}
+        .materi-card li { margin-bottom: 8px;}
+        
+        .video-container {
+            position: relative; padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0; overflow: hidden; max-width: 100%; border-radius: 16px; margin: 20px 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* Flowchart SVG container */
+        .flowchart-box {
+            background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 16px; padding: 20px;
+            display: flex; justify-content: center; overflow-x: auto; margin-bottom: 20px;
+        }
+
+        #gameScreen { padding: 16px; flex-direction: column; justify-content: flex-start; }
+        
+        .game-header {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+            margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed rgba(203, 213, 225, 0.6);
+        }
+        
+        .pill { padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px;}
+        .level-pill { background: #e0e7ff; color: var(--primary-dark); }
+        .score-pill { background: #fef3c7; color: #b45309; }
+
+        .game-body { display: flex; flex-direction: column; gap: 16px; flex: 1; }
+        @media (min-width: 800px) {
             #gameScreen { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
-            .game-header { width: 100%; margin-bottom: 20px; }
-            .game-body { flex-direction: row; gap: 24px; }
-            .left-panel { flex: 0 0 35%; }
-            .right-panel { flex: 1; justify-content: flex-start; }
+            .game-header { width: 100%; }
+            .game-body { flex-direction: row; width: 100%; }
+            .left-panel { flex: 0 0 40%; }
+            .right-panel { flex: 1; }
         }
 
         .visual-stage {
-            flex: 1;
-            width: 100%;
-            min-height: 200px;
-            background: linear-gradient(180deg, #f8fafc, #e2e8f0);
-            border-radius: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            border: 4px solid white;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.05), var(--shadow-md);
-            padding: 20px;
-            overflow: hidden;
+            flex: 1; background: linear-gradient(180deg, #f8fafc, #e2e8f0); border-radius: 24px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border: 4px solid white; box-shadow: 0 10px 15px rgba(0,0,0,0.05); padding: 20px; min-height: 180px; position: relative;
         }
-
-        /* Stage decor */
-        .visual-stage::before {
-            content: ''; position: absolute; bottom: 0; width: 100%; height: 30%;
-            background: rgba(0,0,0,0.03); border-radius: 50% 50% 0 0;
-        }
-
-        .scene-emoji { 
-            font-size: 4.5rem; 
-            z-index: 2; 
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .robot-avatar { 
-            font-size: 3rem; 
-            margin-top: 10px; 
-            z-index: 2;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: drop-shadow(0 8px 8px rgba(0,0,0,0.15));
-            animation: breathe 3s infinite alternate;
-        }
-
+        .scene-emoji { font-size: 4.5rem; z-index: 2; animation: popIn 0.5s; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));}
+        .robot-avatar { font-size: 3rem; margin-top: 10px; z-index: 2; transition: all 0.4s; animation: breathe 3s infinite alternate; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));}
         .condition-label {
-            margin-top: 15px;
-            font-weight: 800;
-            color: var(--primary-dark);
-            background: white;
-            padding: 10px 18px;
-            border-radius: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            font-size: 0.9rem;
-            text-align: center;
-            z-index: 2;
-            border: 2px solid var(--primary-light);
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 15px; font-weight: 800; color: var(--primary-dark); background: white;
+            padding: 8px 16px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            font-size: 0.9rem; text-align: center; border: 2px solid var(--primary-light);
         }
 
         .code-editor {
-            width: 100%;
-            background: var(--code-bg);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 16px;
-            font-family: 'Fira Code', 'Consolas', monospace;
-            color: var(--code-text);
-            box-shadow: inset 0 0 0 2px rgba(255,255,255,0.1), var(--shadow-lg);
-            font-size: 0.95rem;
-            overflow-x: auto;
-            position: relative;
+            background: var(--code-bg); border-radius: 20px; padding: 20px; margin-bottom: 15px;
+            font-family: 'Fira Code', 'Consolas', monospace; color: var(--code-text);
+            box-shadow: inset 0 0 0 2px rgba(255,255,255,0.1), 0 10px 15px rgba(0,0,0,0.2);
+            font-size: 0.95rem; overflow-x: auto; position: relative;
         }
-        
-        /* Mac-like window buttons */
         .code-editor::before {
-            content: '';
-            position: absolute;
-            top: 12px; left: 16px;
-            width: 12px; height: 12px;
-            border-radius: 50%;
-            background: #ff5f56;
-            box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
+            content: ''; position: absolute; top: 12px; left: 16px; width: 12px; height: 12px;
+            border-radius: 50%; background: #ff5f56; box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
         }
-
         .code-editor-content { margin-top: 20px; }
-
         .line { line-height: 1.7; white-space: pre; }
 
-        /* Syntax Highlighting */
         .kw-if, .kw-elif, .kw-else { font-family: 'Fredoka', sans-serif; font-size: 1.05rem; }
-        .kw-if { color: #ff79c6; text-shadow: 0 0 8px rgba(255,121,198,0.4); }
+        .kw-if { color: #ff79c6; }
         .kw-elif { color: #f1fa8c; }
         .kw-else { color: #ff5555; }
         .kw-and, .kw-or { color: #8be9fd; font-style: italic; }
@@ -349,167 +192,61 @@
         .bracket { color: #6272a4; }
 
         .answer-slot {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            min-width: 140px;
-            height: 28px;
-            background: rgba(255,255,255,0.05);
-            border: 2px dashed #6272a4;
-            border-radius: 8px;
-            color: #6272a4;
-            padding: 0 10px;
-            vertical-align: middle;
-            font-weight: 700;
-            font-size: 0.9rem;
-            transition: all 0.3s;
+            display: inline-flex; justify-content: center; align-items: center;
+            min-width: 140px; height: 28px; background: rgba(255,255,255,0.05);
+            border: 2px dashed #6272a4; border-radius: 8px; color: #6272a4;
+            padding: 0 10px; font-weight: 700; font-size: 0.9rem; transition: all 0.3s;
             font-family: 'Nunito', sans-serif;
         }
-        .answer-slot.filled { 
-            border-style: solid; border-color: var(--success); 
-            background: rgba(16, 185, 129, 0.15); color: var(--success); 
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-            animation: pop 0.3s ease;
-        }
-        .answer-slot.wrong { 
-            border-style: solid; border-color: var(--danger); 
-            background: rgba(239, 68, 68, 0.15); color: var(--danger); 
-            animation: shake 0.4s ease;
-        }
+        .answer-slot.filled { border-style: solid; border-color: var(--success); background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .answer-slot.wrong { border-style: solid; border-color: var(--danger); background: rgba(239, 68, 68, 0.15); color: var(--danger); }
 
-        .options-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 12px; 
-            width: 100%; 
-            margin-top: auto;
-        }
-
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .option-btn {
-            background: white;
-            border: 3px solid #e2e8f0;
-            padding: 14px 10px;
-            border-radius: 16px;
-            color: var(--text-main);
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.95rem;
-            box-shadow: 0 6px 0 #e2e8f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            line-height: 1.2;
+            background: white; border: 3px solid #e2e8f0; padding: 14px 10px; border-radius: 16px;
+            color: var(--text); font-weight: 800; cursor: pointer; transition: all 0.2s; font-size: 0.95rem;
+            box-shadow: 0 6px 0 #e2e8f0; display: flex; justify-content: center; align-items: center; text-align: center;
         }
-        .option-btn:hover { 
-            background: #f8fafc; 
-            border-color: var(--tertiary); 
-            color: var(--tertiary);
-            box-shadow: 0 6px 0 var(--tertiary);
-            transform: translateY(-2px);
-        }
-        .option-btn:active { 
-            transform: translateY(6px); 
-            box-shadow: 0 0 0 transparent !important; 
-        }
-        
-        .option-btn.disabled {
-            opacity: 0.6;
-            pointer-events: none;
-            filter: grayscale(1);
-        }
+        .option-btn:hover { background: #f8fafc; border-color: var(--primary); color: var(--primary); box-shadow: 0 6px 0 var(--primary); transform: translateY(-2px); }
+        .option-btn:active { transform: translateY(6px); box-shadow: 0 0 0 transparent !important; }
+        .option-btn.disabled { opacity: 0.6; pointer-events: none; filter: grayscale(1); }
 
         .feedback-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.4);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-            padding: 24px;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 24px;
         }
         .feedback-overlay.show { opacity: 1; pointer-events: all; }
-        
         .feedback-card {
-            background: white;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: var(--shadow-lg), 0 0 40px rgba(0,0,0,0.1);
-            text-align: center;
-            transform: translateY(50px) scale(0.9);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 400px;
-            width: 100%;
-            border: 4px solid white;
+            background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            text-align: center; transform: translateY(50px) scale(0.9); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 400px; width: 100%; border: 4px solid white;
         }
         .feedback-overlay.show .feedback-card { transform: translateY(0) scale(1); }
-
-        .feedback-icon { font-size: 5rem; margin-bottom: 10px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
-        .feedback-title { font-size: 2.2rem; font-family: 'Fredoka', sans-serif; margin-bottom: 12px; }
-        .feedback-text { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; font-weight: 600; }
-
+        
         .btn-next {
-            background: linear-gradient(to bottom, var(--success), var(--success-dark));
-            color: white;
-            border: none;
-            padding: 14px 32px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            font-family: 'Fredoka', sans-serif;
-            cursor: pointer;
-            box-shadow: 0 6px 0 #065f46, 0 10px 15px rgba(16, 185, 129, 0.3);
-            transition: all 0.15s;
-            width: 100%;
+            background: linear-gradient(to bottom, var(--success), var(--success-dark)); color: white;
+            border: none; padding: 14px 32px; border-radius: 50px; font-size: 1.2rem; font-weight: bold;
+            font-family: 'Fredoka', sans-serif; cursor: pointer; box-shadow: 0 6px 0 #065f46; transition: all 0.15s; width: 100%; margin-top: 15px;
         }
         .btn-next:active { transform: translateY(6px); box-shadow: 0 0px 0 #065f46; }
 
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes floatRobot { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-20px) rotate(2deg); } }
         @keyframes breathe { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px) rotate(-5deg); } 40% { transform: translateX(10px) rotate(5deg); } 60% { transform: translateX(-10px) rotate(-5deg); } 80% { transform: translateX(10px) rotate(5deg); } }
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
-        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes shine { 100% { left: 200%; } }
-        
-        .shake-anim { animation: shake 0.5s ease-in-out; }
-        .pop-anim { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        .shake-anim { animation: shake 0.4s ease-in-out; }
 
-        /* Confetti Canvas */
-        #confetti-canvas {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 100;
-        }
+        #confetti-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
 
-        /* Result Screen specifics */
-        #resultScreen h1 { font-size: 3rem; margin-bottom: 10px;}
-        #resultScreen p { font-size: 1.2rem; margin-bottom: 30px;}
-        .score-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
-            padding: 30px; border-radius: 24px; width: 100%; text-align: center; margin-bottom: 30px;
-            box-shadow: inset 0 0 0 2px white, var(--shadow-md);
-            backdrop-filter: blur(10px);
-        }
-
-        /* Adjustments for smaller phones */
-        @media (max-width: 380px) {
-            h1 { font-size: 2rem; }
-            .btn-start { padding: 12px 30px; font-size: 1.2rem; }
+        @media (max-width: 400px) {
+            h1 { font-size: 2rem; } h2 { font-size: 1.5rem; }
+            .btn-main { padding: 12px 24px; font-size: 1.1rem; }
             .code-editor { font-size: 0.8rem; padding: 16px; }
             .answer-slot { min-width: 100px; font-size: 0.8rem; height: 24px;}
             .option-btn { font-size: 0.85rem; padding: 10px 8px; }
-            .visual-stage { min-height: 160px; }
-            .scene-emoji { font-size: 3.5rem; }
-            .robot-avatar { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -519,47 +256,187 @@
 
 <div class="app-container">
 
-    <!-- Screen 1: Intro -->
     <div id="introScreen" class="screen active">
         <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; width: 100%;">
             <div class="intro-img">🤖</div>
-            <h1>Master Logika<br>Kelas 6 SD</h1>
-            <p>30 Tantangan Koding &middot; 3 Tingkat Kesulitan</p>
+            <h1>Petualangan<br>Robo-Code</h1>
+            <p>Pilih tingkat kelasmu untuk memulai petualangan koding!</p>
             
-            <div class="tier-list">
-                <div class="tier-row">
-                    <span class="tier-dot" style="background:var(--success)"></span> 
-                    <span>Sedang <span style="font-size:0.8rem; font-weight:600; color:#94a3b8; display:block">Kondisi sederhana</span></span>
-                    <span class="range">1-10</span>
-                </div>
-                <div class="tier-row">
-                    <span class="tier-dot" style="background:var(--warning)"></span> 
-                    <span>Sulit <span style="font-size:0.8rem; font-weight:600; color:#94a3b8; display:block">DAN / ATAU / BUKAN</span></span>
-                    <span class="range">11-20</span>
-                </div>
-                <div class="tier-row">
-                    <span class="tier-dot" style="background:var(--danger)"></span> 
-                    <span>Sangat Sulit <span style="font-size:0.8rem; font-weight:600; color:#94a3b8; display:block">Logika Bertingkat</span></span>
-                    <span class="range">21-30</span>
-                </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px; margin-top: 20px;">
+                <button class="btn-main" onclick="selectClass(4)">👦👧 Kelas 4 SD</button>
+                <button class="btn-main btn-secondary" onclick="selectClass(6)">🧑👩 Kelas 6 SD</button>
             </div>
-            
-            <button class="btn-start" onclick="startGame()">Mulai Misi 🚀</button>
         </div>
     </div>
 
-    <!-- Screen 2: Game -->
+    <div id="classMenuScreen" class="screen hidden">
+        <button class="btn-back" onclick="goBack('classMenuScreen', 'introScreen')">⬅ Kembali</button>
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; width: 100%;">
+            <h1 id="classMenuTitle">Kelas ?</h1>
+            <p id="classMenuSubtitle">Apa yang ingin kamu lakukan hari ini?</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 320px; margin-top: 30px;">
+                <button class="btn-main" style="background: linear-gradient(to bottom, #10b981, #059669); box-shadow: 0 8px 0 #047857;" onclick="openMaterial()">
+                    📚 Pelajari Materi
+                </button>
+                <button class="btn-main" onclick="startGame()">
+                    🚀 Mulai Misi (Soal)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="materialScreen" class="screen hidden">
+        <button class="btn-back" onclick="goBack('materialScreen', 'classMenuScreen')">⬅ Kembali</button>
+        <h1 style="font-size: 2rem;" id="matTitle">Materi Percabangan</h1>
+        
+        <div id="materialContent4" style="display:none; width: 100%; max-width: 700px; margin: 0 auto;">
+            <!-- Material for Class 4 -->
+            <div class="materi-card">
+                <h2>Apa itu Percabangan (If-Else)?</h2>
+                <p>Dalam koding, komputer butuh diberi aturan kapan dia harus melakukan sesuatu. Bayangkan komputer adalah robot yang patuh. <b>Percabangan</b> adalah cara kita memberitahu robot: <i>"JIKA terjadi sesuatu, maka lakukan A. JIKA TIDAK, lakukan B."</i></p>
+                <p>Contoh di dunia nyata:</p>
+                <ul>
+                    <li><b>JIKA</b> hujan turun = Pakai Payung ☂️</li>
+                    <li><b>JIKA TIDAK</b> hujan = Pakai Topi 🧢</li>
+                </ul>
+            </div>
+
+            <div class="materi-card">
+                <h2>Tonton Video Penjelasan Ini!</h2>
+                <p>Yuk tonton video seru tentang blok IF-ELSE menggunakan Scratch ini:</p>
+                <div class="video-container">
+                    <!-- YouTube Video Class 4 (Scratch If-Else) -->
+                    <iframe src="https://www.youtube.com/embed/ddY5aqHyhuY" title="Scratch - Kondisi If-Else Sederhana" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="materi-card">
+                <h2>Flowchart (Diagram Alir)</h2>
+                <p>Flowchart adalah gambar jalan cerita dari koding kita. Bentuk <b>Belah Ketupat (💎)</b> artinya sebuah pertanyaan/kondisi.</p>
+                
+                <div class="flowchart-box">
+                    <svg width="300" height="250" viewBox="0 0 300 250">
+                        <!-- Start -->
+                        <rect x="100" y="10" width="100" height="30" rx="15" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
+                        <text x="150" y="30" font-family="Nunito" font-size="14" font-weight="bold" text-anchor="middle" fill="#4f46e5">Mulai</text>
+                        <line x1="150" y1="40" x2="150" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <!-- Condition -->
+                        <polygon points="150,70 220,110 150,150 80,110" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+                        <text x="150" y="115" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#b45309">Apakah Hujan?</text>
+                        
+                        <!-- True Branch -->
+                        <line x1="220" y1="110" x2="260" y2="110" stroke="#10b981" stroke-width="2"/>
+                        <line x1="260" y1="110" x2="260" y2="150" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="240" y="105" font-family="Nunito" font-size="12" font-weight="bold" fill="#10b981">Ya</text>
+                        <rect x="210" y="150" width="85" height="40" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                        <text x="252" y="175" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#16a34a">Pakai Payung</text>
+                        
+                        <!-- False Branch -->
+                        <line x1="80" y1="110" x2="40" y2="110" stroke="#ef4444" stroke-width="2"/>
+                        <line x1="40" y1="110" x2="40" y2="150" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="50" y="105" font-family="Nunito" font-size="12" font-weight="bold" fill="#ef4444">Tidak</text>
+                        <rect x="5" y="150" width="85" height="40" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+                        <text x="47" y="175" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#dc2626">Pakai Topi</text>
+                        
+                        <!-- Arrow Definition -->
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div id="materialContent6" style="display:none; width: 100%; max-width: 700px; margin: 0 auto;">
+            <!-- Material for Class 6 -->
+            <div class="materi-card">
+                <h2>Gerbang Logika: DAN, ATAU, BUKAN</h2>
+                <p>Saat koding makin rumit, satu kondisi saja tidak cukup. Kita butuh menggabungkan beberapa kondisi menggunakan operator logika!</p>
+                <ul>
+                    <li><b>DAN (AND)</b> : <span style="color:var(--primary)">Semua</span> syarat harus bernilai BENAR agar hasilnya BENAR. Ibaratnya syarat mutlak. (Misal: <i>Harus bawa SIM <b>DAN</b> STNK</i>)</li>
+                    <li><b>ATAU (OR)</b> : <span style="color:var(--success)">Salah satu</span> syarat saja bernilai BENAR, maka hasilnya sudah BENAR. (Misal: <i>Bayar pakai Cash <b>ATAU</b> QRIS</i>)</li>
+                    <li><b>BUKAN (NOT)</b> : Membalikkan keadaan. Jika benar jadi salah, jika salah jadi benar. (Misal: <i><b>BUKAN</b> hari libur = Hari kerja</i>)</li>
+                </ul>
+            </div>
+
+            <div class="materi-card">
+                <h2>Tonton Video Penjelasan Ini!</h2>
+                <p>Perdalam pemahamanmu tentang operator logika (AND, OR, NOT) dengan video singkat ini:</p>
+                <div class="video-container">
+                    <!-- YouTube Video Class 6 (Logika Pemrograman) -->
+                    <iframe src="https://www.youtube.com/embed/YSC6SU2AHmk" title="Operator Logika Pemrograman" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="materi-card">
+                <h2>Percabangan Bertingkat (IF - ELSE IF - ELSE)</h2>
+                <p>Terkadang pilihan lebih dari dua. Komputer akan mengecek kondisi pertama, jika GAGAL, ia mengecek kondisi kedua, dan seterusnya sampai yang terakhir.</p>
+                
+                <div class="flowchart-box">
+                    <svg width="340" height="350" viewBox="0 0 340 350">
+                        <defs>
+                            <marker id="arrow6" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                            </marker>
+                        </defs>
+                        <!-- Start -->
+                        <rect x="120" y="10" width="100" height="30" rx="15" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
+                        <text x="170" y="30" font-family="Nunito" font-size="14" font-weight="bold" text-anchor="middle" fill="#4f46e5">Mulai Ujian</text>
+                        <line x1="170" y1="40" x2="170" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow6)"/>
+                        
+                        <!-- Cond 1 -->
+                        <polygon points="170,70 240,110 170,150 100,110" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+                        <text x="170" y="115" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#b45309">Nilai &gt;= 90?</text>
+                        
+                        <!-- True 1 -->
+                        <line x1="240" y1="110" x2="280" y2="110" stroke="#10b981" stroke-width="2"/>
+                        <line x1="280" y1="110" x2="280" y2="150" stroke="#10b981" stroke-width="2" marker-end="url(#arrow6)"/>
+                        <rect x="240" y="150" width="80" height="35" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                        <text x="280" y="172" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#16a34a">Dapat "A"</text>
+
+                        <!-- False 1 -> Cond 2 -->
+                        <line x1="170" y1="150" x2="170" y2="180" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow6)"/>
+                        <text x="185" y="165" font-family="Nunito" font-size="12" font-weight="bold" fill="#ef4444">Tidak</text>
+                        
+                        <!-- Cond 2 -->
+                        <polygon points="170,180 240,220 170,260 100,220" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+                        <text x="170" y="225" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#4338ca">Nilai &gt;= 75?</text>
+                        
+                        <!-- True 2 -->
+                        <line x1="240" y1="220" x2="280" y2="220" stroke="#10b981" stroke-width="2"/>
+                        <line x1="280" y1="220" x2="280" y2="260" stroke="#10b981" stroke-width="2" marker-end="url(#arrow6)"/>
+                        <rect x="240" y="260" width="80" height="35" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                        <text x="280" y="282" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#16a34a">Dapat "B"</text>
+                        
+                        <!-- False 2 (ELSE) -->
+                        <line x1="170" y1="260" x2="170" y2="290" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow6)"/>
+                        <text x="185" y="275" font-family="Nunito" font-size="12" font-weight="bold" fill="#ef4444">Tidak</text>
+                        <rect x="130" y="290" width="80" height="35" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+                        <text x="170" y="312" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#dc2626">Dapat "C"</text>
+                        
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn-main" style="margin: 20px auto; display: block;" onclick="startGame()">Sudah Paham, Mulai Misi 🚀</button>
+    </div>
+
     <div id="gameScreen" class="screen hidden">
+        <button class="btn-back" onclick="goBack('gameScreen', 'classMenuScreen')">⬅ Keluar Game</button>
+        
         <div class="game-header">
-            <div class="pill level-pill">🚩 <span id="levelIndicator">Level 1/30</span></div>
-            <div class="diff-pill" id="diffIndicator">Sedang</div>
-            <div class="pill topic-pill">💡 <span id="topicIndicator">IF-ELSE Dasar</span></div>
+            <div class="pill level-pill">🚩 <span id="levelIndicator">Level 1/20</span></div>
             <div class="pill score-pill">⭐ <span id="scoreIndicator">Skor: 0</span></div>
         </div>
 
         <div class="game-body">
             <div class="left-panel">
-                <div class="visual-stage" id="visualStage">
+                <div class="visual-stage">
                     <div class="scene-emoji" id="sceneEmoji">🌧️</div>
                     <div class="condition-label" id="conditionLabel">Cuaca sedang Hujan</div>
                     <div class="robot-avatar" id="robotAvatar">🤖</div>
@@ -567,285 +444,266 @@
             </div>
 
             <div class="right-panel">
-                <div class="code-editor">
-                    <div class="code-editor-content" id="codeEditorArea">
-                        <!-- Code generated by JS -->
-                    </div>
+                <div class="code-editor" id="codeEditorArea">
+                    <!-- Dynamic Code Content -->
                 </div>
                 <div class="options-grid" id="optionsContainer">
-                    <!-- Options generated by JS -->
+                    <!-- Dynamic Options -->
                 </div>
             </div>
         </div>
 
-        <!-- Feedback Overlay -->
+        <!-- Feedback UI -->
         <div class="feedback-overlay" id="feedbackOverlay">
             <div class="feedback-card">
-                <div class="feedback-icon" id="fbIcon">🎉</div>
-                <h2 class="feedback-title" id="fbTitle">Hebat!</h2>
-                <p class="feedback-text" id="fbText">Logikamu benar.</p>
-                <button class="btn-next" id="btnNext" onclick="nextLevel()">Lanjut Level ➡</button>
+                <div style="font-size: 5rem; margin-bottom: 10px;" id="fbIcon">🎉</div>
+                <h2 style="font-size: 2rem; font-family: 'Fredoka'; margin:0 0 10px;" id="fbTitle">Hebat!</h2>
+                <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 20px;" id="fbText">Logikamu benar.</p>
+                <button class="btn-next" onclick="nextLevel()">Lanjut Level ➡</button>
             </div>
         </div>
     </div>
 
-    <!-- Screen 3: Result -->
     <div id="resultScreen" class="screen hidden">
         <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; width: 100%;">
-            <div style="font-size: 6rem; margin-bottom: 10px; animation: pop 1s ease infinite alternate; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2))">🏆</div>
-            <h1>Misi Selesai!</h1>
-            <p>Kamu telah menyelesaikan 30 level logika.</p>
+            <div style="font-size: 6rem; margin-bottom: 10px; animation: popIn 1s ease, floatRobot 2s infinite alternate;">🏆</div>
+            <h1 style="font-size: 3rem;">Misi Selesai!</h1>
+            <p>Kamu telah menyelesaikan 20 soal HOTS logika koding.</p>
             
-            <div class="score-box">
+            <div style="background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4)); padding: 30px; border-radius: 24px; text-align: center; margin: 20px 0; border: 2px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); min-width: 250px;">
                 <h3 style="margin:0; color:var(--text-muted); font-family: 'Fredoka', sans-serif;">Skor Akhir</h3>
                 <h1 style="margin:10px 0 0; color:var(--primary-dark); font-size: 4.5rem; text-shadow: none;" id="finalScore">100</h1>
             </div>
             
-            <button class="btn-start" onclick="location.reload()">Main Lagi ↺</button>
+            <button class="btn-main" onclick="location.reload()">Kembali ke Menu Utama 🏠</button>
         </div>
     </div>
 
 </div>
 
 <script>
-    /* ================= DATA SOAL — 30 LEVEL ================= */
-    const levels = [
-        /* ---------- TIER 1: SEDANG (1-10) ---------- */
-        { id:1, diff:"sedang", topic:"IF-ELSE Dasar", scene:"🌧️", desc:"Cuaca Hujan Deras",
-          branches:[
-            { kw:"JIKA", cond:"hujan == benar", blank:true, options:[{text:"Pakai_Payung",correct:true},{text:"Siram_Tanaman",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Siram_Tanaman" }
-          ], feedbackOk:"Benar! Kalau hujan, kita butuh payung.", feedbackNo:"Kalau sedang hujan, bawa payung ya, bukan menyiram tanaman." },
-        { id:2, diff:"sedang", topic:"Perbandingan <", scene:"🔋", desc:"Baterai Kritis: 5%",
-          branches:[
-            { kw:"JIKA", cond:"baterai < 10", blank:true, options:[{text:"Cari_Charger",correct:true},{text:"Nyalakan_Senter",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Main_Game" }
-          ], feedbackOk:"Pintar! 5 memang kurang dari 10, jadi harus cari charger.", feedbackNo:"5 < 10 itu benar, prioritasnya cari charger dulu." },
-        { id:3, diff:"sedang", topic:"Kesetaraan ==", scene:"🚶", desc:"Lantai Basah & Licin",
-          branches:[
-            { kw:"JIKA", cond:"lantai == licin", blank:true, options:[{text:"Jalan_Pelan",correct:true},{text:"Lompat_Tali",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Lari_Kencang" }
-          ], feedbackOk:"Tepat! Lantai licin itu benar, jadi harus hati-hati.", feedbackNo:"Kalau lantai licin, jalan pelan-pelan supaya tidak jatuh." },
-        { id:4, diff:"sedang", topic:"Kesetaraan ==", scene:"🚦", desc:"Lampu Hijau Menyala",
-          branches:[
-            { kw:"JIKA", cond:"lampu == hijau", blank:true, options:[{text:"Menyeberang",correct:true},{text:"Tidur_di_Jalan",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Berhenti" }
-          ], feedbackOk:"Benar! Hijau memang tandanya boleh menyeberang.", feedbackNo:"Lampu hijau berarti boleh menyeberang dengan aman." },
-        { id:5, diff:"sedang", topic:"Kesetaraan ==", scene:"🚪", desc:"Ada Tamu Mengetuk",
-          branches:[
-            { kw:"JIKA", cond:"ada_tamu == benar", blank:true, options:[{text:"Buka_Pintu",correct:true},{text:"Teriak",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Kunci_Pintu" }
-          ], feedbackOk:"Sopan! Kondisinya benar, jadi pintu harus dibuka.", feedbackNo:"Kalau ada_tamu == benar, sebaiknya buka pintu, bukan berteriak." },
-        { id:6, diff:"sedang", topic:"Cabang ELSE", scene:"🎓", desc:"Nilai Ujian: 80 (KKM: 75)",
-          branches:[
-            { kw:"JIKA", cond:"nilai < 75", action:"Remedial" },
-            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Naik_Kelas",correct:true},{text:"Nangis",correct:false}] }
-          ], feedbackOk:"Hebat! 80 tidak kurang dari 75, jadi masuk JIKA TIDAK.", feedbackNo:"Perhatikan tandanya '< 75'. Nilai 80 lebih besar, jadi masuk JIKA TIDAK." },
-        { id:7, diff:"sedang", topic:"Cabang ELSE", scene:"🤤", desc:"Perut Kenyang (Tidak Lapar)",
-          branches:[
-            { kw:"JIKA", cond:"lapar == benar", action:"Makan_Nasi" },
-            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Lanjut_Main",correct:true},{text:"Minum_Obat",correct:false}] }
-          ], feedbackOk:"Tepat! Karena kenyang, kondisi lapar salah, jadi masuk JIKA TIDAK.", feedbackNo:"Kalau sedang kenyang, kondisi 'lapar' bernilai salah, jadi seharusnya masuk JIKA TIDAK." },
-        { id:8, diff:"sedang", topic:"Cabang IF", scene:"⏰", desc:"Jam 06:00 Pagi",
-          branches:[
-            { kw:"JIKA", cond:"pagi == benar", blank:true, options:[{text:"Bangun_Pagi",correct:true},{text:"Nonton_TV",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Tidur_Lagi" }
-          ], feedbackOk:"Semangat pagi! Kondisinya benar, waktunya bangun.", feedbackNo:"Jam segini pagi==benar, jadi waktunya bangun." },
-        { id:9, diff:"sedang", topic:"Cabang ELSE", scene:"🦷", desc:"Gigi Sehat (Tidak Sakit)",
-          branches:[
-            { kw:"JIKA", cond:"sakit_gigi == benar", action:"Ke_Dokter" },
-            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Makan_Apel",correct:true},{text:"Cabut_Gigi",correct:false}] }
-          ], feedbackOk:"Enak! Karena gigi tidak sakit, masuk JIKA TIDAK.", feedbackNo:"Gigi sehat berarti sakit_gigi itu salah, masuk JIKA TIDAK." },
-        { id:10, diff:"sedang", topic:"Perbandingan >=", scene:"💰", desc:"Uang 5rb, Harga 10rb",
-          branches:[
-            { kw:"JIKA", cond:"uang >= harga", action:"Beli_Barang" },
-            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Menabung",correct:true},{text:"Ambil_Paksa",correct:false}] }
-          ], feedbackOk:"Bijak! 5rb tidak >= 10rb, masuk JIKA TIDAK.", feedbackNo:"5.000 bukan >= 10.000, jadi masuk JIKA TIDAK." },
-
-        /* ---------- TIER 2: SULIT (11-20) ---------- */
-        { id:11, diff:"sulit", topic:"DAN (AND)", scene:"📚", desc:"MTK: 85, IPA: 90 (KKM 75)",
-          branches:[
-            { kw:"JIKA", cond:"mtk >= 75 DAN ipa >= 75", blank:true, options:[{text:"Lulus_Kedua_Mapel",correct:true},{text:"Remedial",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Remedial" }
-          ], feedbackOk:"Betul! DAN artinya SEMUA syarat harus benar.", feedbackNo:"DAN butuh semua syarat benar. Keduanya sudah >= 75." },
-        { id:12, diff:"sulit", topic:"DAN (AND)", scene:"📚", desc:"MTK: 85, IPA: 60 (KKM 75)",
-          branches:[
-            { kw:"JIKA", cond:"mtk >= 75 DAN ipa >= 75", action:"Lulus_Kedua_Mapel" },
-            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Remedial_IPA",correct:true},{text:"Naik_Kelas",correct:false}] }
-          ], feedbackOk:"Tepat! IPA belum mencapai KKM, jadi syarat DAN gagal.", feedbackNo:"DAN butuh SEMUA syarat benar. IPA di bawah KKM." },
-        { id:13, diff:"sulit", topic:"ATAU (OR)", scene:"🏫", desc:"Hari ini: Minggu",
-          branches:[
-            { kw:"JIKA", cond:"hari == Sabtu ATAU hari == Minggu", blank:true, options:[{text:"Libur_Sekolah",correct:true},{text:"Belajar",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Belajar" }
-          ], feedbackOk:"Betul! ATAU cukup satu syarat benar.", feedbackNo:"ATAU artinya cukup satu syarat benar. Hari Minggu sudah memenuhi." },
-        { id:14, diff:"sulit", topic:"ATAU (OR)", scene:"💻", desc:"Baterai: 45%, Sinyal Kuat",
-          branches:[
-            { kw:"JIKA", cond:"baterai < 20 ATAU sinyal == lemah", action:"Cari_Charger" },
-            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Lanjut_Belajar",correct:true},{text:"Matikan",correct:false}] }
-          ], feedbackOk:"Tepat! Kedua syarat ATAU salah, jadi masuk JIKA TIDAK.", feedbackNo:"Baterai masih 45% dan sinyal kuat, kondisi ATAU salah semua." },
-        { id:15, diff:"sulit", topic:"BUKAN (NOT)", scene:"🦷", desc:"Gigi TIDAK Berlubang",
-          branches:[
-            { kw:"JIKA", cond:"BUKAN gigi_berlubang", blank:true, options:[{text:"Sikat_Gigi",correct:true},{text:"Ke_Dokter",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Ke_Dokter" }
-          ], feedbackOk:"Betul! BUKAN membalik nilai. Gigi sehat = benar.", feedbackNo:"BUKAN artinya kebalikan. gigi_berlubang salah, maka BUKAN gigi_berlubang benar." },
-        { id:16, diff:"sulit", topic:"BUKAN + DAN", scene:"⛈️", desc:"Tidak Hujan, tapi Ada Petir",
-          branches:[
-            { kw:"JIKA", cond:"BUKAN hujan DAN BUKAN petir", action:"Main_di_Luar" },
-            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Tetap_di_Dalam",correct:true},{text:"Main_Layangan",correct:false}] }
-          ], feedbackOk:"Pintar! Petir membuat 'BUKAN petir' salah.", feedbackNo:"Petir sedang ada, jadi 'BUKAN petir' salah." },
-        { id:17, diff:"sulit", topic:"DAN (AND)", scene:"🛒", desc:"Uang: 15rb, Harga: 12rb, Stok: Ada",
-          branches:[
-            { kw:"JIKA", cond:"uang >= harga DAN stok == ada", blank:true, options:[{text:"Beli_Buku",correct:true},{text:"Menabung",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Menabung" }
-          ], feedbackOk:"Benar! Uang cukup DAN barangnya ada.", feedbackNo:"Uang cukup DAN stok ada, keduanya terpenuhi." },
-        { id:18, diff:"sulit", topic:"ATAU (OR)", scene:"🛵", desc:"Cerah, tapi Macet Parah",
-          branches:[
-            { kw:"JIKA", cond:"hujan == benar ATAU macet == benar", blank:true, options:[{text:"Naik_Ojek",correct:true},{text:"Jalan_Kaki",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Jalan_Kaki" }
-          ], feedbackOk:"Benar! Macet parah saja sudah cukup memenuhi ATAU.", feedbackNo:"ATAU cukup satu syarat benar. macet == benar sudah cukup." },
-        { id:19, diff:"sulit", topic:"DAN Rentang", scene:"🌡️", desc:"Suhu Tubuh: 38.5°C",
-          branches:[
-            { kw:"JIKA", cond:"suhu >= 38 DAN suhu < 39", blank:true, options:[{text:"Demam_Sedang",correct:true},{text:"Demam_Tinggi",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Pantau_Suhu" }
-          ], feedbackOk:"Benar! 38.5 berada di antara 38 dan 39.", feedbackNo:"38.5 memenuhi suhu>=38 DAN suhu<39." },
-        { id:20, diff:"sulit", topic:"DAN + ATAU", scene:"🏬", desc:"Belanja: 120rb, Member: Ya",
-          branches:[
-            { kw:"JIKA", cond:"total >= 100rb ATAU member == benar", blank:true, options:[{text:"Diskon",correct:true},{text:"Bayar_Penuh",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Bayar_Penuh" }
-          ], feedbackOk:"Hebat! Belanja > 100rb, ATAU sudah terpenuhi.", feedbackNo:"ATAU butuh satu syarat benar. total >= 100rb sudah cukup." },
-
-        /* ---------- TIER 3: SANGAT SULIT (21-30) ---------- */
-        { id:21, diff:"sangat", topic:"JIKA Bertingkat", scene:"📝", desc:"Nilai Ulangan: 95",
-          branches:[
-            { kw:"JIKA", cond:"nilai >= 90", blank:true, options:[{text:"Nilai_A",correct:true},{text:"Nilai_B",correct:false}] },
-            { kw:"ATAU JIKA", cond:"nilai >= 75", action:"Nilai_B" },
-            { kw:"JIKA TIDAK", cond:null, action:"Nilai_C" }
-          ], feedbackOk:"Tepat! 95 memenuhi cabang pertama (>= 90).", feedbackNo:"95 >= 90, seharusnya masuk Nilai A." },
-        { id:22, diff:"sangat", topic:"JIKA Bertingkat", scene:"📝", desc:"Nilai Ulangan: 80",
-          branches:[
-            { kw:"JIKA", cond:"nilai >= 90", action:"Nilai_A" },
-            { kw:"ATAU JIKA", cond:"nilai >= 75", blank:true, options:[{text:"Nilai_B",correct:true},{text:"Nilai_A",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Nilai_C" }
-          ], feedbackOk:"Benar! 80 gagal di pertama, lolos di kedua (>=75).", feedbackNo:"80 gagal di >= 90, cocok di >= 75." },
-        { id:23, diff:"sangat", topic:"JIKA Bertingkat", scene:"📝", desc:"Nilai Ulangan: 60",
-          branches:[
-            { kw:"JIKA", cond:"nilai >= 90", action:"Nilai_A" },
-            { kw:"ATAU JIKA", cond:"nilai >= 75", action:"Nilai_B" },
-            { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Nilai_C",correct:true},{text:"Nilai_B",correct:false}] }
-          ], feedbackOk:"Betul! 60 gagal di semua cabang atas.", feedbackNo:"60 jatuh ke cabang JIKA TIDAK." },
-        { id:24, diff:"sangat", topic:"Bertingkat + DAN", scene:"🌡️", desc:"Suhu Tubuh: 38.5°C",
-          branches:[
-            { kw:"JIKA", cond:"suhu >= 39", action:"Demam_Tinggi" },
-            { kw:"ATAU JIKA", cond:"suhu >= 38", blank:true, options:[{text:"Demam_Sedang",correct:true},{text:"Normal",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Normal" }
-          ], feedbackOk:"Keren! Gagal di >=39 tapi lolos di >=38.", feedbackNo:"38.5 gagal di >=39 tapi cocok di >=38." },
-        { id:25, diff:"sangat", topic:"Bertingkat + ATAU", scene:"🌬️", desc:"Angin: 45 km/jam, Hujan: Tidak",
-          branches:[
-            { kw:"JIKA", cond:"kecepatan >= 60", action:"Waspada_Bahaya" },
-            { kw:"ATAU JIKA", cond:"kecepatan >= 30 ATAU hujan == benar", blank:true, options:[{text:"Waspada_Sedang",correct:true},{text:"Aman",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Aman" }
-          ], feedbackOk:"Tepat! 45>=30 membuat ATAU di cabang kedua benar.", feedbackNo:"45>=30 sudah cukup benar walau tidak hujan." },
-        { id:26, diff:"sangat", topic:"Gabungan Kurung", scene:"🏅", desc:"Nilai: 85, Ekskul: Ya, Absen: 2",
-          branches:[
-            { kw:"JIKA", cond:"(nilai >= 80 DAN ekskul == ya) ATAU absen == 0", blank:true, options:[{text:"Lolos",correct:true},{text:"Tidak_Lolos",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Tidak_Lolos" }
-          ], feedbackOk:"Keren! Isi kurung benar, jadi seluruh syarat ATAU terpenuhi.", feedbackNo:"Selesaikan kurung: nilai>=80 DAN ekskul==ya itu BENAR." },
-        { id:27, diff:"sangat", topic:"Bertingkat", scene:"🏦", desc:"Saldo Tabungan: 750rb",
-          branches:[
-            { kw:"JIKA", cond:"saldo >= 1jt", action:"Bunga_5%" },
-            { kw:"ATAU JIKA", cond:"saldo >= 500rb", blank:true, options:[{text:"Bunga_3%",correct:true},{text:"Bunga_5%",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Bunga_1%" }
-          ], feedbackOk:"Betul! 750rb cocok di cabang kedua.", feedbackNo:"Saldo 750.000 cocok di cabang ATAU JIKA (>=500.000)." },
-        { id:28, diff:"sangat", topic:"DAN + BUKAN", scene:"🏠", desc:"Alarm TIDAK Aktif, Ada Gerakan",
-          branches:[
-            { kw:"JIKA", cond:"gerakan == benar DAN BUKAN alarm_aktif", blank:true, options:[{text:"Nyalakan_Alarm",correct:true},{text:"Diam_Saja",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Diam_Saja" }
-          ], feedbackOk:"Misi Selesai! Ada gerakan DAN alarm belum aktif.", feedbackNo:"Gerakan BENAR dan alarm belum aktif, syarat DAN terpenuhi." },
-        { id:29, diff:"sangat", topic:"Hitung + DAN", scene:"🧮", desc:"Harga 15rb × 8. Member: Ya",
-          branches:[
-            { kw:"JIKA", cond:"total >= 100rb DAN member == benar", blank:true, options:[{text:"Diskon_Besar",correct:true},{text:"Bayar_Penuh",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Bayar_Penuh" }
-          ], feedbackOk:"Hebat! 15rb × 8 = 120rb (>= 100rb) DAN member benar.", feedbackNo:"15rb × 8 = 120rb. Memenuhi >=100rb, ditambah member==benar." },
-        { id:30, diff:"sangat", topic:"Kompleks", scene:"📶", desc:"Kec: 80, Stabil: Tidak, Prioritas: Ya",
-          branches:[
-            { kw:"JIKA", cond:"(kec >= 100 DAN stabil == benar)", action:"Sangat_Cepat" },
-            { kw:"ATAU JIKA", cond:"(kec >= 50 ATAU prioritas == benar)", blank:true, options:[{text:"Cepat",correct:true},{text:"Sangat_Cepat",correct:false}] },
-            { kw:"JIKA TIDAK", cond:null, action:"Lambat" }
-          ], feedbackOk:"Luar biasa! Gagal di pertama karena stabil salah. Lolos di kedua karena kec>=50.", feedbackNo:"Gagal di cabang pertama, tapi kec>=50 memenuhi ATAU di cabang kedua." }
+    // --- DATA SOAL KELAS 4 (HOTS: Logika Sebab-Akibat Sederhana, Analogi Nyata) ---
+    const levelsClass4 = [
+        { id:1, scene:"🌧️", desc:"Hujan Deras Turun", 
+          branches:[ {kw:"JIKA", cond:"hujan == benar", blank:true, options:[{text:"Pakai_Payung",correct:true},{text:"Siram_Tanaman",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_di_Taman"} ], 
+          fbOk:"Logis! Kalau hujan, payung melindungi kita.", fbNo:"Hujan kok malah siram tanaman? Airnya berlebih nanti!" },
+        { id:2, scene:"🔋", desc:"Baterai Sisa 15% (Merah)", 
+          branches:[ {kw:"JIKA", cond:"baterai < 20", blank:true, options:[{text:"Cas_HP",correct:true},{text:"Main_Game_Lagi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bawa_Berpergian"} ], 
+          fbOk:"Benar! Segera isi daya sebelum mati total.", fbNo:"Kalau lanjut main, HP-nya pasti langsung mati." },
+        { id:3, scene:"🚦", desc:"Lampu Lalu Lintas: Hijau", 
+          branches:[ {kw:"JIKA", cond:"lampu == hijau", blank:true, options:[{text:"Jalan_Terus",correct:true},{text:"Berhenti",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Berhenti"} ], 
+          fbOk:"Tepat! Hijau artinya aman untuk melaju.", fbNo:"Hijau itu waktunya jalan, merah baru berhenti." },
+        { id:4, scene:"🚶", desc:"Ada tulisan 'Awas Lantai Licin!'", 
+          branches:[ {kw:"JIKA", cond:"lantai == licin", blank:true, options:[{text:"Jalan_Pelan",correct:true},{text:"Lari_Kencang",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Jalan_Biasa"} ], 
+          fbOk:"Pintar! Menjaga keselamatan itu utama.", fbNo:"Kalau lari kencang di lantai licin, bisa terpeleset!" },
+        { id:5, scene:"🚪", desc:"Terdengar Ketukan Pintu", 
+          branches:[ {kw:"JIKA", cond:"pintu_diketuk == benar", blank:true, options:[{text:"Buka_Pintu",correct:true},{text:"Sembunyi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lanjut_Tidur"} ], 
+          fbOk:"Sopan sekali! Cek siapa yang datang.", fbNo:"Kenapa sembunyi? Lebih baik dilihat dulu siapa tamunya." },
+        { id:6, scene:"🔔", desc:"Bel Sekolah Berbunyi Tet..Tot..", 
+          branches:[ {kw:"JIKA", cond:"bel == bunyi", blank:true, options:[{text:"Masuk_Kelas",correct:true},{text:"Pergi_ke_Kantin",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_di_Halaman"} ], 
+          fbOk:"Disiplin! Waktunya belajar dimulai.", fbNo:"Bel sudah bunyi, kantin sudah tutup saatnya belajar." },
+        { id:7, scene:"🤒", desc:"Suhu Badan Panas, Perut Sakit", 
+          branches:[ {kw:"JIKA", cond:"sakit == benar", blank:true, options:[{text:"Minum_Obat",correct:true},{text:"Makan_Es_Krim",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bermain_Bola"} ], 
+          fbOk:"Cepat sembuh! Minum obat adalah solusi tepat.", fbNo:"Makan es krim malah bikin tambah sakit." },
+        { id:8, scene:"🌙", desc:"Waktu Menunjukkan Pukul 22.00 Malam", 
+          branches:[ {kw:"JIKA", cond:"malam == benar", blank:true, options:[{text:"Tidur",correct:true},{text:"Nonton_TV",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Belajar"} ], 
+          fbOk:"Selamat malam! Tubuh butuh istirahat.", fbNo:"Sudah larut, besok ngantuk kalau nonton TV terus." },
+        { id:9, scene:"🍽️", desc:"Tangan Kotor Setelah Main Tanah", 
+          branches:[ {kw:"JIKA", cond:"tangan_kotor == benar", blank:true, options:[{text:"Cuci_Tangan",correct:true},{text:"Langsung_Makan",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Langsung_Makan"} ], 
+          fbOk:"Higienis! Kuman harus dibuang dulu.", fbNo:"Awas sakit perut kalau makan pakai kuman tanah!" },
+        { id:10, scene:"🦷", desc:"Gigi Sehat, Rajin Sikat Gigi", 
+          branches:[ {kw:"JIKA", cond:"sakit_gigi == benar", action:"Ke_Dokter_Gigi"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Gigi_Kuat_&_Bersih",correct:true},{text:"Gigi_Berlubang",correct:false}]} ], 
+          fbOk:"Hebat! Karena tidak sakit gigi, masuk ke JIKA TIDAK (Gigi Kuat).", fbNo:"Perhatikan kondisinya: 'sakit gigi' bernilai SALAH, jadi masuk ke cabang JIKA TIDAK." },
+        { id:11, scene:"💰", desc:"Uang Rp10.000, Harga Mainan Rp15.000", 
+          branches:[ {kw:"JIKA", cond:"uang >= harga", action:"Beli_Mainan"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Nabung_Dulu",correct:true},{text:"Bawa_Lari",correct:false}]} ], 
+          fbOk:"Bijak! Uang tidak cukup, jadi nabung dulu.", fbNo:"Uang 10rb kurang dari 15rb, harus menabung dulu." },
+        { id:12, scene:"🗑️", desc:"Pegang Bungkus Jajan Kosong", 
+          branches:[ {kw:"JIKA", cond:"ada_sampah == benar", blank:true, options:[{text:"Buang_ke_Tong",correct:true},{text:"Lempar_ke_Sungai",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Simpan_di_Saku"} ], 
+          fbOk:"Pahlawan Bumi! Buang sampah pada tempatnya.", fbNo:"Jangan dibuang ke sungai, nanti bisa banjir!" },
+        { id:13, scene:"💯", desc:"Ulangan Dapat Nilai 100", 
+          branches:[ {kw:"JIKA", cond:"nilai == 100", blank:true, options:[{text:"Dapat_Hadiah",correct:true},{text:"Remedial",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Belajar_Lagi"} ], 
+          fbOk:"Selamat! Usaha keras membuahkan hasil.", fbNo:"Masa nilai 100 disuruh remedial?" },
+        { id:14, scene:"🔥", desc:"Air di Panci Sudah Mendidih", 
+          branches:[ {kw:"JIKA", cond:"air_mendidih == benar", blank:true, options:[{text:"Matikan_Kompor",correct:true},{text:"Biarkan_Saja",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Tunggu_Sebentar"} ], 
+          fbOk:"Aman! Mencegah kebakaran dan panci gosong.", fbNo:"Kalau dibiarkan airnya habis dan bisa kebakaran." },
+        { id:15, scene:"💧", desc:"Lari Keliling Lapangan, Terasa Haus", 
+          branches:[ {kw:"JIKA", cond:"haus == benar", blank:true, options:[{text:"Minum_Air",correct:true},{text:"Makan_Kerupuk",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lanjut_Lari"} ], 
+          fbOk:"Segar! Tubuh butuh cairan setelah olahraga.", fbNo:"Makan kerupuk malah makin haus dong." },
+        { id:16, scene:"👕", desc:"Baju Kena Cipratan Lumpur", 
+          branches:[ {kw:"JIKA", cond:"baju_kotor == benar", blank:true, options:[{text:"Cuci_Baju",correct:true},{text:"Pakai_Terus",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Simpan_di_Lemari"} ], 
+          fbOk:"Rajin! Baju yang kotor harus segera dicuci.", fbNo:"Masa baju berlumpur dipakai terus?" },
+        { id:17, scene:"🥀", desc:"Tanaman Kering & Daun Menguning", 
+          branches:[ {kw:"JIKA", cond:"tanaman == layu", blank:true, options:[{text:"Siram_Air",correct:true},{text:"Cabut_Buang",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Beri_Pupuk"} ], 
+          fbOk:"Penyayang! Air menyelamatkan tanaman layu.", fbNo:"Masih bisa diselamatkan dengan air, jangan langsung dibuang." },
+        { id:18, scene:"👟", desc:"Sol Sepatu Lepas, Tidak Bisa Dipakai", 
+          branches:[ {kw:"JIKA", cond:"sepatu == rusak", blank:true, options:[{text:"Perbaiki/Beli_Baru",correct:true},{text:"Tetap_Dipakai",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lari_Sprint"} ], 
+          fbOk:"Tepat! Sepatu rusak bisa membahayakan kaki.", fbNo:"Tetap dipakai bisa bikin kaki lecet." },
+        { id:19, scene:"📱", desc:"Main Game Sudah 3 Jam Berturut-turut", 
+          branches:[ {kw:"JIKA", cond:"waktu_main > 2_jam", blank:true, options:[{text:"Istirahatkan_Mata",correct:true},{text:"Lanjut_Main",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_Sebentar"} ], 
+          fbOk:"Kesehatan mata itu penting!", fbNo:"Lebih dari 2 jam mata butuh istirahat dari layar." },
+        { id:20, scene:"🌈", desc:"Hujan Sudah Berhenti, Langit Cerah", 
+          branches:[ {kw:"JIKA", cond:"hujan == benar", action:"Pakai_Payung"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Main_di_Luar",correct:true},{text:"Tidur_Pakai_Selimut",correct:false}]} ], 
+          fbOk:"Asyik! Hujan sudah reda (kondisi salah), waktunya main di luar.", fbNo:"Karena hujan bernilai SALAH, kita masuk ke JIKA TIDAK (main di luar)." }
     ];
 
+    // --- DATA SOAL KELAS 6 (HOTS: Logika Bertingkat, AND/OR/NOT, Prioritas) ---
+    const levelsClass6 = [
+        { id:1, scene:"🎓", desc:"Nilai MTK: 80, IPA: 90 (KKM Keduanya 75)", 
+          branches:[ {kw:"JIKA", cond:"mtk >= 75 DAN ipa >= 75", blank:true, options:[{text:"Lulus_Kedua_Mapel",correct:true},{text:"Remedial",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Remedial"} ], 
+          fbOk:"Betul! Operator DAN mengharuskan kedua nilai di atas KKM.", fbNo:"Kedua nilai sudah di atas 75, jadi syarat DAN terpenuhi." },
+        { id:2, scene:"🛍️", desc:"Total Belanja Rp150rb, Punya Kartu Member", 
+          branches:[ {kw:"JIKA", cond:"belanja >= 100rb ATAU member == benar", blank:true, options:[{text:"Dapat_Diskon",correct:true},{text:"Harga_Normal",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Harga_Normal"} ], 
+          fbOk:"Hebat! Operator ATAU cukup salah satu benar. Di sini malah dua-duanya benar!", fbNo:"Karena belanja >= 100rb terpenuhi, syarat ATAU sudah langsung benar." },
+        { id:3, scene:"🌡️", desc:"Suhu Tubuh Pasien: 39.5 Derajat", 
+          branches:[ {kw:"JIKA", cond:"suhu >= 39", blank:true, options:[{text:"Demam_Tinggi",correct:true},{text:"Normal",correct:false}]}, {kw:"ATAU JIKA", cond:"suhu >= 37.5", action:"Demam_Ringan"}, {kw:"JIKA TIDAK", cond:null, action:"Normal"} ], 
+          fbOk:"Tepat! 39.5 langsung tertangkap di kondisi pertama.", fbNo:"Lihat dari atas ke bawah. 39.5 itu > 39, masuk cabang pertama." },
+        { id:4, scene:"🚴", desc:"Cuaca Cerah (Tidak Hujan) DAN Sedang Libur", 
+          branches:[ {kw:"JIKA", cond:"BUKAN hujan DAN hari_libur == benar", blank:true, options:[{text:"Main_Sepeda",correct:true},{text:"Belajar_di_Kamar",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Belajar_di_Kamar"} ], 
+          fbOk:"Logika BUKAN yang bagus! BUKAN hujan = cerah.", fbNo:"Karena tidak hujan, maka 'BUKAN hujan' itu BENAR. Dua syarat terpenuhi." },
+        { id:5, scene:"😁", desc:"Kondisi Gigi: Tidak Berlubang, Tidak Nyeri", 
+          branches:[ {kw:"JIKA", cond:"BUKAN gigi_berlubang", blank:true, options:[{text:"Gigi_Sehat",correct:true},{text:"Sakit_Gigi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Sakit_Gigi"} ], 
+          fbOk:"Benar! Gigi yang TIDAK berlubang berarti gigi sehat.", fbNo:"'BUKAN gigi_berlubang' bernilai BENAR untuk gigi sehat." },
+        { id:6, scene:"🏆", desc:"Nilai: 85, Ikut Ekskul, Tidak Pernah Bolos (Absen=0)", 
+          branches:[ {kw:"JIKA", cond:"(nilai >= 80 DAN ekskul) ATAU absen == 0", blank:true, options:[{text:"Siswa_Teladan",correct:true},{text:"Siswa_Biasa",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Siswa_Biasa"} ], 
+          fbOk:"Keren! Syarat di dalam kurung terpenuhi, ATAU absen=0 juga terpenuhi.", fbNo:"Analisis logikanya: nilai>=80 (Benar) DAN ekskul (Benar) = BENAR. Lolos!" },
+        { id:7, scene:"🚨", desc:"Ada Orang Bergerak, Tapi BUKAN Pemilik Rumah", 
+          branches:[ {kw:"JIKA", cond:"ada_gerakan DAN BUKAN pemilik", blank:true, options:[{text:"Bunyikan_Alarm",correct:true},{text:"Buka_Pintu",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Buka_Pintu"} ], 
+          fbOk:"Sistem Keamanan Aktif! Kondisi terpenuhi sempurna.", fbNo:"Ada gerakan dan itu bukan pemilik, alarm harus bunyi!" },
+        { id:8, scene:"🌊", desc:"Hujan Sangat Deras DAN Saluran Air Mampet Total", 
+          branches:[ {kw:"JIKA", cond:"hujan_deras DAN saluran_mampet", blank:true, options:[{text:"Risiko_Banjir",correct:true},{text:"Aman_Terkendali",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Aman_Terkendali"} ], 
+          fbOk:"Analisis yang baik. Dua kombinasi ini memicu banjir.", fbNo:"Hujan deras + mampet = Banjir (Kedua kondisi BENAR)." },
+        { id:9, scene:"🎁", desc:"Member Toko Belanja 250rb", 
+          branches:[ {kw:"JIKA", cond:"member DAN (belanja >= 200rb ATAU ultah)", blank:true, options:[{text:"Diskon_VIP",correct:true},{text:"Diskon_Biasa",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Diskon_Biasa"} ], 
+          fbOk:"Logika kurung dieksekusi dulu: belanja >= 200rb BENAR. Member BENAR.", fbNo:"Selesaikan dalam kurung. Belanja 250rb berarti >= 200rb (Benar)." },
+        { id:10, scene:"🔑", desc:"Username Ketik: 'admin', Password: '123'", 
+          branches:[ {kw:"JIKA", cond:"user == 'admin' DAN pass == '123'", blank:true, options:[{text:"Login_Sukses",correct:true},{text:"Akses_Ditolak",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Akses_Ditolak"} ], 
+          fbOk:"Kredensial cocok! Sistem mengizinkan masuk.", fbNo:"Keduanya benar, kenapa ditolak?" },
+        { id:11, scene:"🏦", desc:"Uang Tabungan: Rp600.000", 
+          branches:[ {kw:"JIKA", cond:"saldo >= 1_Juta", action:"Bunga_5%"}, {kw:"ATAU JIKA", cond:"saldo >= 500_Ribu", blank:true, options:[{text:"Bunga_3%",correct:true},{text:"Bunga_1%",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bunga_1%"} ], 
+          fbOk:"Betul! 600rb lolos dari cabang pertama, lalu cocok di cabang kedua.", fbNo:"Lihat cabang kedua: 600rb itu >= 500rb, harusnya dapat bunga 3%." },
+        { id:12, scene:"🥵", desc:"Hari Ini Tidak Panas, Tapi Badan Terasa Sangat Lelah", 
+          branches:[ {kw:"JIKA", cond:"cuaca_panas ATAU badan_lelah", blank:true, options:[{text:"Istirahat_Minum",correct:true},{text:"Lari_Maraton",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lari_Maraton"} ], 
+          fbOk:"ATAU hanya butuh satu kondisi Benar. Karena lelah, saatnya istirahat.", fbNo:"Walau tak panas, tapi badan lelah (syarat ATAU terpenuhi)." },
+        { id:13, scene:"🏫", desc:"Hari Ini Hari Selasa, Bukan Tanggal Merah", 
+          branches:[ {kw:"JIKA", cond:"BUKAN sabtu_minggu DAN BUKAN tgl_merah", blank:true, options:[{text:"Masuk_Sekolah",correct:true},{text:"Libur_Panjang",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Libur_Panjang"} ], 
+          fbOk:"Logika BUKAN Ganda. Artinya ini hari kerja biasa.", fbNo:"Bukan sabtu/minggu dan bukan tgl merah berarti hari sekolah." },
+        { id:14, scene:"👮", desc:"Pengendara Membawa STNK, Tapi Lupa Bawa SIM", 
+          branches:[ {kw:"JIKA", cond:"BUKAN bawa_sim ATAU BUKAN bawa_stnk", blank:true, options:[{text:"Kena_Tilang",correct:true},{text:"Bebas_Jalan",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bebas_Jalan"} ], 
+          fbOk:"Karena 'BUKAN bawa_sim' bernilai BENAR, operator ATAU membuat hasil akhir BENAR.", fbNo:"Kalau tidak bawa SIM, satu syarat ATAU sudah terpenuhi untuk ditilang." },
+        { id:15, scene:"🏃", desc:"Kecepatan Pelari: 12, Stamina: 60", 
+          branches:[ {kw:"JIKA", cond:"kecepatan >= 10 DAN stamina >= 80", action:"Juara_Satu"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Juara_Harapan",correct:true},{text:"Juara_Satu",correct:false}]} ], 
+          fbOk:"Benar! Stamina kurang dari 80 membatalkan syarat DAN.", fbNo:"Syarat DAN mensyaratkan KEDUANYA benar. Stamina hanya 60." },
+        { id:16, scene:"🎫", desc:"Penonton Tidak Punya Tiket VIP, Tapi Anak Pemilik Acara", 
+          branches:[ {kw:"JIKA", cond:"tiket == 'VIP' ATAU keluarga_owner", blank:true, options:[{text:"Masuk_VVIP_Room",correct:true},{text:"Duduk_di_Luar",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Duduk_di_Luar"} ], 
+          fbOk:"Privilege bekerja! ATAU membolehkan masuk karena keluarga owner.", fbNo:"Syarat ATAU membolehkan salah satu benar (keluarga_owner = BENAR)." },
+        { id:17, scene:"🔥", desc:"Terdeteksi Ada Asap, Suhu Ruangan 70 Derajat", 
+          branches:[ {kw:"JIKA", cond:"ada_asap DAN suhu >= 60", blank:true, options:[{text:"Semprot_Air_Pemadam",correct:true},{text:"Nyalakan_AC",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Standby"} ], 
+          fbOk:"Sistem cerdas! Kedua sensor memvalidasi adanya kebakaran.", fbNo:"Asap ada dan suhu > 60, itu kebakaran!" },
+        { id:18, scene:"📋", desc:"Tes Tertulis: 85, Tes Wawancara: 70 (Syarat: T>=80, W>=75)", 
+          branches:[ {kw:"JIKA", cond:"tertulis >= 80 DAN wawancara >= 75", action:"Lolos_Seleksi"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Gagal_Seleksi",correct:true},{text:"Lolos_Seleksi",correct:false}]} ], 
+          fbOk:"Ya, sayangnya wawancara di bawah 75, sehingga DAN gagal.", fbNo:"Wawancara cuma 70, syarat DAN tidak terpenuhi." },
+        { id:19, scene:"⏰", desc:"Datang Pukul 07.15 di Hari Senin", 
+          branches:[ {kw:"JIKA", cond:"waktu > '07.00' DAN BUKAN hari_libur", blank:true, options:[{text:"Catat_Terlambat",correct:true},{text:"Beri_Pujian",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Aman"} ], 
+          fbOk:"Tepat! Lebih dari jam 7 di hari kerja = terlambat.", fbNo:"Syarat DAN terpenuhi: Lewat jam 7 dan bukan libur." },
+        { id:20, scene:"🪫", desc:"Baterai 10% DAN Sedang Main Game Berat", 
+          branches:[ {kw:"JIKA", cond:"baterai < 20 DAN main_game", blank:true, options:[{text:"Aktifkan_Hemat_Daya_Ekstrem",correct:true},{text:"Naikkan_Kecerahan",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Mode_Normal"} ], 
+          fbOk:"Misi Selesai! Kondisi kritis, sistem harus dihemat secara ekstrem.", fbNo:"Baterai mau habis kok malah terangin layar?" }
+    ];
+
+    // --- STATE VARIABLES ---
+    let activeClass = 4;
+    let currentQuestions = [];
     let currentLevelIndex = 0;
     let correctCount = 0;
     let currentAnswerSlot = null;
-    let isAnswering = false;
 
-    const introScreen = document.getElementById('introScreen');
-    const gameScreen = document.getElementById('gameScreen');
-    const resultScreen = document.getElementById('resultScreen');
+    // --- UI NAVIGATION ---
+    function switchScreen(hideId, showId) {
+        const hideEl = document.getElementById(hideId);
+        const showEl = document.getElementById(showId);
+        
+        hideEl.classList.remove('active');
+        hideEl.classList.add('left');
+        
+        showEl.classList.remove('hidden', 'left');
+        
+        setTimeout(() => {
+            hideEl.classList.add('hidden');
+            showEl.classList.add('active');
+        }, 100);
+    }
 
-    const diffLabel = { sedang: "Sedang", sulit: "Sulit", sangat: "Sangat Sulit" };
-    const diffClass = { sedang: "diff-sedang", sulit: "diff-sulit", sangat: "diff-sangat" };
+    function goBack(currentId, targetId) {
+        const curEl = document.getElementById(currentId);
+        const tarEl = document.getElementById(targetId);
+        
+        curEl.classList.remove('active');
+        curEl.classList.add('hidden'); // Go to right
+        
+        tarEl.classList.remove('hidden', 'left');
+        
+        setTimeout(() => {
+            tarEl.classList.add('active');
+        }, 100);
+    }
+
+    function selectClass(classNumber) {
+        activeClass = classNumber;
+        document.getElementById('classMenuTitle').innerText = `Kelas ${activeClass} SD`;
+        
+        // Hide both materials initially
+        document.getElementById('materialContent4').style.display = 'none';
+        document.getElementById('materialContent6').style.display = 'none';
+        
+        // Show relevant material
+        document.getElementById(`materialContent${activeClass}`).style.display = 'block';
+        
+        switchScreen('introScreen', 'classMenuScreen');
+    }
+
+    function openMaterial() {
+        switchScreen('classMenuScreen', 'materialScreen');
+    }
 
     function startGame() {
+        currentQuestions = activeClass === 4 ? [...levelsClass4] : [...levelsClass6];
         currentLevelIndex = 0;
         correctCount = 0;
         
-        introScreen.classList.remove('active');
-        introScreen.classList.add('left');
+        if(document.getElementById('classMenuScreen').classList.contains('active')) {
+            switchScreen('classMenuScreen', 'gameScreen');
+        } else if(document.getElementById('materialScreen').classList.contains('active')) {
+            switchScreen('materialScreen', 'gameScreen');
+        }
         
-        gameScreen.classList.remove('hidden');
-        
-        // Slight delay for smooth CSS transition
-        setTimeout(() => {
-            introScreen.classList.add('hidden');
-            gameScreen.classList.add('active');
-            loadLevel();
-        }, 50);
+        setTimeout(() => loadLevel(), 100);
     }
 
-    function highlightCond(condStr) {
+    function formatCondition(condStr) {
         if (!condStr) return '';
         let s = condStr
             .replace(/\(/g, '<span class="bracket">(</span>')
             .replace(/\)/g, '<span class="bracket">)</span>')
             .replace(/\bDAN\b/g, '<span class="kw-and">DAN</span>')
             .replace(/\bATAU\b/g, '<span class="kw-or">ATAU</span>')
-            .replace(/\bBUKAN\b/g, '<span class="kw-not">BUKAN</span>')
-            .replace(/==|>=|<=|<|>/g, match => `<span style="color:#ff79c6">${match}</span>`); // Highlight operators
+            .replace(/\bBUKAN\b/g, '<span class="kw-not">BUKAN</span>');
         return s;
     }
 
     function loadLevel() {
-        if (currentLevelIndex >= levels.length) { endGame(); return; }
-        isAnswering = false;
+        if (currentLevelIndex >= currentQuestions.length) { endGame(); return; }
         
-        const data = levels[currentLevelIndex];
+        const data = currentQuestions[currentLevelIndex];
 
-        // Update Headers
-        document.getElementById('levelIndicator').innerText = `Level ${data.id}/${levels.length}`;
-        const diffEl = document.getElementById('diffIndicator');
-        diffEl.innerText = diffLabel[data.diff];
-        diffEl.className = 'diff-pill ' + diffClass[data.diff];
-        document.getElementById('topicIndicator').innerText = data.topic;
+        document.getElementById('levelIndicator').innerText = `Level ${currentLevelIndex + 1}/${currentQuestions.length}`;
         document.getElementById('scoreIndicator').innerText = `Skor: ${correctCount * 10}`;
 
-        // Update Stage
-        const sceneEmoji = document.getElementById('sceneEmoji');
-        const conditionLabel = document.getElementById('conditionLabel');
-        const robotAvatar = document.getElementById('robotAvatar');
+        document.getElementById('sceneEmoji').innerText = data.scene;
+        document.getElementById('conditionLabel').innerText = data.desc;
         
-        // Reset animations by cloning node
-        const newEmoji = sceneEmoji.cloneNode(true);
-        newEmoji.innerText = data.scene;
-        sceneEmoji.parentNode.replaceChild(newEmoji, sceneEmoji);
-        
-        const newLabel = conditionLabel.cloneNode(true);
-        newLabel.innerText = data.desc;
-        conditionLabel.parentNode.replaceChild(newLabel, conditionLabel);
-
-        robotAvatar.innerText = "🤖";
-        robotAvatar.style.transform = "scale(1)";
-        robotAvatar.style.animation = "breathe 3s infinite alternate";
+        const robot = document.getElementById('robotAvatar');
+        robot.innerText = "🤖";
+        robot.style.transform = "scale(1)";
 
         document.getElementById('feedbackOverlay').classList.remove('show');
 
@@ -859,7 +717,7 @@
             let headLine = '';
             if (idx > 0) headLine += '<span class="bracket">}</span> ';
             headLine += `<span class="${kwClass}">${branch.kw}</span>`;
-            if (!isElse) headLine += ` <span class="bracket">(</span>${highlightCond(branch.cond)}<span class="bracket">)</span>`;
+            if (!isElse) headLine += ` <span class="bracket">(</span>${formatCondition(branch.cond)}<span class="bracket">)</span>`;
             headLine += ' <span class="bracket">{</span>';
             htmlCode += `<div class="line">${headLine}</div>`;
 
@@ -869,7 +727,7 @@
             } else {
                 actionHtml = `<span class="kw-func">lakukan</span>(<span class="kw-val">"${branch.action}"</span>);`;
             }
-            htmlCode += `<div class="line" style="padding-left: 24px;">${actionHtml}</div>`;
+            htmlCode += `<div class="line" style="padding-left: 20px;">${actionHtml}</div>`;
         });
         htmlCode += `<div class="line"><span class="bracket">}</span></div>`;
 
@@ -881,65 +739,44 @@
         optionsContainer.innerHTML = '';
         const blankBranch = data.branches.find(b => b.blank);
         
-        // Shuffle options
         const shuffledOptions = [...blankBranch.options].sort(() => Math.random() - 0.5);
-        
-        shuffledOptions.forEach((opt, index) => {
+        shuffledOptions.forEach((opt, idx) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
-            btn.innerHTML = `<span style="color:var(--primary); font-size:1.2rem; margin-bottom:4px; display:block">${index === 0 ? 'A' : 'B'}</span>${opt.text.replace(/_/g, ' ')}`;
-            
-            // Add staggered animation
-            btn.style.opacity = '0';
-            btn.style.animation = `popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) ${index * 0.1}s forwards`;
-            
-            btn.onclick = () => {
-                if(isAnswering) return; // Prevent double clicks
-                isAnswering = true;
-                
-                // Disable other buttons
-                document.querySelectorAll('.option-btn').forEach(b => {
-                    if(b !== btn) b.classList.add('disabled');
-                });
-                
-                checkAnswer(opt, data);
-            };
+            btn.innerHTML = `<span style="color:var(--primary); font-size:1.2rem; display:block; margin-bottom:5px;">${idx===0?'A':'B'}</span> ${opt.text.replace(/_/g, ' ')}`;
+            btn.onclick = () => checkAnswer(opt, data, btn);
             optionsContainer.appendChild(btn);
         });
     }
 
-    function checkAnswer(selectedOption, levelData) {
+    function checkAnswer(selectedOption, levelData, clickedBtn) {
         if (currentAnswerSlot) {
             currentAnswerSlot.innerText = `"${selectedOption.text}"`;
             currentAnswerSlot.classList.remove('filled', 'wrong');
-            // Trigger reflow for animation
-            void currentAnswerSlot.offsetWidth;
         }
 
-        const robotAvatar = document.getElementById('robotAvatar');
-        robotAvatar.style.animation = 'none'; // Stop breathing
+        // Disable buttons
+        document.querySelectorAll('.option-btn').forEach(b => {
+            if(b !== clickedBtn) b.classList.add('disabled');
+        });
+
+        const robot = document.getElementById('robotAvatar');
 
         if (selectedOption.correct) {
             if (currentAnswerSlot) currentAnswerSlot.classList.add('filled');
             correctCount++;
             document.getElementById('scoreIndicator').innerText = `Skor: ${correctCount * 10}`;
-            
-            robotAvatar.style.transform = "translateY(-20px) scale(1.2)";
-            robotAvatar.innerText = "🤩";
-            
+            robot.style.transform = "translateY(-20px) scale(1.2)";
+            robot.innerText = "🤩";
+            showFeedback(true, levelData.fbOk);
             fireConfetti();
-            setTimeout(() => showFeedback(true, levelData.feedbackOk), 600);
         } else {
             if (currentAnswerSlot) currentAnswerSlot.classList.add('wrong');
-            
-            robotAvatar.style.transform = "scale(0.9)";
-            robotAvatar.innerText = "😵";
-            
-            const visualStage = document.getElementById('visualStage');
+            robot.innerText = "😵";
+            const visualStage = document.querySelector('.visual-stage');
             visualStage.classList.add('shake-anim');
             setTimeout(() => visualStage.classList.remove('shake-anim'), 500);
-            
-            setTimeout(() => showFeedback(false, levelData.feedbackNo), 800);
+            showFeedback(false, levelData.fbNo);
         }
     }
 
@@ -947,27 +784,25 @@
         const title = document.getElementById('fbTitle');
         const icon = document.getElementById('fbIcon');
         const text = document.getElementById('fbText');
-        const btn = document.getElementById('btnNext');
+        const btn = document.querySelector('.feedback-card .btn-next');
         const overlay = document.getElementById('feedbackOverlay');
 
         if (isSuccess) {
-            title.innerText = "Hebat!";
-            title.style.color = "var(--success-dark)";
+            title.innerText = "Hebat!"; title.style.color = "var(--success-dark)";
             icon.innerText = "🎉";
             btn.style.background = "linear-gradient(to bottom, var(--success), var(--success-dark))";
-            btn.style.boxShadow = "0 6px 0 #065f46, 0 10px 15px rgba(16, 185, 129, 0.3)";
+            btn.style.boxShadow = "0 6px 0 #065f46";
             btn.innerText = "Lanjut Level ➡";
         } else {
-            title.innerText = "Kurang Tepat";
-            title.style.color = "var(--danger-dark)";
+            title.innerText = "Kurang Tepat"; title.style.color = "var(--danger-dark)";
             icon.innerText = "🔧";
             btn.style.background = "linear-gradient(to bottom, var(--warning), #d97706)";
-            btn.style.boxShadow = "0 6px 0 #92400e, 0 10px 15px rgba(245, 158, 11, 0.3)";
+            btn.style.boxShadow = "0 6px 0 #92400e";
             btn.innerText = "Coba Level Berikutnya ➡";
         }
 
         text.innerText = message;
-        overlay.classList.add('show');
+        setTimeout(() => overlay.classList.add('show'), 600);
     }
 
     function nextLevel() {
@@ -976,33 +811,20 @@
     }
 
     function endGame() {
-        gameScreen.classList.remove('active');
-        gameScreen.classList.add('left');
+        switchScreen('gameScreen', 'resultScreen');
+        const finalScore = Math.round((correctCount / currentQuestions.length) * 100);
         
-        resultScreen.classList.remove('hidden');
-        
-        setTimeout(() => {
-            gameScreen.classList.add('hidden');
-            resultScreen.classList.add('active');
-            
-            const finalScore = Math.round((correctCount / levels.length) * 100);
-            
-            // Animate score counting up
-            let currentDisplay = 0;
-            const scoreEl = document.getElementById('finalScore');
-            const interval = setInterval(() => {
-                currentDisplay += 2;
-                if(currentDisplay >= finalScore) {
-                    currentDisplay = finalScore;
-                    clearInterval(interval);
-                    if (finalScore >= 80) {
-                        fireConfettiContinuous();
-                    }
-                }
-                scoreEl.innerText = currentDisplay;
-            }, 30);
-            
-        }, 50);
+        let displayScore = 0;
+        const scoreEl = document.getElementById('finalScore');
+        const intv = setInterval(() => {
+            displayScore += 2;
+            if(displayScore >= finalScore) {
+                displayScore = finalScore;
+                clearInterval(intv);
+                if(finalScore >= 80) fireConfettiContinuous();
+            }
+            scoreEl.innerText = displayScore;
+        }, 20);
     }
 
     const canvas = document.getElementById('confetti-canvas');
@@ -1010,26 +832,19 @@
     let particles = [];
     let animationId;
 
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
     function fireConfetti() {
-        const colors = ['#8b5cf6', '#ec4899', '#0ea5e9', '#10b981', '#f59e0b', '#ffffff'];
-        for (let i = 0; i < 100; i++) {
+        const colors = ['#6366f1', '#ec4899', '#10b981', '#f59e0b', '#ffffff'];
+        for (let i = 0; i < 80; i++) {
             particles.push({
-                x: canvas.width / 2,
-                y: canvas.height / 2 + 100,
+                x: canvas.width / 2, y: canvas.height / 2 + 50,
                 r: Math.random() * 6 + 2,
-                dx: Math.random() * 20 - 10,
-                dy: Math.random() * -15 - 5,
+                dx: Math.random() * 20 - 10, dy: Math.random() * -15 - 5,
                 color: colors[Math.floor(Math.random() * colors.length)],
-                tilt: Math.random() * 10,
-                tiltAngle: 0,
-                tiltAngleInc: (Math.random() * 0.07) + 0.05
+                tilt: Math.random() * 10, tiltAngle: 0, tiltAngleInc: (Math.random() * 0.07) + 0.05
             });
         }
         if (!animationId) animateConfetti();
@@ -1037,10 +852,8 @@
 
     function fireConfettiContinuous() {
         fireConfetti();
-        const int = setInterval(() => {
-            if(particles.length < 300) fireConfetti();
-        }, 800);
-        setTimeout(() => clearInterval(int), 5000);
+        const int = setInterval(() => { if(particles.length < 250) fireConfetti(); }, 800);
+        setTimeout(() => clearInterval(int), 4000);
     }
 
     function animateConfetti() {
@@ -1052,28 +865,16 @@
             p.tiltAngle += p.tiltAngleInc;
             p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
             p.x += Math.sin(p.tiltAngle) * 2;
-            p.dy += 0.2; // gravity
-            p.x += p.dx;
-            p.y += p.dy;
+            p.dy += 0.2; p.x += p.dx; p.y += p.dy;
 
-            ctx.beginPath();
-            ctx.lineWidth = p.r;
-            ctx.strokeStyle = p.color;
+            ctx.beginPath(); ctx.lineWidth = p.r; ctx.strokeStyle = p.color;
             ctx.moveTo(p.x + p.tilt + p.r, p.y);
             ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
             ctx.stroke();
 
-            // Remove particles that fall off screen
-            if (p.y > canvas.height || p.x < -50 || p.x > canvas.width + 50) {
-                particles.splice(i, 1);
-                i--;
-            }
+            if (p.y > canvas.height || p.x < -50 || p.x > canvas.width + 50) { particles.splice(i, 1); i--; }
         }
-        
-        if (particles.length === 0) {
-            cancelAnimationFrame(animationId);
-            animationId = null;
-        }
+        if (particles.length === 0) { cancelAnimationFrame(animationId); animationId = null; }
     }
 </script>
 
