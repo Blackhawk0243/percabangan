@@ -248,6 +248,20 @@
             .answer-slot { min-width: 100px; font-size: 0.8rem; height: 24px;}
             .option-btn { font-size: 0.85rem; padding: 10px 8px; }
         }
+
+        /* Responsive khusus Tablet dan HP */
+        @media (max-width: 800px) {
+            .app-container {
+                height: 100vh !important; max-height: 100vh !important;
+                width: 100% !important; border-radius: 0; border: none;
+            }
+            .screen { padding: 15px; }
+            .game-body { flex-direction: column; overflow-y: auto; }
+            .left-panel { flex: none; width: 100%; }
+            .right-panel { flex: none; width: 100%; }
+            .visual-stage { min-height: 140px; padding: 15px; }
+            .code-editor { padding: 15px; font-size: 0.85rem; }
+        }
     </style>
 </head>
 <body>
@@ -304,10 +318,10 @@
 
             <div class="materi-card">
                 <h2>Tonton Video Penjelasan Ini!</h2>
-                <p>Yuk tonton video seru tentang blok IF-ELSE menggunakan Scratch ini:</p>
+                <p>Yuk tonton video seru tentang konsep logika percabangan di dunia pemrograman ini:</p>
                 <div class="video-container">
-                    <!-- YouTube Video Class 4 (Scratch If-Else) -->
-                    <iframe src="https://www.youtube.com/embed/ddY5aqHyhuY" title="Scratch - Kondisi If-Else Sederhana" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <!-- YouTube Video Class 4 (Konsep Logika Percabangan) -->
+                    <iframe src="https://www.youtube.com/embed/KmrVYIfcJ74" title="Konsep Logika Percabangan Pemrograman" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -316,7 +330,7 @@
                 <p>Flowchart adalah gambar jalan cerita dari koding kita. Bentuk <b>Belah Ketupat (💎)</b> artinya sebuah pertanyaan/kondisi.</p>
                 
                 <div class="flowchart-box">
-                    <svg width="300" height="250" viewBox="0 0 300 250">
+                    <svg style="width: 100%; max-width: 300px; height: auto;" viewBox="0 0 300 250">
                         <!-- Start -->
                         <rect x="100" y="10" width="100" height="30" rx="15" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
                         <text x="150" y="30" font-family="Nunito" font-size="14" font-weight="bold" text-anchor="middle" fill="#4f46e5">Mulai</text>
@@ -377,7 +391,7 @@
                 <p>Terkadang pilihan lebih dari dua. Komputer akan mengecek kondisi pertama, jika GAGAL, ia mengecek kondisi kedua, dan seterusnya sampai yang terakhir.</p>
                 
                 <div class="flowchart-box">
-                    <svg width="340" height="350" viewBox="0 0 340 350">
+                    <svg style="width: 100%; max-width: 340px; height: auto;" viewBox="0 0 340 350">
                         <defs>
                             <marker id="arrow6" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
                                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
