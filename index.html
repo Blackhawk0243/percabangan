@@ -317,10 +317,41 @@
             </div>
 
             <div class="materi-card">
+                <h2>Tanda Perbandingan (Matematika Robot) 🐊</h2>
+                <p>Robot juga pintar matematika! Untuk mengambil keputusan, robot seringkali harus membandingkan angka atau keadaan. Yuk kita kenalan dengan tanda-tandanya:</p>
+                <ul>
+                    <li><b><span style="color:var(--primary); font-size:1.2rem;">==</span> (Sama Dengan)</b><br>
+                        Mengecek apakah dua hal <b>sama persis</b>.<br> 
+                        <i>Contoh: <code>lampu == hijau</code> (Robot mengecek apakah warna lampu saat ini adalah hijau).</i>
+                    </li>
+                    <li style="margin-top:10px;"><b><span style="color:var(--primary); font-size:1.2rem;">!=</span> (Tidak Sama Dengan)</b><br>
+                        Artinya <b>Berbeda</b>. <br>
+                        <i>Contoh: <code>cuaca != hujan</code> (Robot mengecek apakah cuaca saat ini <b>bukan</b> hujan. Kalau cerah atau mendung, berarti benar!).</i>
+                    </li>
+                    <li style="margin-top:10px;"><b><span style="color:var(--danger); font-size:1.2rem;">&gt;</span> (Lebih Besar Dari)</b><br>
+                        Ingat mulut buaya 🐊! Buaya selalu membuka mulutnya untuk memakan angka yang lebih besar. <br>
+                        <i>Contoh: <code>nilai &gt; 80</code> (Hanya nilai 81, 82, 90, dst yang benar. 80 tidak ikut dimakan).</i>
+                    </li>
+                    <li style="margin-top:10px;"><b><span style="color:var(--danger); font-size:1.2rem;">&lt;</span> (Lebih Kecil Dari)</b><br>
+                        Artinya kurang dari target. <br>
+                        <i>Contoh: <code>baterai &lt; 20</code> (Baterai 19%, 15%, atau 5% akan membuat kondisi ini Benar).</i>
+                    </li>
+                    <li style="margin-top:10px; background:#fef3c7; padding:10px; border-radius:10px;"><b><span style="color:var(--warning); font-size:1.2rem;">&gt;=</span> (Lebih Besar ATAU Sama Dengan)</b><br>
+                        Artinya <b>Minimal</b> atau <b>Paling Sedikit</b>. <br>
+                        <i>Contoh: <code>uang &gt;= 10.000</code> (Jika kamu punya uang pas 10.000, kondisinya sudah Benar! Apalagi kalau lebih).</i>
+                    </li>
+                    <li style="margin-top:10px; background:#dcfce7; padding:10px; border-radius:10px;"><b><span style="color:var(--success); font-size:1.2rem;">&lt;=</span> (Lebih Kecil ATAU Sama Dengan)</b><br>
+                        Artinya <b>Maksimal</b> atau <b>Paling Banyak</b>. <br>
+                        <i>Contoh: <code>umur &lt;= 10</code> (Anak umur 10 tahun boleh masuk, 9 tahun boleh, tapi 11 tahun tidak boleh).</i>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="materi-card">
                 <h2>Tonton Video Penjelasan Ini!</h2>
-                <p>Yuk tonton video seru tentang konsep logika percabangan di dunia pemrograman ini:</p>
+                <p>Yuk tonton video seru tentang konsep dasar logika percabangan di dunia pemrograman ini:</p>
                 <div class="video-container">
-                    <!-- YouTube Video Class 4 (Konsep Logika Percabangan) -->
+                    <!-- YouTube Video Class 4 (Konsep Logika Percabangan secara umum) -->
                     <iframe src="https://www.youtube.com/embed/KmrVYIfcJ74" title="Konsep Logika Percabangan Pemrograman" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
@@ -496,68 +527,167 @@
 </div>
 
 <script>
-    // --- DATA SOAL KELAS 4 (HOTS: Logika Sebab-Akibat Sederhana, Analogi Nyata) ---
+    // --- DATA SOAL KELAS 4 (HOTS: Logika Sebab-Akibat Sederhana, Analogi Nyata, Operator Perbandingan) ---
     const levelsClass4 = [
+        // 1-10: Logika Dasar & == (Sama Dengan)
         { id:1, scene:"🌧️", desc:"Hujan Deras Turun", 
           branches:[ {kw:"JIKA", cond:"hujan == benar", blank:true, options:[{text:"Pakai_Payung",correct:true},{text:"Siram_Tanaman",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_di_Taman"} ], 
           fbOk:"Logis! Kalau hujan, payung melindungi kita.", fbNo:"Hujan kok malah siram tanaman? Airnya berlebih nanti!" },
-        { id:2, scene:"🔋", desc:"Baterai Sisa 15% (Merah)", 
-          branches:[ {kw:"JIKA", cond:"baterai < 20", blank:true, options:[{text:"Cas_HP",correct:true},{text:"Main_Game_Lagi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bawa_Berpergian"} ], 
-          fbOk:"Benar! Segera isi daya sebelum mati total.", fbNo:"Kalau lanjut main, HP-nya pasti langsung mati." },
-        { id:3, scene:"🚦", desc:"Lampu Lalu Lintas: Hijau", 
-          branches:[ {kw:"JIKA", cond:"lampu == hijau", blank:true, options:[{text:"Jalan_Terus",correct:true},{text:"Berhenti",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Berhenti"} ], 
+        { id:2, scene:"🚦", desc:"Lampu Lalu Lintas: Hijau", 
+          branches:[ {kw:"JIKA", cond:"lampu == 'hijau'", blank:true, options:[{text:"Jalan_Terus",correct:true},{text:"Berhenti",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Berhenti"} ], 
           fbOk:"Tepat! Hijau artinya aman untuk melaju.", fbNo:"Hijau itu waktunya jalan, merah baru berhenti." },
-        { id:4, scene:"🚶", desc:"Ada tulisan 'Awas Lantai Licin!'", 
-          branches:[ {kw:"JIKA", cond:"lantai == licin", blank:true, options:[{text:"Jalan_Pelan",correct:true},{text:"Lari_Kencang",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Jalan_Biasa"} ], 
+        { id:3, scene:"🚶", desc:"Ada tulisan 'Awas Lantai Licin!'", 
+          branches:[ {kw:"JIKA", cond:"lantai == 'licin'", blank:true, options:[{text:"Jalan_Pelan",correct:true},{text:"Lari_Kencang",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Jalan_Biasa"} ], 
           fbOk:"Pintar! Menjaga keselamatan itu utama.", fbNo:"Kalau lari kencang di lantai licin, bisa terpeleset!" },
-        { id:5, scene:"🚪", desc:"Terdengar Ketukan Pintu", 
+        { id:4, scene:"🚪", desc:"Terdengar Ketukan Pintu", 
           branches:[ {kw:"JIKA", cond:"pintu_diketuk == benar", blank:true, options:[{text:"Buka_Pintu",correct:true},{text:"Sembunyi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lanjut_Tidur"} ], 
           fbOk:"Sopan sekali! Cek siapa yang datang.", fbNo:"Kenapa sembunyi? Lebih baik dilihat dulu siapa tamunya." },
-        { id:6, scene:"🔔", desc:"Bel Sekolah Berbunyi Tet..Tot..", 
-          branches:[ {kw:"JIKA", cond:"bel == bunyi", blank:true, options:[{text:"Masuk_Kelas",correct:true},{text:"Pergi_ke_Kantin",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_di_Halaman"} ], 
+        { id:5, scene:"🔔", desc:"Bel Sekolah Berbunyi Tet..Tot..", 
+          branches:[ {kw:"JIKA", cond:"bel == 'bunyi'", blank:true, options:[{text:"Masuk_Kelas",correct:true},{text:"Pergi_ke_Kantin",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_di_Halaman"} ], 
           fbOk:"Disiplin! Waktunya belajar dimulai.", fbNo:"Bel sudah bunyi, kantin sudah tutup saatnya belajar." },
-        { id:7, scene:"🤒", desc:"Suhu Badan Panas, Perut Sakit", 
+        { id:6, scene:"🤒", desc:"Suhu Badan Panas, Perut Sakit", 
           branches:[ {kw:"JIKA", cond:"sakit == benar", blank:true, options:[{text:"Minum_Obat",correct:true},{text:"Makan_Es_Krim",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bermain_Bola"} ], 
           fbOk:"Cepat sembuh! Minum obat adalah solusi tepat.", fbNo:"Makan es krim malah bikin tambah sakit." },
-        { id:8, scene:"🌙", desc:"Waktu Menunjukkan Pukul 22.00 Malam", 
+        { id:7, scene:"🌙", desc:"Waktu Menunjukkan Pukul 22.00 Malam", 
           branches:[ {kw:"JIKA", cond:"malam == benar", blank:true, options:[{text:"Tidur",correct:true},{text:"Nonton_TV",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Belajar"} ], 
           fbOk:"Selamat malam! Tubuh butuh istirahat.", fbNo:"Sudah larut, besok ngantuk kalau nonton TV terus." },
-        { id:9, scene:"🍽️", desc:"Tangan Kotor Setelah Main Tanah", 
+        { id:8, scene:"🍽️", desc:"Tangan Kotor Setelah Main Tanah", 
           branches:[ {kw:"JIKA", cond:"tangan_kotor == benar", blank:true, options:[{text:"Cuci_Tangan",correct:true},{text:"Langsung_Makan",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Langsung_Makan"} ], 
           fbOk:"Higienis! Kuman harus dibuang dulu.", fbNo:"Awas sakit perut kalau makan pakai kuman tanah!" },
-        { id:10, scene:"🦷", desc:"Gigi Sehat, Rajin Sikat Gigi", 
-          branches:[ {kw:"JIKA", cond:"sakit_gigi == benar", action:"Ke_Dokter_Gigi"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Gigi_Kuat_&_Bersih",correct:true},{text:"Gigi_Berlubang",correct:false}]} ], 
-          fbOk:"Hebat! Karena tidak sakit gigi, masuk ke JIKA TIDAK (Gigi Kuat).", fbNo:"Perhatikan kondisinya: 'sakit gigi' bernilai SALAH, jadi masuk ke cabang JIKA TIDAK." },
-        { id:11, scene:"💰", desc:"Uang Rp10.000, Harga Mainan Rp15.000", 
-          branches:[ {kw:"JIKA", cond:"uang >= harga", action:"Beli_Mainan"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Nabung_Dulu",correct:true},{text:"Bawa_Lari",correct:false}]} ], 
-          fbOk:"Bijak! Uang tidak cukup, jadi nabung dulu.", fbNo:"Uang 10rb kurang dari 15rb, harus menabung dulu." },
-        { id:12, scene:"🗑️", desc:"Pegang Bungkus Jajan Kosong", 
+        { id:9, scene:"🗑️", desc:"Pegang Bungkus Jajan Kosong", 
           branches:[ {kw:"JIKA", cond:"ada_sampah == benar", blank:true, options:[{text:"Buang_ke_Tong",correct:true},{text:"Lempar_ke_Sungai",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Simpan_di_Saku"} ], 
           fbOk:"Pahlawan Bumi! Buang sampah pada tempatnya.", fbNo:"Jangan dibuang ke sungai, nanti bisa banjir!" },
-        { id:13, scene:"💯", desc:"Ulangan Dapat Nilai 100", 
+        { id:10, scene:"💯", desc:"Ulangan Dapat Nilai 100", 
           branches:[ {kw:"JIKA", cond:"nilai == 100", blank:true, options:[{text:"Dapat_Hadiah",correct:true},{text:"Remedial",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Belajar_Lagi"} ], 
           fbOk:"Selamat! Usaha keras membuahkan hasil.", fbNo:"Masa nilai 100 disuruh remedial?" },
-        { id:14, scene:"🔥", desc:"Air di Panci Sudah Mendidih", 
-          branches:[ {kw:"JIKA", cond:"air_mendidih == benar", blank:true, options:[{text:"Matikan_Kompor",correct:true},{text:"Biarkan_Saja",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Tunggu_Sebentar"} ], 
-          fbOk:"Aman! Mencegah kebakaran dan panci gosong.", fbNo:"Kalau dibiarkan airnya habis dan bisa kebakaran." },
-        { id:15, scene:"💧", desc:"Lari Keliling Lapangan, Terasa Haus", 
-          branches:[ {kw:"JIKA", cond:"haus == benar", blank:true, options:[{text:"Minum_Air",correct:true},{text:"Makan_Kerupuk",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lanjut_Lari"} ], 
-          fbOk:"Segar! Tubuh butuh cairan setelah olahraga.", fbNo:"Makan kerupuk malah makin haus dong." },
-        { id:16, scene:"👕", desc:"Baju Kena Cipratan Lumpur", 
-          branches:[ {kw:"JIKA", cond:"baju_kotor == benar", blank:true, options:[{text:"Cuci_Baju",correct:true},{text:"Pakai_Terus",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Simpan_di_Lemari"} ], 
-          fbOk:"Rajin! Baju yang kotor harus segera dicuci.", fbNo:"Masa baju berlumpur dipakai terus?" },
-        { id:17, scene:"🥀", desc:"Tanaman Kering & Daun Menguning", 
-          branches:[ {kw:"JIKA", cond:"tanaman == layu", blank:true, options:[{text:"Siram_Air",correct:true},{text:"Cabut_Buang",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Beri_Pupuk"} ], 
-          fbOk:"Penyayang! Air menyelamatkan tanaman layu.", fbNo:"Masih bisa diselamatkan dengan air, jangan langsung dibuang." },
-        { id:18, scene:"👟", desc:"Sol Sepatu Lepas, Tidak Bisa Dipakai", 
-          branches:[ {kw:"JIKA", cond:"sepatu == rusak", blank:true, options:[{text:"Perbaiki/Beli_Baru",correct:true},{text:"Tetap_Dipakai",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lari_Sprint"} ], 
-          fbOk:"Tepat! Sepatu rusak bisa membahayakan kaki.", fbNo:"Tetap dipakai bisa bikin kaki lecet." },
-        { id:19, scene:"📱", desc:"Main Game Sudah 3 Jam Berturut-turut", 
-          branches:[ {kw:"JIKA", cond:"waktu_main > 2_jam", blank:true, options:[{text:"Istirahatkan_Mata",correct:true},{text:"Lanjut_Main",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_Sebentar"} ], 
-          fbOk:"Kesehatan mata itu penting!", fbNo:"Lebih dari 2 jam mata butuh istirahat dari layar." },
-        { id:20, scene:"🌈", desc:"Hujan Sudah Berhenti, Langit Cerah", 
-          branches:[ {kw:"JIKA", cond:"hujan == benar", action:"Pakai_Payung"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Main_di_Luar",correct:true},{text:"Tidur_Pakai_Selimut",correct:false}]} ], 
-          fbOk:"Asyik! Hujan sudah reda (kondisi salah), waktunya main di luar.", fbNo:"Karena hujan bernilai SALAH, kita masuk ke JIKA TIDAK (main di luar)." }
+
+        // 11-20: Menggunakan operator < dan > (Kurang dari, Lebih dari)
+        { id:11, scene:"🔋", desc:"Baterai Sisa 15% (Kritis)", 
+          branches:[ {kw:"JIKA", cond:"baterai < 20", blank:true, options:[{text:"Cas_HP",correct:true},{text:"Main_Game_Lagi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bawa_Berpergian"} ], 
+          fbOk:"Benar! 15 itu lebih kecil dari 20. Segera isi daya.", fbNo:"Kalau lanjut main, HP-nya pasti langsung mati." },
+        { id:12, scene:"🏎️", desc:"Kecepatan Mobil 90 km/jam", 
+          branches:[ {kw:"JIKA", cond:"kecepatan > 80", blank:true, options:[{text:"Kurangi_Kecepatan",correct:true},{text:"Injak_Gas",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Jalan_Santai"} ], 
+          fbOk:"Aman! 90 > 80, itu tandanya ngebut, harus dikurangi.", fbNo:"Sudah ngebut masa tambah gas? Berbahaya!" },
+        { id:13, scene:"🌡️", desc:"Suhu Ruangan AC: 18 Derajat", 
+          branches:[ {kw:"JIKA", cond:"suhu < 20", blank:true, options:[{text:"Pakai_Jaket",correct:true},{text:"Nyalakan_Kipas",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Buka_Baju"} ], 
+          fbOk:"Brrr! Suhu di bawah 20 itu dingin.", fbNo:"Sudah dingin kok malah nyalakan kipas?" },
+        { id:14, scene:"🧳", desc:"Berat Koper 25 kg (Batas Gratis 20 kg)", 
+          branches:[ {kw:"JIKA", cond:"berat > 20", blank:true, options:[{text:"Bayar_Denda",correct:true},{text:"Bawa_Masuk_Gratis",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bawa_Masuk_Gratis"} ], 
+          fbOk:"Tepat. 25 lebih besar dari 20, jadi harus bayar bagasi tambahan.", fbNo:"Tidak bisa gratis karena 25 kg melebihi batas 20 kg." },
+        { id:15, scene:"📱", desc:"Sisa Pulsa Rp 2.000", 
+          branches:[ {kw:"JIKA", cond:"pulsa < 5000", blank:true, options:[{text:"Isi_Ulang",correct:true},{text:"Telepon_Lama",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Telepon_Bebas"} ], 
+          fbOk:"Betul. Pulsa 2000 kurang dari 5000, harus isi ulang dulu.", fbNo:"Pulsa sedikit tidak bisa untuk telepon lama-lama." },
+        { id:16, scene:"🚶", desc:"Jarak ke Sekolah Cuma 500 meter (0.5 km)", 
+          branches:[ {kw:"JIKA", cond:"jarak < 1_km", blank:true, options:[{text:"Jalan_Kaki",correct:true},{text:"Naik_Pesawat",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Naik_Bus"} ], 
+          fbOk:"Sehat! Jarak dekat lebih baik jalan kaki.", fbNo:"Naik pesawat untuk 500 meter? Yang benar saja!" },
+        { id:17, scene:"🔥", desc:"Waktu Main Game 4 Jam", 
+          branches:[ {kw:"JIKA", cond:"waktu > 2_jam", blank:true, options:[{text:"Istirahat_Mata",correct:true},{text:"Main_Semalaman",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_Sebentar"} ], 
+          fbOk:"Benar! 4 jam lebih besar dari 2 jam. Mata butuh istirahat.", fbNo:"Mata bisa rusak kalau main semalaman tanpa istirahat." },
+        { id:18, scene:"⭐", desc:"Skor Game-mu 1500 poin", 
+          branches:[ {kw:"JIKA", cond:"skor > 1000", blank:true, options:[{text:"Naik_Level",correct:true},{text:"Game_Over",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_Lagi"} ], 
+          fbOk:"Hebat! Skormu lebih dari 1000, waktunya naik level.", fbNo:"Skor tinggi kok malah Game Over?" },
+        { id:19, scene:"👕", desc:"Stok Baju Seragam Tersisa 2 Baju", 
+          branches:[ {kw:"JIKA", cond:"stok < 5", blank:true, options:[{text:"Beli_Lagi",correct:true},{text:"Buang_Baju",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Jual_Seragam"} ], 
+          fbOk:"Tepat. Stok kurang dari 5 berarti sudah mau habis, harus tambah.", fbNo:"Sudah mau habis kenapa dibuang?" },
+        { id:20, scene:"🍕", desc:"Potongan Pizza Tinggal 1", 
+          branches:[ {kw:"JIKA", cond:"pizza < 2", blank:true, options:[{text:"Bagi_Rata",correct:true},{text:"Buang_ke_Tempat_Sampah",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Makan_Sendiri"} ], 
+          fbOk:"Bijak! Sisa sedikit lebih baik dibagi rata.", fbNo:"Makanan tidak boleh dibuang sembarangan." },
+
+        // 21-30: Menggunakan operator >= dan <= (Minimal dan Maksimal)
+        { id:21, scene:"🎢", desc:"Tinggi Badan 120 cm. (Syarat Rollercoaster Minimal 120 cm)", 
+          branches:[ {kw:"JIKA", cond:"tinggi >= 120", blank:true, options:[{text:"Boleh_Naik",correct:true},{text:"Dilarang_Naik",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Main_Wahana_Anak"} ], 
+          fbOk:"Hore! Tanda '>=' artinya angka 120 pas juga boleh ikut.", fbNo:"Syaratnya >= 120, jadi karena tinggimu pas 120 kamu BOLEH naik." },
+        { id:22, scene:"💰", desc:"Harga Mainan 15.000, Uangmu 15.000", 
+          branches:[ {kw:"JIKA", cond:"uang >= harga", blank:true, options:[{text:"Beli_Mainan",correct:true},{text:"Nangis",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Nabung_Dulu"} ], 
+          fbOk:"Tepat sekali! Uangmu pas, jadi >= terpenuhi (sama dengan harganya).", fbNo:"Uangmu cukup kok, tidak perlu menangis." },
+        { id:23, scene:"🎫", desc:"Umurmu 9 Tahun. (Tiket Anak-anak Maksimal 10 Tahun)", 
+          branches:[ {kw:"JIKA", cond:"umur <= 10", blank:true, options:[{text:"Dapat_Diskon",correct:true},{text:"Bayar_Penuh",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bayar_Penuh"} ], 
+          fbOk:"Benar! Umur 9 itu kurang dari atau sama dengan 10. Kamu dapat diskon.", fbNo:"Umur 9 masih di bawah batas maksimal 10, jadi dapat diskon." },
+        { id:24, scene:"📝", desc:"Nilai Ujianmu 75. (KKM Kelulusan adalah 75)", 
+          branches:[ {kw:"JIKA", cond:"nilai >= 75", blank:true, options:[{text:"Lulus",correct:true},{text:"Remedial",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Remedial"} ], 
+          fbOk:"Selamat! Nilaimu pas dengan syarat minimal (>= 75).", fbNo:"Kamu tidak remedial karena nilaimu tepat 75, sudah lulus!" },
+        { id:25, scene:"🏋️", desc:"Kapasitas Lift Maksimal 500 kg. Berat Saat Ini 450 kg.", 
+          branches:[ {kw:"JIKA", cond:"berat <= 500", blank:true, options:[{text:"Lift_Naik",correct:true},{text:"Alarm_Bunyi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Alarm_Bunyi"} ], 
+          fbOk:"Aman! 450 masih <= 500. Lift bisa bergerak.", fbNo:"Alarm baru bunyi kalau beratnya LEBIH dari 500." },
+        { id:26, scene:"🛒", desc:"Diskon Berlaku Jika Belanja Minimal Rp 100.000. Kamu Belanja 150.000", 
+          branches:[ {kw:"JIKA", cond:"belanja >= 100_000", blank:true, options:[{text:"Dapat_Potongan",correct:true},{text:"Harga_Normal",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Harga_Normal"} ], 
+          fbOk:"Asyik! Belanja 150.000 sudah pasti lebih besar atau sama dengan batasnya.", fbNo:"Kamu belanja banyak, pasti dapat potongan dong." },
+        { id:27, scene:"🪫", desc:"Baterai Powerbank Sisa 1 Bar (<= 25%)", 
+          branches:[ {kw:"JIKA", cond:"baterai <= 25", blank:true, options:[{text:"Waktunya_Dicas",correct:true},{text:"Bisa_Dipakai_Lama",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bisa_Dipakai"} ], 
+          fbOk:"Betul. Kalau baterai kecil atau sama dengan 25, powerbank perlu diisi ulang.", fbNo:"Sisa sedikit tidak bisa dipakai berlama-lama." },
+        { id:28, scene:"⏰", desc:"Siswa Harus Tiba Paling Lambat Jam 07.00. Kamu Datang Jam 06.50", 
+          branches:[ {kw:"JIKA", cond:"jam <= '07.00'", blank:true, options:[{text:"Tepat_Waktu",correct:true},{text:"Terlambat",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Terlambat"} ], 
+          fbOk:"Rajin! 06.50 itu <= 07.00, jadi kamu tepat waktu.", fbNo:"Jam 06.50 belum jam 7, berarti kamu belum telat." },
+        { id:29, scene:"🥤", desc:"Botol Minum Isi 500ml (Kapasitas Maksimal 500ml)", 
+          branches:[ {kw:"JIKA", cond:"isi >= 500", blank:true, options:[{text:"Botol_Penuh",correct:true},{text:"Isi_Air_Lagi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Isi_Air_Lagi"} ], 
+          fbOk:"Airnya sudah penuh (>= 500), jangan diisi lagi nanti tumpah.", fbNo:"Kalau isi lagi, airnya pasti meluber." },
+        { id:30, scene:"🏃", desc:"Syarat Ikut Lomba Lari Cepat: Waktu Lari <= 15 Detik. Waktumu 14 Detik.", 
+          branches:[ {kw:"JIKA", cond:"waktu <= 15", blank:true, options:[{text:"Lolos_Kualifikasi",correct:true},{text:"Gagal",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Gagal"} ], 
+          fbOk:"Hebat! Kecepatanmu 14 detik, memenuhi syarat <= 15.", fbNo:"Waktu 14 detik itu lebih cepat dari 15 detik, harusnya lolos!" },
+
+        // 31-40: Menggunakan operator != (Tidak Sama Dengan) dan Logika ELSE (JIKA TIDAK)
+        { id:31, scene:"🔑", desc:"Password yang Diketik Salah!", 
+          branches:[ {kw:"JIKA", cond:"password != 'rahasia'", blank:true, options:[{text:"Akses_Ditolak",correct:true},{text:"Masuk_Aplikasi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Masuk_Aplikasi"} ], 
+          fbOk:"Keamanan aktif! Password TIDAK SAMA DENGAN aslinya, akses ditolak.", fbNo:"Kalau passwordnya beda ( != ), tidak boleh masuk." },
+        { id:32, scene:"🌈", desc:"Cuaca Hari Ini Cerah", 
+          branches:[ {kw:"JIKA", cond:"cuaca != 'hujan'", blank:true, options:[{text:"Main_di_Luar",correct:true},{text:"Pakai_Payung",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Pakai_Payung"} ], 
+          fbOk:"Asyik! Karena cuaca TIDAK hujan, waktunya main di luar.", fbNo:"Tidak hujan, buat apa pakai payung?" },
+        { id:33, scene:"📅", desc:"Hari Ini Adalah Hari Senin", 
+          branches:[ {kw:"JIKA", cond:"hari != 'Minggu'", blank:true, options:[{text:"Pakai_Seragam",correct:true},{text:"Baju_Bebas",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Baju_Bebas"} ], 
+          fbOk:"Disiplin! Karena BUKAN hari Minggu, pakai seragam sekolah.", fbNo:"Senin waktunya sekolah, tidak boleh baju bebas." },
+        { id:34, scene:"🚦", desc:"Lampu Lalu Lintas Kuning", 
+          branches:[ {kw:"JIKA", cond:"lampu != 'merah'", blank:true, options:[{text:"Siap_Siap_Jalan",correct:true},{text:"Mati_Mesin",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Berhenti"} ], 
+          fbOk:"Benar! Karena bukan merah, kendaraan bersiap melaju.", fbNo:"Kuning tandanya siap-siap, bukan mematikan mesin." },
+        { id:35, scene:"🌶️", desc:"Rasa Makanan Sangat Manis", 
+          branches:[ {kw:"JIKA", cond:"rasa != 'pedas'", blank:true, options:[{text:"Boleh_Dimakan_Adik",correct:true},{text:"Sediakan_Air_Banyak",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Sediakan_Air_Banyak"} ], 
+          fbOk:"Cocok! Adik kecil boleh makan karena TIDAK pedas.", fbNo:"Kan tidak pedas, adik tidak butuh minum banyak-banyak." },
+        { id:36, scene:"🧼", desc:"Baju Kena Tumpahan Cat", 
+          branches:[ {kw:"JIKA", cond:"baju == 'bersih'", action:"Pakai_Pergi"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Cuci_Dulu",correct:true},{text:"Pakai_Pergi",correct:false}]} ], 
+          fbOk:"Pintar! Baju 'bersih' itu SALAH, jadi masuk ke JIKA TIDAK.", fbNo:"Baju kena cat itu kotor, berarti masuk ke JIKA TIDAK (Cuci)." },
+        { id:37, scene:"📺", desc:"Listrik Padam Tiba-tiba", 
+          branches:[ {kw:"JIKA", cond:"listrik == 'menyala'", action:"Nonton_TV"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Nyalakan_Senter",correct:true},{text:"Nyalakan_Kipas",correct:false}]} ], 
+          fbOk:"Tepat. Karena kondisi 'menyala' SALAH, kita masuk ke JIKA TIDAK.", fbNo:"Listrik padam kipas angin tidak bisa menyala." },
+        { id:38, scene:"💧", desc:"Air Sudah Direbus Tapi Belum Mendidih", 
+          branches:[ {kw:"JIKA", cond:"air == 'mendidih'", action:"Matikan_Kompor"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Tunggu_Sebentar",correct:true},{text:"Buang_Airnya",correct:false}]} ], 
+          fbOk:"Sabar. Karena belum mendidih, kita masuk cabang JIKA TIDAK.", fbNo:"Jangan dibuang, tunggu saja sebentar lagi." },
+        { id:39, scene:"👟", desc:"Ukuran Sepatumu 38. Sepatu di Toko Ukuran 42", 
+          branches:[ {kw:"JIKA", cond:"ukuran == 38", action:"Beli_Sepatu"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Cari_Ukuran_Lain",correct:true},{text:"Paksa_Pakai",correct:false}]} ], 
+          fbOk:"Benar! Karena ukurannya beda (kondisi SALAH), cari ukuran lain.", fbNo:"Kalau dipaksa nanti sepatu akan kebesaran dipakai." },
+        { id:40, scene:"🌾", desc:"Tanaman Padi Masih Hijau (Belum Kuning/Matang)", 
+          branches:[ {kw:"JIKA", cond:"padi == 'kuning'", action:"Mulai_Panen"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Beri_Pupuk",correct:true},{text:"Potong_Sekarang",correct:false}]} ], 
+          fbOk:"Pertanian pintar! Padi belum kuning, jadi masuk JIKA TIDAK.", fbNo:"Padi hijau belum siap panen, nanti berasnya keras." },
+
+        // 41-50: Campuran Analisis HOTS (Penerapan Konsep Sehari-hari)
+        { id:41, scene:"💸", desc:"Ingin Beli Buku Rp20.000, Uang Saku Sisa Rp10.000", 
+          branches:[ {kw:"JIKA", cond:"uang >= 20_000", action:"Beli_Buku"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Menabung",correct:true},{text:"Utang_Teman",correct:false}]} ], 
+          fbOk:"Baik sekali, jika uang belum >= harga, lebih baik menabung.", fbNo:"Sebaiknya menabung dulu, jangan membiasakan berutang." },
+        { id:42, scene:"⛔", desc:"Tanda Larangan Masuk untuk Tinggi >= 150 cm. Tinggimu 160 cm.", 
+          branches:[ {kw:"JIKA", cond:"tinggi >= 150", blank:true, options:[{text:"Tidak_Boleh_Masuk",correct:true},{text:"Lari_Masuk",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Boleh_Masuk"} ], 
+          fbOk:"Taat aturan! Tinggimu memenuhi syarat larangan.", fbNo:"Aturannya yang tinggi >= 150 dilarang masuk. 160 itu >= 150." },
+        { id:43, scene:"🌡️", desc:"Termometer Daging Menunjukkan 80 Derajat (Matang: 75 Derajat)", 
+          branches:[ {kw:"JIKA", cond:"suhu >= 75", blank:true, options:[{text:"Angkat_Daging",correct:true},{text:"Panggang_Terus",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Panggang_Terus"} ], 
+          fbOk:"Koki handal! Suhu 80 >= 75, artinya daging sudah matang sempurna.", fbNo:"Kalau dipanggang terus nanti dagingnya gosong!" },
+        { id:44, scene:"📦", desc:"Kapasitas Kardus Maksimal 5 Mainan. Ingin Memasukkan 6 Mainan.", 
+          branches:[ {kw:"JIKA", cond:"jumlah <= 5", action:"Tutup_Kardus"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Siapkan_Kardus_Baru",correct:true},{text:"Paksa_Masuk",correct:false}]} ], 
+          fbOk:"Tepat! Karena 6 TIDAK <= 5, maka masuk ke JIKA TIDAK.", fbNo:"Kalau dipaksa masuk, kardus atau mainannya bisa rusak." },
+        { id:45, scene:"🏃", desc:"Skor Kesehatan Menurun Jadi 30 (Kritis di bawah 40)", 
+          branches:[ {kw:"JIKA", cond:"skor < 40", blank:true, options:[{text:"Pergi_ke_Rumah_Sakit",correct:true},{text:"Lanjut_Olahraga_Berat",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Olahraga_Ringan"} ], 
+          fbOk:"Pilihan darurat yang tepat! 30 kurang dari 40.", fbNo:"Tubuh sudah kritis, butuh penanganan medis bukan olahraga." },
+        { id:46, scene:"🎂", desc:"Umur Kakak 17 Tahun (Syarat Buat SIM: >= 17 Tahun)", 
+          branches:[ {kw:"JIKA", cond:"umur >= 17", blank:true, options:[{text:"Boleh_Ujian_SIM",correct:true},{text:"Dilarang_Bawa_Motor",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Dilarang_Bawa_Motor"} ], 
+          fbOk:"Selamat! Umur pas 17 (>=17), jadi sudah legal.", fbNo:"Umurnya sudah mencukupi syarat minimal, jadi boleh ujian." },
+        { id:47, scene:"🚗", desc:"Bensin Mobil di Angka 0 (Kosong)", 
+          branches:[ {kw:"JIKA", cond:"bensin == 0", blank:true, options:[{text:"Mobil_Mogok",correct:true},{text:"Mobil_Terbang",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Jalan_Terus"} ], 
+          fbOk:"Fisika dasar, tanpa bensin mobil pasti mogok.", fbNo:"Mobil tidak bisa terbang hanya karena bensinnya habis!" },
+        { id:48, scene:"🕒", desc:"Waktu Ujian Selesai Pukul 10.00. Saat Ini Pukul 10.15", 
+          branches:[ {kw:"JIKA", cond:"waktu > '10.00'", blank:true, options:[{text:"Kumpulkan_Kertas",correct:true},{text:"Minta_Waktu_Tambahan",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lanjut_Mengerjakan"} ], 
+          fbOk:"Disiplin waktu! Sudah melebihi batas waktu.", fbNo:"Aturan adalah aturan, jika sudah lewat batas waktu harus dikumpulkan." },
+        { id:49, scene:"🐕", desc:"Anjing Penjaga Melihat Orang Asing (Bukan Pemilik)", 
+          branches:[ {kw:"JIKA", cond:"orang != 'pemilik'", blank:true, options:[{text:"Menggonggong",correct:true},{text:"Tidur",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Minta_Makan"} ], 
+          fbOk:"Pintar! Karena orang itu TIDAK SAMA DENGAN pemilik, anjing memperingatkan.", fbNo:"Itu tugas anjing penjaga, kalau ada orang asing dia menggonggong." },
+        { id:50, scene:"🏆", desc:"Tugas Akhir Sekolah! Nilai Kodingmu 100", 
+          branches:[ {kw:"JIKA", cond:"nilai == 100", blank:true, options:[{text:"Lulus_dengan_Bintang",correct:true},{text:"Ulang_Kelas",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Belajar_Lagi"} ], 
+          fbOk:"SEMPURNA! Kamu adalah Master Robo-Code Kelas 4!", fbNo:"Kamu sudah mendapat 100, pastinya lulus dengan Bintang!" }
     ];
 
     // --- DATA SOAL KELAS 6 (HOTS: Logika Bertingkat, AND/OR/NOT, Prioritas) ---
