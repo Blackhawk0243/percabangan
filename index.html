@@ -3,72 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>Petualangan Robo-Code: Master Logika SD</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    
+    <title>Petualangan Robo-Code: Game Pembelajaran</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Modern Color Palette */
             --primary: #6366f1;
             --primary-dark: #4f46e5;
-            --primary-light: #a5b4fc;
             --secondary: #ec4899;
             --success: #10b981;
-            --success-dark: #059669;
             --danger: #ef4444;
-            --danger-dark: #dc2626;
             --warning: #f59e0b;
-            
-            --bg-gradient-1: #e0e7ff;
-            --bg-gradient-2: #fbcfe8;
-            --card-bg: rgba(255, 255, 255, 0.95);
+            --bg: #f0fdfa;
+            --card-bg: #ffffff;
             --text: #1e293b;
-            --text-muted: #64748b;
-            
             --code-bg: #1e1e2e;
             --code-text: #a6accd;
         }
 
-        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; user-select: none; }
 
         html, body {
             font-family: 'Nunito', sans-serif;
+            background-color: var(--bg);
             margin: 0; padding: 0;
             width: 100vw; height: 100vh;
-            color: var(--text);
             overflow: hidden;
-            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Grid Pattern Overlay */
-        body::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: 0; pointer-events: none;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex; justify-content: center; align-items: center;
         }
 
         .app-container {
-            width: 100%; max-width: 900px; height: 100%;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            width: 100%; max-width: 900px;
+            height: 100%; max-height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             display: flex; flex-direction: column;
-            position: relative; z-index: 1; overflow: hidden;
+            position: relative; overflow: hidden;
         }
 
         @media (min-width: 800px) {
             .app-container {
-                height: 90vh; max-height: 850px;
-                width: 95%; border-radius: 32px;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 4px rgba(255,255,255,0.5) inset;
-                border: 2px solid rgba(255,255,255,0.8);
+                height: 95vh; max-height: 750px;
+                border-radius: 24px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+                border: 4px solid #fff;
             }
         }
 
@@ -76,948 +55,679 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column;
             background: transparent;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 24px; z-index: 1; overflow-y: auto; overflow-x: hidden;
-            opacity: 1; transform: scale(1) translateX(0);
+            transition: transform 0.4s ease-in-out, opacity 0.3s ease;
+            padding: 20px; z-index: 1; overflow-y: auto;
         }
 
-        .screen::-webkit-scrollbar { width: 8px; }
-        .screen::-webkit-scrollbar-track { background: transparent; }
-        .screen::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
-
-        .screen.hidden { transform: scale(0.9) translateX(120%); opacity: 0; pointer-events: none; z-index: 0; }
-        .screen.active { transform: scale(1) translateX(0); opacity: 1; pointer-events: auto; }
-        .screen.left { transform: scale(0.9) translateX(-120%); opacity: 0; pointer-events: none; }
-
-        h1 { font-family: 'Fredoka', sans-serif; color: var(--primary-dark); font-size: 2.5rem; margin: 0; text-align: center; line-height: 1.1; }
-        h2 { font-family: 'Fredoka', sans-serif; color: var(--primary); font-size: 1.8rem; margin: 20px 0 10px; }
-        p { color: var(--text-muted); text-align: center; margin-bottom: 24px; font-size: 1.1rem; font-weight: 600; }
-        
-        .intro-img { font-size: 6rem; margin-bottom: 10px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.15)); animation: floatRobot 3s ease-in-out infinite; text-align: center;}
-        
-        .btn-main {
-            background: linear-gradient(to bottom, var(--primary), var(--primary-dark)); color: white;
-            border: none; padding: 16px 40px; font-size: 1.3rem; border-radius: 50px;
-            cursor: pointer; font-family: 'Fredoka', sans-serif;
-            box-shadow: 0 8px 0 #4338ca, 0 15px 20px rgba(79, 70, 229, 0.4);
-            transition: all 0.15s; margin: 10px; position: relative; overflow: hidden;
-        }
-        .btn-main:active { transform: translateY(8px); box-shadow: 0 0px 0 #4338ca; }
-        
-        .btn-secondary { background: linear-gradient(to bottom, var(--secondary), #db2777); box-shadow: 0 8px 0 #be185d, 0 15px 20px rgba(236, 72, 153, 0.4); }
-        .btn-secondary:active { box-shadow: 0 0px 0 #be185d; transform: translateY(8px); }
+        .screen.hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
+        .screen.active { transform: translateX(0); opacity: 1; pointer-events: all; }
+        .screen.left { transform: translateX(-100%); opacity: 0; pointer-events: none; }
 
         .btn-back {
-            background: #e2e8f0; color: #475569; border: none;
-            padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 4px 0 #cbd5e1; align-self: flex-start; margin-bottom: 15px;
+            background: #e2e8f0; color: #475569; border: none; padding: 10px 20px;
+            border-radius: 20px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 0 #cbd5e1; align-self: flex-start; margin-bottom: 15px; flex-shrink: 0;
         }
-        .btn-back:active { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
+        .btn-back:active { transform: translateY(4px); box-shadow: none; }
 
-        .materi-card {
-            background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border: 2px solid #f1f5f9; text-align: left;
+        h1 { font-family: 'Fredoka', sans-serif; color: var(--primary); font-size: 2.2rem; margin: 0; text-align: center; line-height: 1.2; }
+        p { color: #64748b; text-align: center; margin-bottom: 18px; font-size: 1.1rem; }
+
+        .btn-main {
+            background: var(--primary); color: white; border: none; padding: 15px 40px;
+            font-size: 1.25rem; border-radius: 50px; cursor: pointer; font-family: 'Fredoka', sans-serif;
+            box-shadow: 0 6px 0 var(--primary-dark); transition: all 0.1s; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 300px; margin: 8px auto;
         }
-        .materi-card p { text-align: left; font-weight: normal; color: #334155; line-height: 1.6; margin-bottom: 10px; }
-        .materi-card ul { margin-left: 20px; color: #334155; margin-bottom: 20px; line-height: 1.6;}
-        .materi-card li { margin-bottom: 8px;}
-        
-        .video-container {
-            position: relative; padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            height: 0; overflow: hidden; max-width: 100%; border-radius: 16px; margin: 20px 0;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); background: #000;
-        }
+        .btn-main:active { transform: translateY(6px); box-shadow: none; }
+        .btn-secondary { background: var(--success); box-shadow: 0 6px 0 #059669; }
+
+        /* --- MATERIAL UI --- */
+        .materi-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border: 2px solid #f1f5f9; }
+        .materi-card h2 { color: var(--primary-dark); margin-top: 0; font-family: 'Fredoka', sans-serif;}
+        .materi-card ul { padding-left: 20px; line-height: 1.6; color: #334155; }
+        .materi-card li { margin-bottom: 10px; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; margin: 15px 0; background: #000; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-
-        /* Flowchart SVG container */
-        .flowchart-box {
-            background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 16px; padding: 20px;
-            display: flex; justify-content: center; overflow-x: auto; margin-bottom: 20px;
-        }
-
-        #gameScreen { padding: 16px; flex-direction: column; justify-content: flex-start; }
         
-        .game-header {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
-            margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px dashed rgba(203, 213, 225, 0.6);
-        }
-        
-        .pill { padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 6px;}
-        .level-pill { background: #e0e7ff; color: var(--primary-dark); }
-        .score-pill { background: #fef3c7; color: #b45309; }
+        /* --- GAME UI CLASSES --- */
+        .game-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #e2e8f0; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;}
+        .pill { padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; }
+        .level-pill { background: #e0e7ff; color: var(--primary); }
+        .score-pill { background: #fef3c7; color: #d97706; }
+        .timer-pill { background: #fee2e2; color: #dc2626; font-family: 'Consolas', monospace; font-size: 1rem;}
 
-        .game-body { display: flex; flex-direction: column; gap: 16px; flex: 1; }
-        
+        .game-body { display: flex; flex-direction: column; gap: 15px; flex: 1; overflow-y: auto; padding-bottom: 20px;}
+        .left-panel, .right-panel { display: flex; flex-direction: column; width: 100%; }
+
         @media (min-width: 800px) {
-            #gameScreen { flex-direction: row; flex-wrap: wrap; align-content: flex-start; }
-            .game-header { width: 100%; }
-            .game-body { flex-direction: row; width: 100%; }
-            .left-panel { flex: 0 0 40%; display: flex; flex-direction: column; }
-            .right-panel { flex: 1; display: flex; flex-direction: column; justify-content: center;}
+            .game-body { flex-direction: row; align-items: stretch; }
+            .left-panel { flex: 0 0 45%; }
+            .right-panel { flex: 1; justify-content: center; }
         }
 
-        .visual-stage {
-            flex: 1; background: linear-gradient(180deg, #f8fafc, #e2e8f0); border-radius: 24px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border: 4px solid white; box-shadow: 0 10px 15px rgba(0,0,0,0.05); padding: 20px; min-height: 180px; position: relative;
+        /* --- PABRIK SORTIR (CLASS 4) --- */
+        .factory-stage {
+            background: #cbd5e1; border: 6px solid #94a3b8; border-radius: 20px; 
+            padding: 20px 10px; display: flex; flex-direction: column; align-items: center; 
+            position: relative; overflow: hidden; height: 100%; min-height: 250px;
         }
-        .scene-emoji { font-size: 4.5rem; z-index: 2; animation: popIn 0.5s; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));}
-        .robot-avatar { font-size: 3rem; margin-top: 10px; z-index: 2; transition: all 0.4s; animation: breathe 3s infinite alternate; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));}
-        .condition-label {
-            margin-top: 15px; font-weight: 800; color: var(--primary-dark); background: white;
-            padding: 8px 16px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            font-size: 0.95rem; text-align: center; border: 2px solid var(--primary-light);
+        .conveyor-belt {
+            width: 110%; height: 60px; background: #334155; position: absolute; bottom: 30px;
+            border-top: 4px solid #475569; border-bottom: 4px solid #1e293b;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 40px, #1e293b 40px, #1e293b 50px);
+            animation: moveBelt 2s linear infinite; display: flex; justify-content: center; align-items: flex-end;
         }
+        @keyframes moveBelt { 0% { background-position: 0 0; } 100% { background-position: 50px 0; } }
+        
+        .factory-item {
+            background: white; border: 4px solid #fbbf24; border-radius: 16px; padding: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 5;
+            display: flex; flex-direction: column; align-items: center; min-width: 160px;
+            position: absolute; bottom: 10px; left: -200px;
+        }
+        
+        .f-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 5px; }
+        .f-stats { background: #f8fafc; width: 100%; border-radius: 8px; padding: 8px; font-size: 0.9rem; font-weight: 800; color: #475569;}
+        .f-stats div { display: flex; justify-content: space-between; border-bottom: 1px dashed #cbd5e1; padding: 2px 0;}
+        .f-stats div:last-child { border: none; }
+        .f-val { color: var(--primary-dark); font-family: 'Fredoka'; font-size: 1.1rem; }
 
-        .code-editor {
-            background: var(--code-bg); border-radius: 20px; padding: 20px; margin-bottom: 15px;
-            font-family: 'Fira Code', 'Consolas', monospace; color: var(--code-text);
-            box-shadow: inset 0 0 0 2px rgba(255,255,255,0.1), 0 10px 15px rgba(0,0,0,0.2);
-            font-size: 0.95rem; overflow-x: auto; position: relative;
+        /* CODE MONITOR */
+        .code-monitor {
+            background: var(--code-bg); border-radius: 20px; padding: 20px; color: var(--code-text);
+            font-family: 'Consolas', monospace; box-shadow: inset 0 0 0 4px #334155, 0 10px 25px rgba(0,0,0,0.2); font-size: 1.05rem; margin-bottom: 15px;
         }
-        .code-editor::before {
-            content: ''; position: absolute; top: 12px; left: 16px; width: 12px; height: 12px;
-            border-radius: 50%; background: #ff5f56; box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
+        .code-line { margin: 6px 0; line-height: 1.5; white-space: pre-wrap; word-break: break-all;}
+        .kw-if { color: #c678dd; font-weight: bold; }
+        .kw-elif { color: #e5c07b; font-weight: bold; }
+        .kw-else { color: #e06c75; font-weight: bold; }
+        .kw-cond { color: #56b6c2; font-weight: bold; }
+        .kw-act { color: #98c379; }
+
+        /* BIN BUTTONS */
+        .bin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .bin-grid.three-bins { grid-template-columns: 1fr 1fr 1fr; }
+        
+        .btn-bin {
+            padding: 15px 5px; border-radius: 16px; border: none; font-size: 1.1rem; font-weight: bold; font-family: 'Fredoka', sans-serif; cursor: pointer; color: white; transition: all 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
         }
-        .code-editor-content { margin-top: 20px; }
-        .line { line-height: 1.7; white-space: pre; }
+        .btn-merah { background: #ef4444; box-shadow: 0 6px 0 #b91c1c; }
+        .btn-biru { background: #3b82f6; box-shadow: 0 6px 0 #1d4ed8; }
+        .btn-hijau { background: #10b981; box-shadow: 0 6px 0 #047857; }
+        .btn-bin:active { transform: translateY(6px); box-shadow: none; }
+        .btn-bin.disabled { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
+        .bin-icon { font-size: 2rem; }
 
-        .kw-if, .kw-elif, .kw-else { font-family: 'Fredoka', sans-serif; font-size: 1.05rem; }
-        .kw-if { color: #ff79c6; }
-        .kw-elif { color: #f1fa8c; }
-        .kw-else { color: #ff5555; }
-        .kw-and, .kw-or { color: #8be9fd; font-style: italic; }
-        .kw-not { color: #ffb86c; }
-        .kw-func { color: #50fa7b; }
-        .kw-val { color: #f1fa8c; }
-        .bracket { color: #6272a4; }
-
-        .answer-slot {
-            display: inline-flex; justify-content: center; align-items: center;
-            min-width: 140px; height: 28px; background: rgba(255,255,255,0.05);
-            border: 2px dashed #6272a4; border-radius: 8px; color: #6272a4;
-            padding: 0 10px; font-weight: 700; font-size: 0.9rem; transition: all 0.3s;
-            font-family: 'Nunito', sans-serif;
-        }
-        .answer-slot.filled { border-style: solid; border-color: var(--success); background: rgba(16, 185, 129, 0.15); color: var(--success); }
-        .answer-slot.wrong { border-style: solid; border-color: var(--danger); background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .option-btn {
-            background: white; border: 3px solid #e2e8f0; padding: 14px 10px; border-radius: 16px;
-            color: var(--text); font-weight: 800; cursor: pointer; transition: all 0.2s; font-size: 0.95rem;
-            box-shadow: 0 6px 0 #e2e8f0; display: flex; justify-content: center; align-items: center; text-align: center;
-        }
-        .option-btn:hover { background: #f8fafc; border-color: var(--primary); color: var(--primary); box-shadow: 0 6px 0 var(--primary); transform: translateY(-2px); }
-        .option-btn:active { transform: translateY(6px); box-shadow: 0 0 0 transparent !important; }
-        .option-btn.disabled { opacity: 0.6; pointer-events: none; filter: grayscale(1); }
-
+        /* FEEDBACK OVERLAY */
         .feedback-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding: 24px;
+            z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 20px;
         }
         .feedback-overlay.show { opacity: 1; pointer-events: all; }
-        .feedback-card {
-            background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            text-align: center; transform: translateY(50px) scale(0.9); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 400px; width: 100%; border: 4px solid white;
-        }
-        .feedback-overlay.show .feedback-card { transform: translateY(0) scale(1); }
-        
-        .btn-next {
-            background: linear-gradient(to bottom, var(--success), var(--success-dark)); color: white;
-            border: none; padding: 14px 32px; border-radius: 50px; font-size: 1.2rem; font-weight: bold;
-            font-family: 'Fredoka', sans-serif; cursor: pointer; box-shadow: 0 6px 0 #065f46; transition: all 0.15s; width: 100%; margin-top: 15px;
-        }
-        .btn-next:active { transform: translateY(6px); box-shadow: 0 0px 0 #065f46; }
+        .fb-card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; border: 4px solid white; max-width: 400px; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .feedback-overlay.show .fb-card { transform: scale(1); }
+        .fb-icon { font-size: 4rem; margin-bottom: 10px; }
+        .fb-title { font-family: 'Fredoka'; font-size: 2rem; margin: 0 0 10px; }
+        .fb-text { color: #64748b; font-size: 1.1rem; margin-bottom: 20px; line-height: 1.5; font-weight: 600;}
 
-        @keyframes floatRobot { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-20px) rotate(2deg); } }
-        @keyframes breathe { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes popIn { 0% { transform: scale(0) rotate(-10deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
         .shake-anim { animation: shake 0.4s ease-in-out; }
 
-        #confetti-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
-
-        @media (max-width: 400px) {
-            h1 { font-size: 2rem; } h2 { font-size: 1.5rem; }
-            .btn-main { padding: 12px 24px; font-size: 1.1rem; }
-            .code-editor { font-size: 0.8rem; padding: 16px; }
-            .answer-slot { min-width: 100px; font-size: 0.8rem; height: 24px;}
-            .option-btn { font-size: 0.85rem; padding: 10px 8px; }
-        }
+        @media (max-width: 400px) { h1 { font-size: 1.8rem; } .code-monitor { font-size: 0.85rem; } }
     </style>
 </head>
 <body>
 
-<canvas id="confetti-canvas"></canvas>
-
 <div class="app-container">
 
-    <div id="introScreen" class="screen active">
-        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; width: 100%;">
-            <div class="intro-img">🤖</div>
-            <h1>Petualangan<br>Robo-Code</h1>
-            <p>Pilih tingkat kelasmu untuk memulai petualangan koding!</p>
-            
-            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px; margin-top: 20px;">
-                <button class="btn-main" onclick="selectClass(4)">👦👧 Kelas 4 SD</button>
-                <button class="btn-main btn-secondary" onclick="selectClass(6)">🧑👩 Kelas 6 SD</button>
-            </div>
+    <!-- SCREEN 1: Menu Utama -->
+    <div id="introScreen" class="screen active" style="justify-content: center; align-items: center;">
+        <div style="font-size: 5rem; margin-bottom: 10px; animation: popIn 1s;">🎮</div>
+        <h1>Petualangan<br>Robo-Code</h1>
+        <p>Pilih kelasmu untuk memulai belajar logika koding!</p>
+        
+        <div style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            <button class="btn-main" onclick="selectClass(4)">👦 Kelas 4 SD</button>
+            <button class="btn-main" style="background:var(--secondary); box-shadow:0 6px 0 #be185d;" onclick="selectClass(6)">🧑 Kelas 6 SD</button>
         </div>
     </div>
 
+    <!-- SCREEN 2: Menu Kelas -->
     <div id="classMenuScreen" class="screen hidden">
-        <button class="btn-back" onclick="goBack('classMenuScreen', 'introScreen')">⬅ Kembali</button>
-        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; width: 100%;">
-            <h1 id="classMenuTitle">Kelas ?</h1>
-            <p id="classMenuSubtitle">Apa yang ingin kamu lakukan hari ini?</p>
+        <button class="btn-back" onclick="switchScreen('classMenuScreen', 'introScreen')">⬅ Kembali</button>
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+            <h1 id="classTitle">Kelas ?</h1>
+            <p>Apa yang ingin kamu lakukan?</p>
             
-            <div style="display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 320px; margin-top: 30px;">
-                <button class="btn-main" style="background: linear-gradient(to bottom, #10b981, #059669); box-shadow: 0 8px 0 #047857;" onclick="openMaterial()">
-                    📚 Pelajari Materi
-                </button>
-                <button class="btn-main" onclick="startGame()">
-                    🚀 Mulai Misi (Soal)
-                </button>
-            </div>
+            <button class="btn-main btn-secondary" onclick="switchScreen('classMenuScreen', 'materialScreen')">📚 Pelajari Materi</button>
+            <button class="btn-main" onclick="startGame()">🚀 Mainkan Game!</button>
         </div>
     </div>
 
+    <!-- SCREEN 3: Materi Pembelajaran -->
     <div id="materialScreen" class="screen hidden">
-        <button class="btn-back" onclick="goBack('materialScreen', 'classMenuScreen')">⬅ Kembali</button>
-        <h1 style="font-size: 2rem; margin-bottom: 20px;" id="matTitle">Materi Percabangan</h1>
+        <button class="btn-back" onclick="switchScreen('materialScreen', 'classMenuScreen')">⬅ Kembali</button>
+        <h1 style="margin-bottom: 20px;">Materi Logika</h1>
         
-        <div id="materialContent4" style="display:none; width: 100%; max-width: 700px; margin: 0 auto;">
-            <!-- Material for Class 4 -->
+        <!-- MATERI KELAS 4 -->
+        <div id="matClass4" style="display:none; padding-bottom: 30px;">
             <div class="materi-card">
-                <h2>Apa itu Percabangan (If-Else)?</h2>
-                <p>Dalam koding, komputer butuh diberi aturan kapan dia harus melakukan sesuatu. Bayangkan komputer adalah robot yang patuh. <b>Percabangan</b> adalah cara kita memberitahu robot: <i>"JIKA terjadi sesuatu, maka lakukan A. JIKA TIDAK, lakukan B."</i></p>
-                <p>Contoh di dunia nyata:</p>
+                <h2>Konsep JIKA - MAKA (If-Else)</h2>
+                <p>Komputer itu ibarat robot penurut. Agar robot bisa mengambil keputusan, kita gunakan aturan <b>JIKA (IF)</b> dan <b>JIKA TIDAK (ELSE)</b>.</p>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/KmrVYIfcJ74" title="Konsep Dasar Percabangan" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div class="materi-card" style="border-color: var(--warning); background: #fffbeb;">
+                <h2>⚙️ Aturan Mesin Bertingkat (Sangat Penting!)</h2>
+                <p>Bagaimana jika pilihannya lebih dari dua? Mesin akan menggunakan <b>ATAU JIKA (ELSE IF)</b>. Aturan paling penting: <b>Mesin SELALU membaca dari ATAS ke BAWAH.</b></p>
                 <ul>
-                    <li><b>JIKA</b> cuaca == hujan ➜ Pakai Payung ☂️</li>
-                    <li><b>JIKA TIDAK</b> ➜ Pakai Topi 🧢</li>
+                    <li>Mesin mengecek Syarat 1. Jika <b>BENAR</b>, laksanakan tugas, lalu <b>BERHENTI</b> mengecek syarat lain.</li>
+                    <li>Jika Syarat 1 <b>SALAH</b>, mesin baru turun untuk mengecek Syarat 2.</li>
+                    <li>Jika semua syarat salah, mesin akan masuk ke keranjang sampah (JIKA TIDAK).</li>
                 </ul>
+                <p style="color: var(--danger); font-weight: bold; text-align: left;">Jebakan: Jika Syarat 1 dan Syarat 2 sama-sama BENAR, mesin akan TETAP memilih Syarat 1 karena letaknya paling atas!</p>
             </div>
 
             <div class="materi-card">
-                <h2>Tanda Perbandingan (Matematika Robot) 🐊</h2>
-                <p>Robot mengambil keputusan dengan membandingkan sesuatu. Ini tanda-tandanya:</p>
+                <h2>Matematika Robot (Tanda Perbandingan)</h2>
+                <p>Robot membandingkan angka menggunakan tanda khusus yang mirip dengan "Mulut Buaya". Buaya selalu memakan angka yang lebih besar!</p>
                 <ul>
-                    <li><b><span style="color:var(--primary); font-size:1.2rem;">==</span> (Sama Dengan)</b><br>
-                        Mengecek apakah dua hal <b>sama persis</b>. 
-                        <i>Contoh: <code>lampu == 'merah'</code></i>
-                    </li>
-                    <li style="margin-top:10px;"><b><span style="color:var(--primary); font-size:1.2rem;">!=</span> (Tidak Sama Dengan)</b><br>
-                        Artinya <b>Berbeda</b> atau Bukan. 
-                        <i>Contoh: <code>cuaca != 'hujan'</code> (Artinya cuaca saat ini BUKAN hujan).</i>
-                    </li>
-                    <li style="margin-top:10px;"><b><span style="color:var(--danger); font-size:1.2rem;">&gt;</span> (Lebih Besar Dari)</b><br>
-                        Mulut buaya 🐊 selalu memakan angka yang lebih besar.
-                        <i>Contoh: <code>umur &gt; 10</code> (Hanya umur 11, 12, dst yang benar).</i>
-                    </li>
-                    <li style="margin-top:10px;"><b><span style="color:var(--danger); font-size:1.2rem;">&lt;</span> (Lebih Kecil Dari)</b><br>
-                        Artinya kurang dari target.
-                        <i>Contoh: <code>baterai &lt; 20</code> (Baterai 19, 15, atau 5).</i>
-                    </li>
-                    <li style="margin-top:10px; background:#fef3c7; padding:10px; border-radius:10px;"><b><span style="color:var(--warning); font-size:1.2rem;">&gt;=</span> (Lebih Besar ATAU Sama Dengan)</b><br>
-                        Artinya <b>Minimal</b> atau <b>Paling Sedikit</b>. <br>
-                        <i>Contoh: <code>uang &gt;= 10.000</code> (Kalau kamu punya pas 10.000, kondisinya Benar!).</i>
-                    </li>
-                    <li style="margin-top:10px; background:#dcfce7; padding:10px; border-radius:10px;"><b><span style="color:var(--success); font-size:1.2rem;">&lt;=</span> (Lebih Kecil ATAU Sama Dengan)</b><br>
-                        Artinya <b>Maksimal</b> atau <b>Paling Banyak</b>. <br>
-                        <i>Contoh: <code>berat &lt;= 50</code> (Berat pas 50kg itu Benar!).</i>
-                    </li>
+                    <li><b><span style="color:var(--danger); font-size:1.2rem;">&gt;</span> (Lebih Besar)</b>: Contoh <code>10 &gt; 5</code> (Benar). Angka sebelah kiri harus lebih besar.</li>
+                    <li><b><span style="color:var(--danger); font-size:1.2rem;">&lt;</span> (Lebih Kecil)</b>: Contoh <code>3 &lt; 8</code> (Benar). Angka sebelah kiri harus lebih kecil.</li>
+                    <li><b><span style="color:var(--warning); font-size:1.2rem;">&gt;=</span> (Lebih Besar ATAU Sama Dengan)</b>: Artinya <i>Minimal / Paling Sedikit</i>. Jika batas <code>Umur &gt;= 10</code>, maka anak yang umurnya <b>pas 10 tahun</b> BOLEH masuk!</li>
+                    <li><b><span style="color:var(--success); font-size:1.2rem;">&lt;=</span> (Lebih Kecil ATAU Sama Dengan)</b>: Artinya <i>Maksimal / Paling Banyak</i>. Jika <code>Tinggi &lt;= 120</code>, tinggi <b>pas 120 cm</b> BOLEH masuk.</li>
+                    <li><b><span style="color:var(--primary); font-size:1.2rem;">==</span> (Sama Persis)</b>: Robot mengecek apakah kedua angka kembar identik.</li>
+                    <li><b><span style="color:var(--primary-dark); font-size:1.2rem;">!=</span> (Tidak Sama)</b>: Syarat akan BENAR jika angkanya berbeda.</li>
                 </ul>
             </div>
 
-            <!-- HOTS WARNING -->
             <div class="materi-card" style="border-color: var(--danger); background: #fef2f2;">
-                <h2>⚠️ Awas Jebakan Angka! (HOTS)</h2>
-                <p>Dalam soal logika tingkat tinggi, kamu harus sangat teliti membaca batas angka!</p>
-                <ul>
-                    <li>Jika aturannya <code>umur &lt; 10</code>, apakah anak umur <b>10 tahun</b> boleh masuk? <b>TIDAK!</b> Karena 10 <i>tidak lebih kecil</i> dari 10. Ia akan masuk ke <code>JIKA TIDAK (ELSE)</code>.</li>
-                    <li>Tapi jika aturannya <code>umur &lt;= 10</code> (pakai Sama Dengan), maka anak umur 10 tahun <b>BOLEH</b> masuk!</li>
-                    <li>Perhatikan juga logika kata. <i>"Mendung"</i> itu belum <i>"Hujan"</i>. Jadi <code>cuaca == 'hujan'</code> akan bernilai <b>SALAH</b> jika cuaca baru mendung.</li>
-                </ul>
+                <h2>⚠️ AWAS JEBAKAN ANGKA (HOTS) ⚠️</h2>
+                <p>Jika aturan tertulis <code>Tinggi &gt; 130</code>. Lalu datang anak dengan tinggi <b>pas 130 cm</b>. Apakah dia boleh masuk?</p>
+                <p><b>Jawabannya: TIDAK BOLEH!</b><br>Kenapa? Karena 130 <i>tidak lebih besar</i> dari 130 (angkanya sama). Komputer sangat tegas! Dia akan ditolak (masuk ke cabang JIKA TIDAK).</p>
+                <p>Berbeda jika aturannya <code>Tinggi &gt;= 130</code>. Kalau ada tanda Sama Dengan (<b>=</b>), barulah angka yang pas boleh masuk.</p>
             </div>
-
-            <div class="materi-card">
-                <h2>Tonton Konsep Logika Percabangan</h2>
-                <p>Yuk tonton video seru tentang konsep dasar logika IF-ELSE (JIKA-MAKA) dalam pemrograman:</p>
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/KmrVYIfcJ74" title="Konsep Logika Percabangan Pemrograman" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-            </div>
-
-            <div class="materi-card">
-                <h2>Flowchart (Diagram Alir)</h2>
-                <p>Flowchart adalah gambar jalan cerita dari koding kita. Bentuk <b>Belah Ketupat (💎)</b> artinya sebuah pertanyaan/kondisi.</p>
-                
-                <div class="flowchart-box">
-                    <svg style="width: 100%; max-width: 300px; height: auto;" viewBox="0 0 300 250">
-                        <!-- Start -->
-                        <rect x="100" y="10" width="100" height="30" rx="15" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
-                        <text x="150" y="30" font-family="Nunito" font-size="14" font-weight="bold" text-anchor="middle" fill="#4f46e5">Mulai</text>
-                        <line x1="150" y1="40" x2="150" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
-                        
-                        <!-- Condition -->
-                        <polygon points="150,70 220,110 150,150 80,110" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
-                        <text x="150" y="115" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#b45309">Apakah Hujan?</text>
-                        
-                        <!-- True Branch -->
-                        <line x1="220" y1="110" x2="260" y2="110" stroke="#10b981" stroke-width="2"/>
-                        <line x1="260" y1="110" x2="260" y2="150" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)"/>
-                        <text x="240" y="105" font-family="Nunito" font-size="12" font-weight="bold" fill="#10b981">Ya</text>
-                        <rect x="210" y="150" width="85" height="40" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
-                        <text x="252" y="175" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#16a34a">Pakai Payung</text>
-                        
-                        <!-- False Branch -->
-                        <line x1="80" y1="110" x2="40" y2="110" stroke="#ef4444" stroke-width="2"/>
-                        <line x1="40" y1="110" x2="40" y2="150" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow)"/>
-                        <text x="50" y="105" font-family="Nunito" font-size="12" font-weight="bold" fill="#ef4444">Tidak</text>
-                        <rect x="5" y="150" width="85" height="40" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
-                        <text x="47" y="175" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#dc2626">Pakai Topi</text>
-                        
-                        <!-- Arrow Definition -->
-                        <defs>
-                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
-                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
-                            </marker>
-                        </defs>
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <div id="materialContent6" style="display:none; width: 100%; max-width: 700px; margin: 0 auto;">
-            <!-- Material for Class 6 -->
-            <div class="materi-card">
-                <h2>Gerbang Logika: DAN, ATAU, BUKAN</h2>
-                <p>Saat koding makin rumit, satu kondisi saja tidak cukup. Kita butuh menggabungkan beberapa kondisi menggunakan operator logika!</p>
-                <ul>
-                    <li><b>DAN (AND)</b> : <span style="color:var(--primary)">Semua</span> syarat harus bernilai BENAR agar hasilnya BENAR. Ibaratnya syarat mutlak. (Misal: <i>Harus bawa SIM <b>DAN</b> STNK</i>)</li>
-                    <li><b>ATAU (OR)</b> : <span style="color:var(--success)">Salah satu</span> syarat saja bernilai BENAR, maka hasilnya sudah BENAR. (Misal: <i>Bayar pakai Cash <b>ATAU</b> QRIS</i>)</li>
-                    <li><b>BUKAN (NOT)</b> : Membalikkan keadaan. Jika benar jadi salah, jika salah jadi benar. (Misal: <i><b>BUKAN</b> hari libur = Hari kerja</i>)</li>
-                </ul>
-            </div>
-
-            <div class="materi-card">
-                <h2>Tonton Video Operator Logika</h2>
-                <p>Perdalam pemahamanmu tentang logika (AND, OR, NOT) dengan video singkat ini:</p>
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/YSC6SU2AHmk" title="Operator Logika Pemrograman" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-            </div>
-
-            <div class="materi-card">
-                <h2>Percabangan Bertingkat (IF - ELSE IF - ELSE)</h2>
-                <p>Terkadang pilihan lebih dari dua. Komputer akan mengecek kondisi pertama, jika GAGAL, ia mengecek kondisi kedua (ATAU JIKA), dan seterusnya sampai yang terakhir (JIKA TIDAK).</p>
-                
-                <div class="flowchart-box">
-                    <svg style="width: 100%; max-width: 340px; height: auto;" viewBox="0 0 340 350">
-                        <defs>
-                            <marker id="arrow6" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse">
-                                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
-                            </marker>
-                        </defs>
-                        <!-- Start -->
-                        <rect x="120" y="10" width="100" height="30" rx="15" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
-                        <text x="170" y="30" font-family="Nunito" font-size="14" font-weight="bold" text-anchor="middle" fill="#4f46e5">Mulai Ujian</text>
-                        <line x1="170" y1="40" x2="170" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow6)"/>
-                        
-                        <!-- Cond 1 -->
-                        <polygon points="170,70 240,110 170,150 100,110" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
-                        <text x="170" y="115" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#b45309">Nilai &gt;= 90?</text>
-                        
-                        <!-- True 1 -->
-                        <line x1="240" y1="110" x2="280" y2="110" stroke="#10b981" stroke-width="2"/>
-                        <line x1="280" y1="110" x2="280" y2="150" stroke="#10b981" stroke-width="2" marker-end="url(#arrow6)"/>
-                        <rect x="240" y="150" width="80" height="35" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
-                        <text x="280" y="172" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#16a34a">Dapat "A"</text>
-
-                        <!-- False 1 -> Cond 2 -->
-                        <line x1="170" y1="150" x2="170" y2="180" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow6)"/>
-                        <text x="185" y="165" font-family="Nunito" font-size="12" font-weight="bold" fill="#ef4444">Tidak</text>
-                        
-                        <!-- Cond 2 -->
-                        <polygon points="170,180 240,220 170,260 100,220" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
-                        <text x="170" y="225" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#4338ca">Nilai &gt;= 75?</text>
-                        
-                        <!-- True 2 -->
-                        <line x1="240" y1="220" x2="280" y2="220" stroke="#10b981" stroke-width="2"/>
-                        <line x1="280" y1="220" x2="280" y2="260" stroke="#10b981" stroke-width="2" marker-end="url(#arrow6)"/>
-                        <rect x="240" y="260" width="80" height="35" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
-                        <text x="280" y="282" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#16a34a">Dapat "B"</text>
-                        
-                        <!-- False 2 (ELSE) -->
-                        <line x1="170" y1="260" x2="170" y2="290" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow6)"/>
-                        <text x="185" y="275" font-family="Nunito" font-size="12" font-weight="bold" fill="#ef4444">Tidak</text>
-                        <rect x="130" y="290" width="80" height="35" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
-                        <text x="170" y="312" font-family="Nunito" font-size="12" font-weight="bold" text-anchor="middle" fill="#dc2626">Dapat "C"</text>
-                    </svg>
-                </div>
-            </div>
+            
+            <button class="btn-main" onclick="startGame()">Siap Tantangan 50 Soal? Main Game!</button>
         </div>
         
-        <button class="btn-main" style="margin: 20px auto; display: block;" onclick="startGame()">Sudah Paham, Mulai Misi 🚀</button>
+        <!-- MATERI KELAS 6 -->
+        <div id="matClass6" style="display:none; padding-bottom: 30px;">
+            <div class="materi-card"><h2>Materi Kelas 6</h2><p>Mode Kelas 6 sedang dalam pengembangan materi.</p></div>
+        </div>
     </div>
 
+    <!-- SCREEN 4: GAME AREA (PABRIK SORTIR) -->
     <div id="gameScreen" class="screen hidden">
-        <button class="btn-back" onclick="goBack('gameScreen', 'classMenuScreen')">⬅ Keluar Game</button>
+        <button class="btn-back" onclick="switchScreen('gameScreen', 'classMenuScreen')">⬅ Keluar Game</button>
         
         <div class="game-header">
-            <div class="pill level-pill">🚩 <span id="levelIndicator">Level 1/?</span></div>
-            <div class="pill score-pill">⭐ <span id="scoreIndicator">Skor: 0</span></div>
+            <div class="pill level-pill">📦 Paket <span id="lvlText">1</span>/50</div>
+            <div class="pill timer-pill" id="timerPill">⏳ <span id="timerText">35:00</span></div>
+            <div class="pill score-pill">⭐ Skor: <span id="scoreText">0</span></div>
         </div>
 
         <div class="game-body">
+            <!-- FACTORY BELT (KIRI) -->
             <div class="left-panel">
-                <div class="visual-stage">
-                    <div class="scene-emoji" id="sceneEmoji">🌧️</div>
-                    <div class="condition-label" id="conditionLabel">Cuaca sedang Hujan</div>
-                    <div class="robot-avatar" id="robotAvatar">🤖</div>
+                <div class="factory-stage" id="factoryStage">
+                    <h3 style="margin:0 0 10px; color:var(--text); font-family:'Fredoka'; text-align:center; z-index: 10; background: rgba(255,255,255,0.8); padding: 5px 15px; border-radius: 20px;">Inspeksi Barang</h3>
+                    
+                    <div class="conveyor-belt">
+                        <div class="factory-item" id="fItem">
+                            <div class="f-emoji" id="fEmoji">📦</div>
+                            <div class="f-stats">
+                                <div>Berat: <span class="f-val"><span id="fBerat">10</span> kg</span></div>
+                                <div>Suhu: <span class="f-val"><span id="fSuhu">30</span> °C</span></div>
+                                <div>Energi: <span class="f-val"><span id="fEnergi">50</span> %</span></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- CODE MONITOR & BINS (KANAN) -->
             <div class="right-panel">
-                <div class="code-editor" id="codeEditorArea">
-                    <!-- Dynamic Code Content -->
+                <div class="code-monitor" id="codeMonitor">
+                    <!-- Code lines will be injected here -->
                 </div>
-                <div class="options-grid" id="optionsContainer">
-                    <!-- Dynamic Options -->
+
+                <div style="text-align: center; font-weight: 800; color: #64748b; margin-bottom: 8px;">Tebak, kemana mesin akan membuang barang ini?</div>
+                <div class="bin-grid three-bins" id="binGrid">
+                    <button class="btn-bin btn-merah" onclick="checkBin('merah')"><span class="bin-icon">🔴</span> Pipa Merah</button>
+                    <button class="btn-bin btn-biru" onclick="checkBin('biru')"><span class="bin-icon">🔵</span> Pipa Biru</button>
+                    <button class="btn-bin btn-hijau" onclick="checkBin('hijau')" id="btnHijau"><span class="bin-icon">🟢</span> Pipa Hijau</button>
                 </div>
             </div>
         </div>
 
         <!-- Feedback UI -->
-        <div class="feedback-overlay" id="feedbackOverlay">
-            <div class="feedback-card">
-                <div style="font-size: 5rem; margin-bottom: 10px;" id="fbIcon">🎉</div>
-                <h2 style="font-size: 2rem; font-family: 'Fredoka'; margin:0 0 10px;" id="fbTitle">Hebat!</h2>
-                <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 20px;" id="fbText">Logikamu benar.</p>
-                <button class="btn-next" onclick="nextLevel()">Lanjut Level ➡</button>
+        <div class="feedback-overlay" id="fbOverlay">
+            <div class="fb-card">
+                <div class="fb-icon" id="fbIcon">🎉</div>
+                <h2 class="fb-title" id="fbTitle">Tepat Sekali!</h2>
+                <p class="fb-text" id="fbDesc">Penjelasan diletakkan disini.</p>
+                <button class="btn-main" onclick="nextRound()" style="font-size: 1.1rem; padding: 10px 20px;">Lanjut Paket ➡</button>
             </div>
         </div>
     </div>
 
-    <div id="resultScreen" class="screen hidden">
-        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; width: 100%;">
-            <div style="font-size: 6rem; margin-bottom: 10px; animation: popIn 1s ease, floatRobot 2s infinite alternate;">🏆</div>
-            <h1 style="font-size: 3rem;">Misi Selesai!</h1>
-            <p id="resultText">Kamu telah menyelesaikan semua soal logika koding.</p>
-            
-            <div style="background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4)); padding: 30px; border-radius: 24px; text-align: center; margin: 20px 0; border: 2px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); min-width: 250px;">
-                <h3 style="margin:0; color:var(--text-muted); font-family: 'Fredoka', sans-serif;">Skor Akhir</h3>
-                <h1 style="margin:10px 0 0; color:var(--primary-dark); font-size: 4.5rem; text-shadow: none;" id="finalScore">100</h1>
-            </div>
-            
-            <button class="btn-main" onclick="location.reload()">Kembali ke Menu Utama 🏠</button>
+    <!-- SCREEN 5: Result -->
+    <div id="resultScreen" class="screen hidden" style="justify-content: center; align-items: center;">
+        <div style="font-size: 5rem; margin-bottom: 20px;" id="resultIcon">🏆</div>
+        <h1 id="resultTitle">Shift Selesai!</h1>
+        <p id="resultDesc">Tugasmu menyelesaikan 50 Soal telah berakhir.</p>
+        <div style="background: #f8fafc; padding: 20px 40px; border-radius: 20px; border: 2px dashed #cbd5e1; margin-bottom: 20px; text-align: center;">
+            <h3 style="margin:0; color:#64748b;">Skor Akhir (Maks: 100)</h3>
+            <h1 style="font-size:4rem; color:var(--primary); margin:10px 0;"> <span id="finalScore">100</span></h1>
         </div>
+        <button class="btn-main" onclick="location.reload()">Kembali ke Menu 🏠</button>
     </div>
 
 </div>
 
 <script>
-    // --- DATA SOAL KELAS 4 (50 SOAL HOTS: Jebakan Kesetaraan, Negasi, & Batas Angka Kritis) ---
-    const levelsClass4 = [
-        // Group 1: Jebakan Kesetaraan (==) 1-10
-        { id:1, scene:"⛅", desc:"Cuaca Mendung Gelap (Belum Hujan)", 
-          branches:[ {kw:"JIKA", cond:"cuaca == 'hujan'", action:"Pakai_Jas_Hujan"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Angkat_Jemuran",correct:true},{text:"Tidur_Siang",correct:false}]} ], 
-          fbOk:"Kritis! Mendung BUKAN hujan, jadi kondisinya SALAH. Kita masuk ke JIKA TIDAK dan angkat jemuran untuk jaga-jaga.", fbNo:"Mendung belum tentu hujan, kondisinya SALAH. Kenapa malah tidur siang saat jemuran hampir kehujanan?" },
-        { id:2, scene:"🔑", desc:"Password akun adalah 'rahasia'. Kamu mengetik 'Rahasia' (R besar).", 
-          branches:[ {kw:"JIKA", cond:"pass == 'rahasia'", action:"Masuk_Akun"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Akses_Ditolak",correct:true},{text:"Login_Berhasil",correct:false}]} ], 
-          fbOk:"Teliti! Huruf 'R' besar dan 'r' kecil itu BERBEDA bagi komputer. Masuk JIKA TIDAK.", fbNo:"Komputer sangat ketat! 'Rahasia' != 'rahasia'. Karena beda huruf besar, kondisinya SALAH." },
-        { id:3, scene:"🎫", desc:"Pembeli adalah Anak usia 12 Tahun. Kategori: 'Remaja'.", 
-          branches:[ {kw:"JIKA", cond:"kategori == 'anak'", action:"Tiket_Gratis"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Bayar_Penuh",correct:true},{text:"Dilarang_Masuk",correct:false}]} ], 
-          fbOk:"Benar! Kategorinya 'Remaja', jadi syarat 'anak' SALAH. Masuk cabang JIKA TIDAK.", fbNo:"Karena kategorinya 'remaja', bukan 'anak', maka ia masuk JIKA TIDAK (Bayar penuh)." },
-        { id:4, scene:"🚦", desc:"Lampu lalu lintas berwarna Kuning.", 
-          branches:[ {kw:"JIKA", cond:"lampu == 'merah'", action:"Berhenti_Total"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Siap_Siap_Pelan",correct:true},{text:"Tancap_Gas",correct:false}]} ], 
-          fbOk:"Hati-hati! Kuning itu bukan merah (Kondisi SALAH). Di cabang JIKA TIDAK, kita harus siap-siap pelan.", fbNo:"Lampu kuning berarti harus pelan-pelan, bukan malah tancap gas di cabang JIKA TIDAK." },
-        { id:5, scene:"🌡️", desc:"Suhu air mencapai 99 Derajat Celcius.", 
-          branches:[ {kw:"JIKA", cond:"suhu == 100", action:"Matikan_Kompor"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Tunggu_Sebentar_Lagi",correct:true},{text:"Tambahkan_Es",correct:false}]} ], 
-          fbOk:"Tepat! 99 derajat BELUM 100 derajat. Jadi kondisi SALAH, kita tunggu sebentar lagi.", fbNo:"Airnya hampir mendidih, masak ditambah es? Kondisi 99==100 itu SALAH, harusnya tunggu." },
-        { id:6, scene:"🚪", desc:"Pintu rumah tertutup rapat, tapi belum dikunci.", 
-          branches:[ {kw:"JIKA", cond:"pintu == 'Terkunci'", action:"Tidur_Tenang"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Putar_Kunci",correct:true},{text:"Buka_Pintu_Lebar",correct:false}]} ], 
-          fbOk:"Aman! Tertutup belum tentu 'Terkunci'. Karena SALAH, kita masuk JIKA TIDAK lalu menguncinya.", fbNo:"Pintu belum terkunci, harusnya dikunci dong, bukan malah dibuka lebar!" },
-        { id:7, scene:"🪙", desc:"Mesin mainan butuh 5 koin. Kamu punya 4 koin.", 
-          branches:[ {kw:"JIKA", cond:"koin == 5", action:"Mesin_Menyala"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Cari_Satu_Koin_Lagi",correct:true},{text:"Pukul_Mesin",correct:false}]} ], 
-          fbOk:"Logis. 4 koin tidak sama dengan 5. Karena kondisi SALAH, cari 1 koin lagi.", fbNo:"Memukul mesin tidak akan menyelesaikan masalah koin yang kurang!" },
-        { id:8, scene:"🚴", desc:"Kamu mengendarai Sepeda. Ada rambu khusus 'Mobil'.", 
-          branches:[ {kw:"JIKA", cond:"kendaraan == 'Mobil'", action:"Masuk_Jalan_Tol"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Lewat_Jalan_Biasa",correct:true},{text:"Ngebut_di_Tol",correct:false}]} ], 
-          fbOk:"Taat aturan! Sepeda != Mobil (Kondisi SALAH). Sepeda harus lewat jalan biasa.", fbNo:"Sepeda dilarang masuk tol karena kondisi kendaraan=='Mobil' itu SALAH." },
-        { id:9, scene:"🩺", desc:"Pasien terkena penyakit 'Batuk'.", 
-          branches:[ {kw:"JIKA", cond:"sakit == 'Demam'", action:"Beri_Obat_Penurun_Panas"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Beri_Sirup_Batuk",correct:true},{text:"Suruh_Pulang",correct:false}]} ], 
-          fbOk:"Dokter pintar! Penyakitnya Batuk, jadi syarat 'Demam' SALAH. Masuk cabang JIKA TIDAK.", fbNo:"Jangan disuruh pulang, obati dulu batuknya karena dia tidak demam." },
-        { id:10, scene:"👕", desc:"Bajumu baru saja disetrika, tapi ada noda debu kecil (Kotor Sedikit).", 
-          branches:[ {kw:"JIKA", cond:"baju == 'Bersih_Total'", action:"Simpan_di_Lemari"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Kibas_Debunya_Dulu",correct:true},{text:"Buang_Bajunya",correct:false}]} ], 
-          fbOk:"Teliti! Ada noda berarti belum 'Bersih_Total'. Kondisi SALAH, bersihkan dulu nodanya.", fbNo:"Hanya karena berdebu sedikit jangan langsung dibuang bajunya." },
-
-        // Group 2: Jebakan Batas Angka Kritis (< dan >) 11-20
-        { id:11, scene:"🔋", desc:"Baterai HP tepat berada di angka 20%.", 
-          branches:[ {kw:"JIKA", cond:"baterai < 20", action:"Mode_Hemat_Daya"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Tetap_Nyala_Normal",correct:true},{text:"Layar_Mati",correct:false}]} ], 
-          fbOk:"Ini jebakan HOTS! 20 TIDAK lebih kecil dari 20. Karena SALAH, masuk ke JIKA TIDAK.", fbNo:"Angka 20 tidak lebih kecil dari 20. Syarat '<20' gagal (SALAH). Masuk ke JIKA TIDAK." },
-        { id:12, scene:"🏎️", desc:"Batas kecepatan tol 80 km/jam. Kecepatan mobilmu PAS 80 km/jam.", 
-          branches:[ {kw:"JIKA", cond:"kecepatan > 80", action:"Kena_Tilang_Polisi"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Aman_Melaju",correct:true},{text:"Berhenti_Mendadak",correct:false}]} ], 
-          fbOk:"Luar biasa! Kecepatan 80 tidak lebih dari 80. Syarat >80 SALAH, kamu bebas tilang.", fbNo:"Kecepatanmu tepat di batas maksimal, jadi `> 80` itu SALAH. Kamu aman!" },
-        { id:13, scene:"🚨", desc:"Alarm Lift berbunyi jika beban > 500 kg. Berat penumpang di dalam PAS 500 kg.", 
-          branches:[ {kw:"JIKA", cond:"berat > 500", action:"Alarm_Berbunyi"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Pintu_Lift_Menutup",correct:true},{text:"Semua_Orang_Keluar",correct:false}]} ], 
-          fbOk:"Analisis yang tajam! 500 bukan > 500. Lift masih kuat dan aman.", fbNo:"Lift masih aman karena 500 tidak lebih besar dari 500." },
-        { id:14, scene:"👦", desc:"Syarat masuk wahana bermain: Umur < 12 Tahun. Umurmu Hari Ini Pas 12 Tahun.", 
-          branches:[ {kw:"JIKA", cond:"umur < 12", blank:true, options:[{text:"Dilarang_Masuk",correct:false},{text:"Boleh_Masuk",correct:true}]}, {kw:"JIKA TIDAK", cond:null, action:"Dilarang_Masuk"} ], 
-          fbOk:"Jebakan berhasil dilewati! Umur 12 membuat syarat `< 12` menjadi SALAH, jadi kamu dilarang masuk.", fbNo:"Kamu sudah 12 tahun, sedangkan syaratnya harus 'Kurang dari 12'. Berarti kondisi ini SALAH." },
-        { id:15, scene:"⏳", desc:"Waktu main game maksimal 60 menit. Kamu sudah main 60 menit.", 
-          branches:[ {kw:"JIKA", cond:"waktu > 60", action:"Komputer_Mati_Otomatis"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Siap_Siap_Save_Game",correct:true},{text:"Lanjut_Main_Terus",correct:false}]} ], 
-          fbOk:"Betul. 60 tidak > 60. Kondisi SALAH, tapi kamu harus mulai bersiap menyudahi permainan.", fbNo:"Waktu tepat 60 menit belum mematikan PC, tapi sebaiknya bersiap, bukan lanjut terus." },
-        { id:16, scene:"📱", desc:"Sisa Pulsa Rp 0. Peringatan muncul jika pulsa < 1000.", 
-          branches:[ {kw:"JIKA", cond:"pulsa < 1000", blank:true, options:[{text:"Muncul_Notif_Isi_Ulang",correct:true},{text:"Bisa_Telepon_Luar_Negeri",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Telepon_Bebas"} ], 
-          fbOk:"Tepat! Angka 0 itu lebih kecil dari 1000 (BENAR). Segera isi pulsa.", fbNo:"Nol itu kurang dari 1000, notifikasi harusnya muncul." },
-        { id:17, scene:"🌊", desc:"Sensor Banjir aktif jika tinggi air > 50cm. Saat ini tinggi air 50cm.", 
-          branches:[ {kw:"JIKA", cond:"tinggi_air > 50", action:"Sirine_Bahaya_Bunyi"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Siaga_Satu",correct:true},{text:"Tidur_Pulas",correct:false}]} ], 
-          fbOk:"Mantap! 50 tidak > 50 (SALAH). Sirine belum bunyi, tapi kita harus Siaga.", fbNo:"Air sudah di batas maksimal (50cm). Meskipun sirine belum bunyi, jangan tidur pulas!" },
-        { id:18, scene:"📝", desc:"Nilaimu 75. Aturan remedial: JIKA nilai < 75.", 
-          branches:[ {kw:"JIKA", cond:"nilai < 75", action:"Ikut_Remedial"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Tuntas",correct:true},{text:"Ulang_Kelas",correct:false}]} ], 
-          fbOk:"Selamat! 75 tidak kurang dari 75. Kondisi SALAH, berarti kamu Tuntas.", fbNo:"Nilaimu pas batas, jadi nilai < 75 itu SALAH. Kamu tuntas!" },
-        { id:19, scene:"🧳", desc:"Batas gratis bagasi pesawat 20kg. Kopermu beratnya 20.1 kg.", 
-          branches:[ {kw:"JIKA", cond:"koper > 20", blank:true, options:[{text:"Bayar_Denda_Kelebihan",correct:true},{text:"Lolos_Gratis",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lolos_Gratis"} ], 
-          fbOk:"Sangat jeli! 20.1 itu LEBIH BESAR dari 20. Kondisi BENAR, kena denda.", fbNo:"Kopermu kelebihan 100 gram (0.1kg). Itu sudah > 20 lho!" },
-        { id:20, scene:"❄️", desc:"Suhu AC di ruang server 18 Derajat. Alarm nyala jika suhu < 18 (terlalu beku).", 
-          branches:[ {kw:"JIKA", cond:"suhu < 18", action:"Alarm_Nyala"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Suhu_Normal",correct:true},{text:"Bakar_Ruangan",correct:false}]} ], 
-          fbOk:"Benar. 18 tidak < 18 (SALAH). Suhu ruang server masih normal.", fbNo:"Suhu masih batas normal, jangan dibakar!" },
-
-        // Group 3: Jebakan Batas <= dan >= (Inklusif) 21-30
-        { id:21, scene:"🎓", desc:"Syarat beasiswa: Nilai >= 90. Nilaimu 89.5 (Belum Dibulatkan).", 
-          branches:[ {kw:"JIKA", cond:"nilai >= 90", action:"Dapat_Beasiswa"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Gagal_Beasiswa",correct:true},{text:"Protes_Ke_Guru",correct:false}]} ], 
-          fbOk:"Ketelitian robotik! 89.5 itu BELUM mencapai 90. Kondisi SALAH.", fbNo:"Meski sedikit lagi, 89.5 belum memenuhi syarat >= 90." },
-        { id:22, scene:"💾", desc:"Flashdisk mu maksimal menyimpan <= 16 GB. Kamu memasukkan file ukuran 16 GB pas.", 
-          branches:[ {kw:"JIKA", cond:"ukuran_file <= 16", blank:true, options:[{text:"File_Berhasil_Disimpan",correct:true},{text:"Memori_Penuh",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Memori_Penuh"} ], 
-          fbOk:"Tepat! Tanda '<=' artinya 16 juga termasuk (BENAR). File berhasil masuk.", fbNo:"Tanda '<=' berarti angka 16 boleh dimasukkan. Kondisinya BENAR." },
-        { id:23, scene:"💳", desc:"Uangmu Rp 10.000. Harga pensil Rp 10.000.", 
-          branches:[ {kw:"JIKA", cond:"uang >= harga", blank:true, options:[{text:"Transaksi_Berhasil",correct:true},{text:"Uang_Kurang",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Uang_Kurang"} ], 
-          fbOk:"Betul. >= artinya lebih dari ATAU sama dengan. Karena uangmu sama, kondisinya BENAR.", fbNo:"Uangmu pas 10.000, syarat >= terpenuhi." },
-        { id:24, scene:"🎁", desc:"Diskon toko untuk belanja >= 50.000. Kamu belanja 49.900.", 
-          branches:[ {kw:"JIKA", cond:"belanja >= 50000", action:"Dapat_Diskon"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Bayar_Harga_Asli",correct:true},{text:"Minta_Diskon_Paksa",correct:false}]} ], 
-          fbOk:"Kurang Rp 100 rupiah! Karena tidak mencapai batas, kondisi SALAH.", fbNo:"Komputer sangat jujur, kurang 100 perak berarti syarat >= gagal (SALAH)." },
-        { id:25, scene:"👴", desc:"Aturan Pensiun: Usia >= 60 Tahun. Kakek berulang tahun ke-60 hari ini.", 
-          branches:[ {kw:"JIKA", cond:"usia >= 60", blank:true, options:[{text:"Mulai_Pensiun",correct:true},{text:"Kerja_Lembur",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lanjut_Kerja"} ], 
-          fbOk:"Selamat ulang tahun Kakek! Usia 60 pas membuat syarat >= menjadi BENAR.", fbNo:"Usia 60 sudah termasuk dalam syarat >= 60." },
-        { id:26, scene:"🎢", desc:"Tinggi aman wahana ekstrim >= 140 cm. Tinggimu 139 cm.", 
-          branches:[ {kw:"JIKA", cond:"tinggi >= 140", action:"Naik_Wahana"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Main_Wahana_Lain",correct:true},{text:"Nangis_Guling_Guling",correct:false}]} ], 
-          fbOk:"Sayang sekali, 139 cm kurang 1 cm untuk mencapai >= 140. Kondisi SALAH.", fbNo:"Jangan menangis, main wahana lain saja yang lebih aman karena syaratmu belum cukup." },
-        { id:27, scene:"⏱️", desc:"Ujian selesai jika waktu <= 30 menit. Sekarang menit ke-30 pas.", 
-          branches:[ {kw:"JIKA", cond:"waktu <= 30", blank:true, options:[{text:"Ujian_Diterima",correct:true},{text:"Ujian_Ditolak",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Ujian_Ditolak"} ], 
-          fbOk:"Tepat waktu! Menit ke-30 masih masuk dalam syarat <= 30 (BENAR).", fbNo:"Batas maksimalnya adalah 30, jadi tepat menit ke-30 masih diterima." },
-        { id:28, scene:"🥤", desc:"Botol air maksimal diisi <= 500 ml. Kamu menuang 501 ml.", 
-          branches:[ {kw:"JIKA", cond:"isi <= 500", action:"Botol_Aman"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Air_Tumpah_Meluber",correct:true},{text:"Botol_Meledak",correct:false}]} ], 
-          fbOk:"Awas basah! 501 ml melebihi batas maksimal, jadi kondisi SALAH dan tumpah.", fbNo:"Air 501 ml lebih dari 500 ml, menyebabkan air tumpah." },
-        { id:29, scene:"🏆", desc:"Syarat masuk tim inti bola: Skor lari >= 80. Skormu 80 pas.", 
-          branches:[ {kw:"JIKA", cond:"skor >= 80", blank:true, options:[{text:"Masuk_Tim_Inti",correct:true},{text:"Jadi_Cadangan",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Jadi_Cadangan"} ], 
-          fbOk:"Hebat! Skormu pas dengan batas minimal, jadi kamu lolos (BENAR).", fbNo:"Skor 80 sudah memenuhi batas minimal >= 80, jadi berhak masuk tim inti." },
-        { id:30, scene:"🚌", desc:"Kapasitas bus wisata maksimal <= 40 orang. Ada 41 orang masuk.", 
-          branches:[ {kw:"JIKA", cond:"jumlah <= 40", action:"Bus_Berangkat"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Satu_Orang_Keluar",correct:true},{text:"Pangku_Pangkuan",correct:false}]} ], 
-          fbOk:"Keamanan nomor 1! 41 > 40, sehingga kondisi <= 40 SALAH.", fbNo:"Demi keselamatan, jumlah tidak boleh lebih dari 40 (Kondisi SALAH)." },
-
-        // Group 4: Analisa != (Tidak Sama Dengan) & Logika Negasi 31-40
-        { id:31, scene:"📅", desc:"Hari ini adalah hari Minggu.", 
-          branches:[ {kw:"JIKA", cond:"hari != 'Minggu'", action:"Masuk_Sekolah"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Libur_di_Rumah",correct:true},{text:"Bolos_Sekolah",correct:false}]} ], 
-          fbOk:"Tepat! Hari ini BENAR-BENAR Minggu, jadi syarat `hari != 'Minggu'` menjadi SALAH.", fbNo:"Kondisinya 'JIKA BUKAN MINGGU'. Karena ini hari Minggu, kondisinya jadi SALAH." },
-        { id:32, scene:"🔐", desc:"Sistem meminta password selain 'admin' (password != 'admin'). Kamu mengetik 'Admin' (A besar).", 
-          branches:[ {kw:"JIKA", cond:"password != 'admin'", blank:true, options:[{text:"Password_Diterima",correct:true},{text:"Password_Ditolak",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Password_Ditolak"} ], 
-          fbOk:"Logika tingkat tinggi! 'Admin' berbeda dengan 'admin', jadi syarat `!=` bernilai BENAR.", fbNo:"Ingat, komputer membedakan huruf besar dan kecil. 'Admin' tidak sama dengan 'admin'." },
-        { id:33, scene:"💳", desc:"Status tagihanmu baru dibayar setengah (Status: 'Belum Lunas').", 
-          branches:[ {kw:"JIKA", cond:"status != 'Lunas'", blank:true, options:[{text:"Kirim_Surat_Tagihan",correct:true},{text:"Ucapkan_Terima_Kasih",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Ucapkan_Terima_Kasih"} ], 
-          fbOk:"Benar. Karena statusnya bukan lunas, maka `status != 'Lunas'` bernilai BENAR.", fbNo:"Karena belum lunas, syarat != 'Lunas' bernilai BENAR, harusnya kirim tagihan." },
-        { id:34, scene:"👕", desc:"Bajumu baru saja dicuci bersih.", 
-          branches:[ {kw:"JIKA", cond:"baju != 'Kotor'", blank:true, options:[{text:"Siap_Dipakai",correct:true},{text:"Masukkan_Mesin_Cuci",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Masukkan_Mesin_Cuci"} ], 
-          fbOk:"Logika pembalikan! Baju bersih artinya 'TIDAK KOTOR', jadi kondisinya BENAR.", fbNo:"Kalau baju tidak kotor (benar), berarti siap dipakai, bukan dicuci lagi." },
-        { id:35, scene:"🚦", desc:"Lampu lalu lintas berwarna Merah.", 
-          branches:[ {kw:"JIKA", cond:"lampu != 'Hijau'", blank:true, options:[{text:"Dilarang_Jalan",correct:true},{text:"Jalan_Terus",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Jalan_Terus"} ], 
-          fbOk:"Benar! Karena merah BUKAN hijau, maka syarat `!= 'Hijau'` bernilai BENAR.", fbNo:"Merah itu bukan hijau, jadi kondisinya BENAR, kamu dilarang jalan." },
-        { id:36, scene:"🏍️", desc:"Kamu mengendarai Sepeda Motor. Aturan tol: kendaraan != 'Roda Dua'.", 
-          branches:[ {kw:"JIKA", cond:"kendaraan != 'Roda Dua'", action:"Boleh_Masuk_Tol"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Putar_Balik",correct:true},{text:"Terobos_Masuk",correct:false}]} ], 
-          fbOk:"Hebat! Sepeda motor adalah roda dua, jadi syarat `!= 'Roda Dua'` itu SALAH.", fbNo:"Motor itu roda dua, jadi dia TIDAK memenuhi syarat (SALAH). Harus putar balik." },
-        { id:37, scene:"🐐", desc:"Hewan di depanmu adalah Kambing (Pemakan Rumput).", 
-          branches:[ {kw:"JIKA", cond:"hewan != 'Karnivora'", blank:true, options:[{text:"Beri_Makan_Rumput",correct:true},{text:"Beri_Makan_Daging",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Beri_Makan_Daging"} ], 
-          fbOk:"Benar! Kambing BUKAN karnivora (pemakan daging). Syaratnya BENAR.", fbNo:"Karena Kambing bukan karnivora, kondisi ini BENAR, beri makan rumput." },
-        { id:38, scene:"⛅", desc:"Cuaca di luar Mendung Gelap (Belum turun air).", 
-          branches:[ {kw:"JIKA", cond:"cuaca != 'Hujan'", blank:true, options:[{text:"Masih_Bisa_Jalan",correct:true},{text:"Pakai_Jas_Hujan_Cepat",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Pakai_Jas_Hujan_Cepat"} ], 
-          fbOk:"Analisis Kritis! Mendung itu BUKAN hujan, jadi kondisinya BENAR.", fbNo:"Karena belum hujan (hanya mendung), syarat != hujan bernilai BENAR." },
-        { id:39, scene:"💯", desc:"Nilai ujianmu 99.", 
-          branches:[ {kw:"JIKA", cond:"nilai != 100", blank:true, options:[{text:"Belum_Sempurna",correct:true},{text:"Nilai_Sempurna",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Nilai_Sempurna"} ], 
-          fbOk:"Ya, 99 memang BUKAN 100. Jadi kondisinya BENAR.", fbNo:"Karena 99 tidak sama dengan 100, maka kondisinya BENAR (Belum sempurna)." },
-        { id:40, scene:"🗝️", desc:"Kunci yang dipakai ukurannya kebesaran.", 
-          branches:[ {kw:"JIKA", cond:"kunci != 'Cocok'", blank:true, options:[{text:"Ganti_Kunci_Lain",correct:true},{text:"Paksa_Putar",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Buka_Gembok"} ], 
-          fbOk:"Logis. Kunci kebesaran berarti BUKAN 'Cocok' (BENAR). Jangan dipaksa putar.", fbNo:"Kalau kunci bukan cocok (BENAR), harusnya ganti kunci." },
-
-        // Group 5: Prioritas & Real World Constraint (Gabungan HOTS) 41-50
-        { id:41, scene:"💸", desc:"Saldomu Rp 10.000. Harga Roti 8.000, Air 3.000 (Total 11.000).", 
-          branches:[ {kw:"JIKA", cond:"saldo >= total", action:"Beli_Semua"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Beli_Satu_Saja",correct:true},{text:"Bawa_Kabur_Barang",correct:false}]} ], 
-          fbOk:"Matematika dan Logika! 10.000 < 11.000, kondisi SALAH. Belilah sesuai kemampuan.", fbNo:"Hitung totalnya: 11.000. Saldo 10.000 berarti kurang (SALAH)." },
-        { id:42, scene:"📅", desc:"Jatuh tempo denda adalah jika tanggal > 15. Hari ini tanggal 15 pas.", 
-          branches:[ {kw:"JIKA", cond:"tanggal > 15", action:"Kena_Denda"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Aman_Bayar_Normal",correct:true},{text:"Bayar_Denda",correct:false}]} ], 
-          fbOk:"Batas kritis! 15 tidak lebih dari 15. Kondisi SALAH, kamu bebas denda hari ini.", fbNo:"Hari ini tanggal 15, artinya belum melebihi batas > 15." },
-        { id:43, scene:"🏃", desc:"Rekor lari sekolah 10 detik. Untuk pecah rekor: waktu < 10. Waktumu 10 detik pas.", 
-          branches:[ {kw:"JIKA", cond:"waktu < 10", action:"Pecahkan_Rekor"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Menyamai_Rekor_Lama",correct:true},{text:"Menangis_Kalah",correct:false}]} ], 
-          fbOk:"Tepat! 10 tidak kurang dari 10 (SALAH). Kamu menyamai rekor, bukan memecahkannya.", fbNo:"Untuk pecah rekor harus kurang dari 10. Karena kamu pas 10, kamu hanya menyamai rekor (JIKA TIDAK)." },
-        { id:44, scene:"🛒", desc:"Promo: Beli >= 3 gratis piring. Kamu membawa 2 barang di keranjang.", 
-          branches:[ {kw:"JIKA", cond:"jumlah >= 3", action:"Dapat_Piring"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Tambah_1_Barang_Lagi",correct:true},{text:"Pulang_Saja",correct:false}]} ], 
-          fbOk:"Strategi belanja pintar! Syarat SALAH, tapi kamu bisa tambah 1 barang agar promo berlaku.", fbNo:"Dua barang tidak memenuhi syarat >= 3, tambah 1 barang agar dapat promo." },
-        { id:45, scene:"📶", desc:"Sisa Kuota Internet 2 GB. Kamu mau download Game 2.5 GB.", 
-          branches:[ {kw:"JIKA", cond:"kuota >= ukuran_game", action:"Download_Sukses"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Pakai_Wifi_Rumah",correct:true},{text:"Paksa_Download",correct:false}]} ], 
-          fbOk:"Kritis! 2 GB tidak cukup untuk 2.5 GB. Kondisi SALAH, cari Wifi saja.", fbNo:"Memaksa download dengan kuota kurang akan membuat proses gagal di tengah jalan." },
-        { id:46, scene:"🚚", desc:"Tinggi portal 2 Meter. Trukmu tingginya pas 2 Meter. Syarat nabrak: tinggi_truk > portal.", 
-          branches:[ {kw:"JIKA", cond:"tinggi_truk > portal", action:"Truk_Nabrak_Portal"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Lolos_Ngepas",correct:true},{text:"Truk_Meledak",correct:false}]} ], 
-          fbOk:"Sangat mendebarkan! 2 meter tidak lebih dari 2 meter. Trukmu lolos dengan sangat pas.", fbNo:"Karena tingginya sama, tidak lebih tinggi (SALAH). Truk aman lewat." },
-        { id:47, scene:"🍜", desc:"Indomie matang jika waktu rebus >= 3 menit. Ini baru menit ke-2.", 
-          branches:[ {kw:"JIKA", cond:"waktu >= 3", action:"Angkat_Mie"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Tunggu_Lagi",correct:true},{text:"Makan_Mie_Keras",correct:false}]} ], 
-          fbOk:"Sabar! 2 menit belum memenuhi syarat >= 3. Kondisinya SALAH.", fbNo:"Mie baru 2 menit belum matang, tunggu lagi ya." },
-        { id:48, scene:"🔋", desc:"HP mati jika baterai == 0%. Saat ini baterai 1%.", 
-          branches:[ {kw:"JIKA", cond:"baterai == 0", action:"HP_Mati_Total"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Lari_Cari_Cas",correct:true},{text:"Tonton_Film_Panjang",correct:false}]} ], 
-          fbOk:"Berpacu dengan waktu! Syarat == 0 masih SALAH, tapi kamu harus lari cari charger.", fbNo:"Tonton film panjang dengan 1%? Itu cari gara-gara namanya." },
-        { id:49, scene:"🐈", desc:"Sensor Pintu Otomatis: Buka jika benda == 'Manusia'. Ada Kucing lewat.", 
-          branches:[ {kw:"JIKA", cond:"benda == 'Manusia'", action:"Pintu_Membuka"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Pintu_Tertutup",correct:true},{text:"Pintu_Meledak",correct:false}]} ], 
-          fbOk:"Sistem cerdas! Kucing != Manusia, maka kondisi SALAH dan pintu tetap tertutup.", fbNo:"Hanya Manusia yang membuat pintu membuka. Kalau kucing, pintu tetap tertutup." },
-        { id:50, scene:"🎯", desc:"Target tabungan beli sepeda Rp 1 Juta. Uangmu baru Rp 999.000.", 
-          branches:[ {kw:"JIKA", cond:"tabungan >= 1000000", action:"Beli_Sepeda"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Minta_Tambah_1000",correct:true},{text:"Beli_Motor",correct:false}]} ], 
-          fbOk:"Ah, kurang Rp 1000 saja! Kondisi SALAH. Minta tambah ayah sedikit lagi.", fbNo:"Hanya karena kurang 1000 perak, jangan malah beli motor (uang dari mana?)." }
-    ];
-
-    // --- DATA SOAL KELAS 6 (HOTS: Logika Bertingkat, AND/OR/NOT, Prioritas) ---
-    // (Array Kelas 6 dibiarkan utuh seperti sebelumnya)
-    const levelsClass6 = [
-        { id:1, scene:"🎓", desc:"Nilai MTK: 80, IPA: 90 (KKM Keduanya 75)", 
-          branches:[ {kw:"JIKA", cond:"mtk >= 75 DAN ipa >= 75", blank:true, options:[{text:"Lulus_Kedua_Mapel",correct:true},{text:"Remedial",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Remedial"} ], 
-          fbOk:"Betul! Operator DAN mengharuskan kedua nilai di atas KKM.", fbNo:"Kedua nilai sudah di atas 75, jadi syarat DAN terpenuhi." },
-        { id:2, scene:"🛍️", desc:"Total Belanja Rp150rb, Punya Kartu Member", 
-          branches:[ {kw:"JIKA", cond:"belanja >= 100rb ATAU member == benar", blank:true, options:[{text:"Dapat_Diskon",correct:true},{text:"Harga_Normal",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Harga_Normal"} ], 
-          fbOk:"Hebat! Operator ATAU cukup salah satu benar. Di sini malah dua-duanya benar!", fbNo:"Karena belanja >= 100rb terpenuhi, syarat ATAU sudah langsung benar." },
-        { id:3, scene:"🌡️", desc:"Suhu Tubuh Pasien: 39.5 Derajat", 
-          branches:[ {kw:"JIKA", cond:"suhu >= 39", blank:true, options:[{text:"Demam_Tinggi",correct:true},{text:"Normal",correct:false}]}, {kw:"ATAU JIKA", cond:"suhu >= 37.5", action:"Demam_Ringan"}, {kw:"JIKA TIDAK", cond:null, action:"Normal"} ], 
-          fbOk:"Tepat! 39.5 langsung tertangkap di kondisi pertama.", fbNo:"Lihat dari atas ke bawah. 39.5 itu > 39, masuk cabang pertama." },
-        { id:4, scene:"🚴", desc:"Cuaca Cerah (Tidak Hujan) DAN Sedang Libur", 
-          branches:[ {kw:"JIKA", cond:"BUKAN hujan DAN hari_libur == benar", blank:true, options:[{text:"Main_Sepeda",correct:true},{text:"Belajar_di_Kamar",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Belajar_di_Kamar"} ], 
-          fbOk:"Logika BUKAN yang bagus! BUKAN hujan = cerah.", fbNo:"Karena tidak hujan, maka 'BUKAN hujan' itu BENAR. Dua syarat terpenuhi." },
-        { id:5, scene:"😁", desc:"Kondisi Gigi: Tidak Berlubang, Tidak Nyeri", 
-          branches:[ {kw:"JIKA", cond:"BUKAN gigi_berlubang", blank:true, options:[{text:"Gigi_Sehat",correct:true},{text:"Sakit_Gigi",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Sakit_Gigi"} ], 
-          fbOk:"Benar! Gigi yang TIDAK berlubang berarti gigi sehat.", fbNo:"'BUKAN gigi_berlubang' bernilai BENAR untuk gigi sehat." },
-        { id:6, scene:"🏆", desc:"Nilai: 85, Ikut Ekskul, Tidak Pernah Bolos (Absen=0)", 
-          branches:[ {kw:"JIKA", cond:"(nilai >= 80 DAN ekskul) ATAU absen == 0", blank:true, options:[{text:"Siswa_Teladan",correct:true},{text:"Siswa_Biasa",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Siswa_Biasa"} ], 
-          fbOk:"Keren! Syarat di dalam kurung terpenuhi, ATAU absen=0 juga terpenuhi.", fbNo:"Analisis logikanya: nilai>=80 (Benar) DAN ekskul (Benar) = BENAR. Lolos!" },
-        { id:7, scene:"🚨", desc:"Ada Orang Bergerak, Tapi BUKAN Pemilik Rumah", 
-          branches:[ {kw:"JIKA", cond:"ada_gerakan DAN BUKAN pemilik", blank:true, options:[{text:"Bunyikan_Alarm",correct:true},{text:"Buka_Pintu",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Buka_Pintu"} ], 
-          fbOk:"Sistem Keamanan Aktif! Kondisi terpenuhi sempurna.", fbNo:"Ada gerakan dan itu bukan pemilik, alarm harus bunyi!" },
-        { id:8, scene:"🌊", desc:"Hujan Sangat Deras DAN Saluran Air Mampet Total", 
-          branches:[ {kw:"JIKA", cond:"hujan_deras DAN saluran_mampet", blank:true, options:[{text:"Risiko_Banjir",correct:true},{text:"Aman_Terkendali",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Aman_Terkendali"} ], 
-          fbOk:"Analisis yang baik. Dua kombinasi ini memicu banjir.", fbNo:"Hujan deras + mampet = Banjir (Kedua kondisi BENAR)." },
-        { id:9, scene:"🎁", desc:"Member Toko Belanja 250rb", 
-          branches:[ {kw:"JIKA", cond:"member DAN (belanja >= 200rb ATAU ultah)", blank:true, options:[{text:"Diskon_VIP",correct:true},{text:"Diskon_Biasa",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Diskon_Biasa"} ], 
-          fbOk:"Logika kurung dieksekusi dulu: belanja >= 200rb BENAR. Member BENAR.", fbNo:"Selesaikan dalam kurung. Belanja 250rb berarti >= 200rb (Benar)." },
-        { id:10, scene:"🔑", desc:"Username Ketik: 'admin', Password: '123'", 
-          branches:[ {kw:"JIKA", cond:"user == 'admin' DAN pass == '123'", blank:true, options:[{text:"Login_Sukses",correct:true},{text:"Akses_Ditolak",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Akses_Ditolak"} ], 
-          fbOk:"Kredensial cocok! Sistem mengizinkan masuk.", fbNo:"Keduanya benar, kenapa ditolak?" },
-        { id:11, scene:"🏦", desc:"Uang Tabungan: Rp600.000", 
-          branches:[ {kw:"JIKA", cond:"saldo >= 1_Juta", action:"Bunga_5%"}, {kw:"ATAU JIKA", cond:"saldo >= 500_Ribu", blank:true, options:[{text:"Bunga_3%",correct:true},{text:"Bunga_1%",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bunga_1%"} ], 
-          fbOk:"Betul! 600rb lolos dari cabang pertama, lalu cocok di cabang kedua.", fbNo:"Lihat cabang kedua: 600rb itu >= 500rb, harusnya dapat bunga 3%." },
-        { id:12, scene:"🥵", desc:"Hari Ini Tidak Panas, Tapi Badan Terasa Sangat Lelah", 
-          branches:[ {kw:"JIKA", cond:"cuaca_panas ATAU badan_lelah", blank:true, options:[{text:"Istirahat_Minum",correct:true},{text:"Lari_Maraton",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Lari_Maraton"} ], 
-          fbOk:"ATAU hanya butuh satu kondisi Benar. Karena lelah, saatnya istirahat.", fbNo:"Walau tak panas, tapi badan lelah (syarat ATAU terpenuhi)." },
-        { id:13, scene:"🏫", desc:"Hari Ini Hari Selasa, Bukan Tanggal Merah", 
-          branches:[ {kw:"JIKA", cond:"BUKAN sabtu_minggu DAN BUKAN tgl_merah", blank:true, options:[{text:"Masuk_Sekolah",correct:true},{text:"Libur_Panjang",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Libur_Panjang"} ], 
-          fbOk:"Logika BUKAN Ganda. Artinya ini hari kerja biasa.", fbNo:"Bukan sabtu/minggu dan bukan tgl merah berarti hari sekolah." },
-        { id:14, scene:"👮", desc:"Pengendara Membawa STNK, Tapi Lupa Bawa SIM", 
-          branches:[ {kw:"JIKA", cond:"BUKAN bawa_sim ATAU BUKAN bawa_stnk", blank:true, options:[{text:"Kena_Tilang",correct:true},{text:"Bebas_Jalan",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Bebas_Jalan"} ], 
-          fbOk:"Karena 'BUKAN bawa_sim' bernilai BENAR, operator ATAU membuat hasil akhir BENAR.", fbNo:"Kalau tidak bawa SIM, satu syarat ATAU sudah terpenuhi untuk ditilang." },
-        { id:15, scene:"🏃", desc:"Kecepatan Pelari: 12, Stamina: 60", 
-          branches:[ {kw:"JIKA", cond:"kecepatan >= 10 DAN stamina >= 80", action:"Juara_Satu"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Juara_Harapan",correct:true},{text:"Juara_Satu",correct:false}]} ], 
-          fbOk:"Benar! Stamina kurang dari 80 membatalkan syarat DAN.", fbNo:"Syarat DAN mensyaratkan KEDUANYA benar. Stamina hanya 60." },
-        { id:16, scene:"🎫", desc:"Penonton Tidak Punya Tiket VIP, Tapi Anak Pemilik Acara", 
-          branches:[ {kw:"JIKA", cond:"tiket == 'VIP' ATAU keluarga_owner", blank:true, options:[{text:"Masuk_VVIP_Room",correct:true},{text:"Duduk_di_Luar",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Duduk_di_Luar"} ], 
-          fbOk:"Privilege bekerja! ATAU membolehkan masuk karena keluarga owner.", fbNo:"Syarat ATAU membolehkan salah satu benar (keluarga_owner = BENAR)." },
-        { id:17, scene:"🔥", desc:"Terdeteksi Ada Asap, Suhu Ruangan 70 Derajat", 
-          branches:[ {kw:"JIKA", cond:"ada_asap DAN suhu >= 60", blank:true, options:[{text:"Semprot_Air_Pemadam",correct:true},{text:"Nyalakan_AC",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Standby"} ], 
-          fbOk:"Sistem cerdas! Kedua sensor memvalidasi adanya kebakaran.", fbNo:"Asap ada dan suhu > 60, itu kebakaran!" },
-        { id:18, scene:"📋", desc:"Tes Tertulis: 85, Tes Wawancara: 70 (Syarat: T>=80, W>=75)", 
-          branches:[ {kw:"JIKA", cond:"tertulis >= 80 DAN wawancara >= 75", action:"Lolos_Seleksi"}, {kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Gagal_Seleksi",correct:true},{text:"Lolos_Seleksi",correct:false}]} ], 
-          fbOk:"Ya, sayangnya wawancara di bawah 75, sehingga DAN gagal.", fbNo:"Wawancara cuma 70, syarat DAN tidak terpenuhi." },
-        { id:19, scene:"⏰", desc:"Datang Pukul 07.15 di Hari Senin", 
-          branches:[ {kw:"JIKA", cond:"waktu > '07.00' DAN BUKAN hari_libur", blank:true, options:[{text:"Catat_Terlambat",correct:true},{text:"Beri_Pujian",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Aman"} ], 
-          fbOk:"Tepat! Lebih dari jam 7 di hari kerja = terlambat.", fbNo:"Syarat DAN terpenuhi: Lewat jam 7 dan bukan libur." },
-        { id:20, scene:"🪫", desc:"Baterai 10% DAN Sedang Main Game Berat", 
-          branches:[ {kw:"JIKA", cond:"baterai < 20 DAN main_game", blank:true, options:[{text:"Aktifkan_Hemat_Daya_Ekstrem",correct:true},{text:"Naikkan_Kecerahan",correct:false}]}, {kw:"JIKA TIDAK", cond:null, action:"Mode_Normal"} ], 
-          fbOk:"Misi Selesai! Kondisi kritis, sistem harus dihemat secara ekstrem.", fbNo:"Baterai mau habis kok malah terangin layar?" }
-    ];
-
-    // --- STATE VARIABLES ---
+    // --- APP STATE & NAVIGATION ---
     let activeClass = 4;
-    let currentQuestions = [];
-    let currentLevelIndex = 0;
-    let correctCount = 0;
-    let currentAnswerSlot = null;
-
-    // --- UI NAVIGATION ---
+    
     function switchScreen(hideId, showId) {
         const hideEl = document.getElementById(hideId);
         const showEl = document.getElementById(showId);
-        
-        hideEl.classList.remove('active');
-        hideEl.classList.add('left');
-        
+        hideEl.classList.remove('active'); hideEl.classList.add('left');
         showEl.classList.remove('hidden', 'left');
-        
-        setTimeout(() => {
-            hideEl.classList.add('hidden');
-            showEl.classList.add('active');
-        }, 100);
+        setTimeout(() => { hideEl.classList.add('hidden'); showEl.classList.add('active'); }, 100);
     }
 
-    function goBack(currentId, targetId) {
-        const curEl = document.getElementById(currentId);
-        const tarEl = document.getElementById(targetId);
-        
-        curEl.classList.remove('active');
-        curEl.classList.add('hidden'); // Go to right
-        
-        tarEl.classList.remove('hidden', 'left');
-        
-        setTimeout(() => {
-            tarEl.classList.add('active');
-        }, 100);
-    }
-
-    function selectClass(classNumber) {
-        activeClass = classNumber;
-        document.getElementById('classMenuTitle').innerText = `Kelas ${activeClass} SD`;
-        
-        // Hide both materials initially
-        document.getElementById('materialContent4').style.display = 'none';
-        document.getElementById('materialContent6').style.display = 'none';
-        
-        // Show relevant material
-        document.getElementById(`materialContent${activeClass}`).style.display = 'block';
-        
+    function selectClass(cls) {
+        activeClass = cls;
+        document.getElementById('classTitle').innerText = `Kelas ${cls} SD`;
+        document.getElementById('matClass4').style.display = cls === 4 ? 'block' : 'none';
+        document.getElementById('matClass6').style.display = cls === 6 ? 'block' : 'none';
         switchScreen('introScreen', 'classMenuScreen');
     }
 
-    function openMaterial() {
-        switchScreen('classMenuScreen', 'materialScreen');
+    // --- GAME ENGINE: PABRIK SORTIR (CLASS 4) ---
+    const MAX_ROUNDS = 50; 
+    let currentRound = 1;
+    let score = 0;
+    
+    // Timer State
+    let timeRemaining = 35 * 60; 
+    let timerInterval;
+
+    let moveTimeout; // Waktu pergerakan kotak di conveyor
+    let penaltyTimeout; // Jeda 5 detik saat penalti
+
+    // State for current round
+    let currentItem = {};
+    let rules = [];
+    let expectedBin = ''; 
+    let matchedRuleIndex = 0; // 1 (IF), 2 (ELIF), 3 (ELSE)
+
+    const emojis = ["📦", "🛢️", "💎", "🧪", "🧱", "⚙️", "🔋"];
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timeRemaining = 35 * 60;
+        updateTimerDisplay();
+        
+        timerInterval = setInterval(() => {
+            timeRemaining--;
+            updateTimerDisplay();
+            
+            if (timeRemaining < 180) {
+                document.getElementById('timerPill').style.background = "var(--danger)";
+                document.getElementById('timerPill').style.color = "white";
+                document.getElementById('timerPill').classList.add('shake-anim');
+            }
+
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                endGame(true); 
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        let m = Math.floor(timeRemaining / 60);
+        let s = timeRemaining % 60;
+        document.getElementById('timerText').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function evalCondition(val, op, limit) {
+        if (op === '>') return val > limit;
+        if (op === '<') return val < limit;
+        if (op === '>=') return val >= limit;
+        if (op === '<=') return val <= limit;
+        if (op === '==') return val == limit;
+        if (op === '!=') return val != limit;
+        return false;
+    }
+
+    function generateRoundData() {
+        // Generate Random Item
+        currentItem = {
+            emoji: emojis[Math.floor(Math.random() * emojis.length)],
+            Berat: Math.floor(Math.random() * 90) + 10,
+            Suhu: Math.floor(Math.random() * 90) + 10,
+            Energi: Math.floor(Math.random() * 90) + 10
+        };
+
+        const propsAvailable = ['Berat', 'Suhu', 'Energi'];
+        const prop1 = propsAvailable[Math.floor(Math.random() * propsAvailable.length)];
+        let prop2 = propsAvailable[Math.floor(Math.random() * propsAvailable.length)];
+        while(prop2 === prop1) { prop2 = propsAvailable[Math.floor(Math.random() * propsAvailable.length)]; }
+
+        const opList = ['>', '<', '>=', '<=', '==', '!='];
+        
+        let numBins = 3;
+        let isBoundaryTrap = false;
+        let isOrderTrap = false;
+
+        if (currentRound <= 10) {
+            numBins = 2; // Level 1: Cuma IF dan ELSE
+        } else if (currentRound <= 25) {
+            numBins = 3; // Level 2: IF, ELSE IF, ELSE (Tiga Pilihan Normal)
+        } else if (currentRound <= 40) {
+            numBins = 3; 
+            isBoundaryTrap = true; // Level 3: Angka dibuat pas dengan aturan (Jebakan = / >)
+        } else {
+            numBins = 3;
+            isOrderTrap = true; // Level 4: Jebakan Urutan. Syarat 1 dan 2 KEDUANYA BENAR!
+        }
+
+        rules = [];
+
+        // Aturan 1 (JIKA) - Pipa Merah
+        let op1 = opList[Math.floor(Math.random() * opList.length)];
+        let val1 = currentItem[prop1];
+        
+        if (!isBoundaryTrap && !isOrderTrap) {
+            val1 += (Math.random() > 0.5 ? 5 : -5); // Angka santai
+        }
+        if (isOrderTrap) {
+            op1 = '>'; val1 = currentItem[prop1] - 5; 
+        }
+
+        rules.push({ type: 'if', kw: 'JIKA', prop: prop1, op: op1, val: val1, target: 'merah', label: 'Pipa Merah 🔴' });
+
+        // Aturan 2 (ATAU JIKA) - Pipa Biru (Hanya jika bin = 3)
+        if (numBins === 3) {
+            let op2 = opList[Math.floor(Math.random() * opList.length)];
+            let val2 = currentItem[prop2];
+            
+            if (!isBoundaryTrap && !isOrderTrap) {
+                val2 += (Math.random() > 0.5 ? 5 : -5);
+            }
+            if (isOrderTrap) {
+                op2 = '<'; val2 = currentItem[prop2] + 5;
+            }
+
+            rules.push({ type: 'elif', kw: 'ATAU JIKA', prop: prop2, op: op2, val: val2, target: 'biru', label: 'Pipa Biru 🔵' });
+        }
+
+        // Aturan 3 (JIKA TIDAK) - Pipa Sisanya
+        let elseTarget = numBins === 3 ? 'hijau' : 'biru';
+        let elseLabel = numBins === 3 ? 'Pipa Hijau 🟢' : 'Pipa Biru 🔵';
+        rules.push({ type: 'else', kw: 'JIKA TIDAK', target: elseTarget, label: elseLabel });
+
+        // Evaluasi Mesin Sungguhan (Sesuai Urutan Algoritma Komputer)
+        if (evalCondition(currentItem[rules[0].prop], rules[0].op, rules[0].val)) {
+            expectedBin = rules[0].target;
+            matchedRuleIndex = 1;
+        } else if (numBins === 3 && evalCondition(currentItem[rules[1].prop], rules[1].op, rules[1].val)) {
+            expectedBin = rules[1].target;
+            matchedRuleIndex = 2;
+        } else {
+            expectedBin = rules[rules.length - 1].target;
+            matchedRuleIndex = numBins === 3 ? 3 : 2;
+        }
+    }
+
+    function renderGameUI() {
+        document.getElementById('fEmoji').innerText = currentItem.emoji;
+        document.getElementById('fBerat').innerText = currentItem.Berat;
+        document.getElementById('fSuhu').innerText = currentItem.Suhu;
+        document.getElementById('fEnergi').innerText = currentItem.Energi;
+
+        const binGrid = document.getElementById('binGrid');
+        const btnHijau = document.getElementById('btnHijau');
+        if (rules.length === 2) {
+            binGrid.classList.remove('three-bins');
+            btnHijau.style.display = 'none';
+        } else {
+            binGrid.classList.add('three-bins');
+            btnHijau.style.display = 'flex';
+        }
+
+        const codeDiv = document.getElementById('codeMonitor');
+        codeDiv.innerHTML = `<div style="color:#64748b; font-size:0.8rem; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:5px;">// PROGRAM PENYORTIR MESIN</div>`;
+        
+        rules.forEach((r, idx) => {
+            let line = `<div class="code-line">`;
+            if (idx > 0 && r.type !== 'else') line += `} `;
+            if (r.type === 'else') line += `} <span class="kw-else">${r.kw}</span> {`;
+            else line += `<span class="${r.type==='if'?'kw-if':'kw-elif'}">${r.kw}</span> ( <span class="kw-cond">${r.prop} ${r.op} ${r.val}</span> ) {`;
+            line += `</div>`;
+            
+            line += `<div class="code-line" style="padding-left: 20px;"><span class="kw-act">Buka(${r.label});</span></div>`;
+            codeDiv.innerHTML += line;
+        });
+        codeDiv.innerHTML += `<div class="code-line">}</div>`;
     }
 
     function startGame() {
-        currentQuestions = activeClass === 4 ? [...levelsClass4] : [...levelsClass6];
-        currentLevelIndex = 0;
-        correctCount = 0;
-        
-        if(document.getElementById('classMenuScreen').classList.contains('active')) {
-            switchScreen('classMenuScreen', 'gameScreen');
-        } else if(document.getElementById('materialScreen').classList.contains('active')) {
-            switchScreen('materialScreen', 'gameScreen');
+        if(activeClass === 6) {
+            alert("Mode permainan kelas 6 sedang dalam pengembangan (Pilih kelas 4 terlebih dahulu!)");
+            return;
         }
         
-        setTimeout(() => loadLevel(), 100);
+        currentRound = 1;
+        score = 0;
+        clearTimeout(moveTimeout);
+        clearTimeout(penaltyTimeout);
+        
+        const activeScreens = document.querySelectorAll('.screen.active');
+        activeScreens.forEach(el => { el.classList.remove('active'); el.classList.add('left'); setTimeout(() => el.classList.add('hidden'), 100); });
+        
+        const gs = document.getElementById('gameScreen');
+        gs.classList.remove('hidden', 'left');
+        setTimeout(() => gs.classList.add('active'), 100);
+        
+        startTimer(); // Mulai Timer 35 Menit
+        loadRound();
     }
 
-    function formatCondition(condStr) {
-        if (!condStr) return '';
-        let s = condStr
-            .replace(/\(/g, '<span class="bracket">(</span>')
-            .replace(/\)/g, '<span class="bracket">)</span>')
-            .replace(/\bDAN\b/g, '<span class="kw-and">DAN</span>')
-            .replace(/\bATAU\b/g, '<span class="kw-or">ATAU</span>')
-            .replace(/\bBUKAN\b/g, '<span class="kw-not">BUKAN</span>');
-        return s;
-    }
-
-    function loadLevel() {
-        if (currentLevelIndex >= currentQuestions.length) { endGame(); return; }
+    function loadRound() {
+        document.getElementById('fbOverlay').classList.remove('show');
+        document.querySelectorAll('.btn-bin').forEach(b => b.classList.remove('disabled'));
         
-        const data = currentQuestions[currentLevelIndex];
-
-        document.getElementById('levelIndicator').innerText = `Level ${currentLevelIndex + 1}/${currentQuestions.length}`;
-        document.getElementById('scoreIndicator').innerText = `Skor: ${correctCount * 10}`;
-
-        document.getElementById('sceneEmoji').innerText = data.scene;
-        document.getElementById('conditionLabel').innerText = data.desc;
+        clearTimeout(moveTimeout);
+        clearTimeout(penaltyTimeout);
         
-        const robot = document.getElementById('robotAvatar');
-        robot.innerText = "🤖";
-        robot.style.transform = "scale(1)";
-
-        document.getElementById('feedbackOverlay').classList.remove('show');
-
-        // Generate Code UI
-        let htmlCode = '';
-        data.branches.forEach((branch, idx) => {
-            const isElse = branch.kw === 'JIKA TIDAK';
-            const isElif = branch.kw === 'ATAU JIKA';
-            const kwClass = isElse ? 'kw-else' : (isElif ? 'kw-elif' : 'kw-if');
-
-            let headLine = '';
-            if (idx > 0) headLine += '<span class="bracket">}</span> ';
-            headLine += `<span class="${kwClass}">${branch.kw}</span>`;
-            if (!isElse) headLine += ` <span class="bracket">(</span>${formatCondition(branch.cond)}<span class="bracket">)</span>`;
-            headLine += ' <span class="bracket">{</span>';
-            htmlCode += `<div class="line">${headLine}</div>`;
-
-            let actionHtml = '';
-            if (branch.blank) {
-                actionHtml = `<span class="kw-func">lakukan</span>(<span id="dynamicSlot" class="answer-slot">???</span>);`;
-            } else {
-                actionHtml = `<span class="kw-func">lakukan</span>(<span class="kw-val">"${branch.action}"</span>);`;
-            }
-            htmlCode += `<div class="line" style="padding-left: 20px;">${actionHtml}</div>`;
-        });
-        htmlCode += `<div class="line"><span class="bracket">}</span></div>`;
-
-        document.getElementById('codeEditorArea').innerHTML = htmlCode;
-        currentAnswerSlot = document.getElementById('dynamicSlot');
-
-        // Generate Options
-        const optionsContainer = document.getElementById('optionsContainer');
-        optionsContainer.innerHTML = '';
-        const blankBranch = data.branches.find(b => b.blank);
-        
-        const shuffledOptions = [...blankBranch.options].sort(() => Math.random() - 0.5);
-        shuffledOptions.forEach((opt, idx) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerHTML = `<span style="color:var(--primary); font-size:1.2rem; display:block; margin-bottom:5px;">${idx===0?'A':'B'}</span> ${opt.text.replace(/_/g, ' ')}`;
-            btn.onclick = () => checkAnswer(opt, data, btn);
-            optionsContainer.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(selectedOption, levelData, clickedBtn) {
-        if (currentAnswerSlot) {
-            currentAnswerSlot.innerText = `"${selectedOption.text}"`;
-            currentAnswerSlot.classList.remove('filled', 'wrong');
+        if (currentRound > MAX_ROUNDS) {
+            endGame(false); 
+            return;
         }
 
-        // Disable buttons
-        document.querySelectorAll('.option-btn').forEach(b => {
-            if(b !== clickedBtn) b.classList.add('disabled');
-        });
+        generateRoundData();
+        renderGameUI();
 
-        const robot = document.getElementById('robotAvatar');
-
-        if (selectedOption.correct) {
-            if (currentAnswerSlot) currentAnswerSlot.classList.add('filled');
-            correctCount++;
-            document.getElementById('scoreIndicator').innerText = `Skor: ${correctCount * 10}`;
-            robot.style.transform = "translateY(-20px) scale(1.2)";
-            robot.innerText = "🤩";
-            showFeedback(true, levelData.fbOk);
-            fireConfetti();
-        } else {
-            if (currentAnswerSlot) currentAnswerSlot.classList.add('wrong');
-            robot.innerText = "😵";
-            const visualStage = document.querySelector('.visual-stage');
-            visualStage.classList.add('shake-anim');
-            setTimeout(() => visualStage.classList.remove('shake-anim'), 500);
-            showFeedback(false, levelData.fbNo);
-        }
+        document.getElementById('lvlText').innerText = currentRound;
+        document.getElementById('scoreText').innerText = score;
+        
+        const fItem = document.getElementById('fItem');
+        fItem.style.transition = 'none';
+        fItem.style.left = '-200px'; 
+        fItem.style.opacity = '1';
+        
+        void fItem.offsetWidth; // Force reflow
+        
+        fItem.style.transition = 'left 15s linear';
+        fItem.style.left = '100%';
+        
+        moveTimeout = setTimeout(() => {
+            handleMissedItem();
+        }, 15000);
     }
 
-    function showFeedback(isSuccess, message) {
+    function handleMissedItem() {
+        score = Math.max(0, score - 1); // Skor berkurang 1
+        
+        // Waktu berkurang 5 detik sebagai hukuman
+        timeRemaining -= 5;
+        if (timeRemaining < 0) timeRemaining = 0;
+        updateTimerDisplay();
+
+        document.getElementById('scoreText').innerText = score;
+        
+        document.querySelectorAll('.btn-bin').forEach(b => b.classList.add('disabled'));
+        
+        const fItem = document.getElementById('fItem');
+        fItem.style.opacity = '0'; 
+        
         const title = document.getElementById('fbTitle');
         const icon = document.getElementById('fbIcon');
-        const text = document.getElementById('fbText');
-        const btn = document.querySelector('.feedback-card .btn-next');
-        const overlay = document.getElementById('feedbackOverlay');
+        const btn = document.querySelector('.fb-card .btn-main');
+        
+        title.innerText = "Barang Terlewat!"; 
+        title.style.color = "var(--warning)"; 
+        icon.innerText = "💨";
+        document.getElementById('fbDesc').innerText = "Kotak barang mentok di ujung dan terjatuh! Skor kamu dikurangi 1 dan sisa waktu berkurang 5 detik.\n\nMenunggu barang selanjutnya (5 detik)...";
+        
+        btn.style.display = 'none'; 
+        document.getElementById('fbOverlay').classList.add('show');
+        
+        penaltyTimeout = setTimeout(() => {
+            document.getElementById('fbOverlay').classList.remove('show');
+            nextRound(); 
+        }, 5000);
+    }
+
+    function checkBin(selectedBin) {
+        clearTimeout(moveTimeout); 
+
+        const fItem = document.getElementById('fItem');
+        const currentLeft = window.getComputedStyle(fItem).left;
+        fItem.style.transition = 'none';
+        fItem.style.left = currentLeft;
+
+        document.querySelectorAll('.btn-bin').forEach(b => b.classList.add('disabled'));
+        
+        const isCorrect = (selectedBin === expectedBin);
+        
+        let feedbackText = "";
+        
+        if (matchedRuleIndex === 1) {
+            const r = rules[0];
+            const cv = currentItem[r.prop];
+            feedbackText += `Mesin membaca baris ke-1: ${r.prop} (${cv}) ${r.op} ${r.val}. Syarat ini BENAR! `;
+            feedbackText += `Mesin langsung membuang barang ke ${r.label} tanpa mengecek syarat di bawahnya.`;
+        } 
+        else if (matchedRuleIndex === 2 && rules.length === 3) {
+            const r1 = rules[0];
+            const r2 = rules[1];
+            feedbackText += `Mesin membaca baris ke-1: Syarat GAGAL karena ${r1.prop} (${currentItem[r1.prop]}) BUKAN ${r1.op} ${r1.val}. `;
+            feedbackText += `\nLanjut ke baris ke-2: ${r2.prop} (${currentItem[r2.prop]}) ${r2.op} ${r2.val} BENAR! Masuk ke ${r2.label}.`;
+        }
+        else {
+            feedbackText += `Semua syarat JIKA dan ATAU JIKA di atas bernilai SALAH. `;
+            feedbackText += `Karena tidak ada yang cocok, mesin melempar barang ke keranjang sisanya (JIKA TIDAK), yaitu ${rules[rules.length-1].label}.`;
+        }
+
+        if (isCorrect) {
+            score += 2; // Tiap jawaban benar dapat 2 poin, Total: 100 poin
+            showFeedback(true, feedbackText);
+        } else {
+            document.getElementById('factoryStage').classList.add('shake-anim');
+            setTimeout(() => document.getElementById('factoryStage').classList.remove('shake-anim'), 400);
+            
+            let badText = `Salah Pipa! Barang seharusnya masuk ke pipa berwarna ${expectedBin.toUpperCase()}.\n\nALASAN MESIN:\n`;
+            showFeedback(false, badText + feedbackText);
+        }
+    }
+
+    function showFeedback(isSuccess, desc) {
+        const title = document.getElementById('fbTitle');
+        const icon = document.getElementById('fbIcon');
+        const btn = document.querySelector('.fb-card .btn-main');
+
+        btn.style.display = 'inline-flex'; 
 
         if (isSuccess) {
-            title.innerText = "Hebat!"; title.style.color = "var(--success-dark)";
-            icon.innerText = "🎉";
-            btn.style.background = "linear-gradient(to bottom, var(--success), var(--success-dark))";
-            btn.style.boxShadow = "0 6px 0 #065f46";
-            btn.innerText = "Lanjut Level ➡";
+            title.innerText = "Logika Sempurna!"; title.style.color = "var(--success)"; icon.innerText = "🎉";
+            btn.style.background = "var(--success)"; btn.style.boxShadow = "0 6px 0 #059669";
         } else {
-            title.innerText = "Kurang Tepat"; title.style.color = "var(--danger-dark)";
-            icon.innerText = "🔧";
-            btn.style.background = "linear-gradient(to bottom, var(--warning), #d97706)";
-            btn.style.boxShadow = "0 6px 0 #92400e";
-            btn.innerText = "Coba Level Berikutnya ➡";
+            title.innerText = "Pabrik Macet!"; title.style.color = "var(--danger)"; icon.innerText = "💥";
+            btn.style.background = "var(--warning)"; btn.style.boxShadow = "0 6px 0 #b45309";
         }
-
-        text.innerText = message;
-        setTimeout(() => overlay.classList.add('show'), 600);
+        document.getElementById('fbDesc').innerText = desc;
+        
+        if (currentRound === MAX_ROUNDS) {
+             btn.innerText = "Lihat Laporan Akhir 🏆";
+        } else {
+             btn.innerText = "Lanjut Paket ➡";
+        }
+        
+        setTimeout(() => document.getElementById('fbOverlay').classList.add('show'), 600);
     }
 
-    function nextLevel() {
-        currentLevelIndex++;
-        loadLevel();
+    function nextRound() {
+        currentRound++;
+        loadRound();
     }
 
-    function endGame() {
+    function endGame(isTimeout) {
+        clearInterval(timerInterval); 
+        clearTimeout(moveTimeout); 
+        clearTimeout(penaltyTimeout);
         switchScreen('gameScreen', 'resultScreen');
-        document.getElementById('resultText').innerText = `Kamu telah menyelesaikan ${currentQuestions.length} soal logika koding.`;
         
-        const finalScore = Math.round((correctCount / currentQuestions.length) * 100);
+        document.getElementById('finalScore').innerText = score;
         
-        let displayScore = 0;
-        const scoreEl = document.getElementById('finalScore');
-        const intv = setInterval(() => {
-            displayScore += 2;
-            if(displayScore >= finalScore) {
-                displayScore = finalScore;
-                clearInterval(intv);
-                if(finalScore >= 80) fireConfettiContinuous();
-            }
-            scoreEl.innerText = displayScore;
-        }, 20);
-    }
-
-    const canvas = document.getElementById('confetti-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animationId;
-
-    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    function fireConfetti() {
-        const colors = ['#6366f1', '#ec4899', '#10b981', '#f59e0b', '#ffffff'];
-        for (let i = 0; i < 80; i++) {
-            particles.push({
-                x: canvas.width / 2, y: canvas.height / 2 + 50,
-                r: Math.random() * 6 + 2,
-                dx: Math.random() * 20 - 10, dy: Math.random() * -15 - 5,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                tilt: Math.random() * 10, tiltAngle: 0, tiltAngleInc: (Math.random() * 0.07) + 0.05
-            });
+        const title = document.getElementById('resultTitle');
+        const desc = document.getElementById('resultDesc');
+        const icon = document.getElementById('resultIcon');
+        
+        if (isTimeout) {
+            title.innerText = "Waktu Habis!";
+            title.style.color = "var(--danger)";
+            icon.innerText = "⏰";
+            desc.innerText = `Kamu kehabisan waktu di Soal ke-${currentRound}. Latih lagi kecepatanmu!`;
+        } else {
+            title.innerText = "Misi Selesai!";
+            title.style.color = "var(--primary)";
+            icon.innerText = "🏆";
+            desc.innerText = `Luar biasa! Kamu berhasil menyelesaikan seluruh 50 tantangan logika.`;
+            // Syarat konfeti kini di angka 80 karena nilai maksimumnya adalah 100
+            if(score >= 80) createConfetti();
         }
-        if (!animationId) animateConfetti();
     }
 
-    function fireConfettiContinuous() {
-        fireConfetti();
-        const int = setInterval(() => { if(particles.length < 250) fireConfetti(); }, 800);
-        setTimeout(() => clearInterval(int), 4000);
-    }
-
-    function animateConfetti() {
-        requestAnimationFrame(animateConfetti);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        for (let i = 0; i < particles.length; i++) {
-            let p = particles[i];
-            p.tiltAngle += p.tiltAngleInc;
-            p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
-            p.x += Math.sin(p.tiltAngle) * 2;
-            p.dy += 0.2; p.x += p.dx; p.y += p.dy;
-
-            ctx.beginPath(); ctx.lineWidth = p.r; ctx.strokeStyle = p.color;
-            ctx.moveTo(p.x + p.tilt + p.r, p.y);
-            ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
-            ctx.stroke();
-
-            if (p.y > canvas.height || p.x < -50 || p.x > canvas.width + 50) { particles.splice(i, 1); i--; }
+    function createConfetti() {
+        const colors = ['#ec4899', '#6366f1', '#10b981', '#f59e0b'];
+        for (let i = 0; i < 50; i++) {
+            const conf = document.createElement('div');
+            conf.style.position = 'absolute';
+            conf.style.width = '10px'; conf.style.height = '10px';
+            conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            conf.style.left = Math.random() * 100 + 'vw';
+            conf.style.top = '-10px';
+            conf.style.zIndex = '100';
+            conf.style.animation = `fall ${Math.random() * 2 + 1}s linear forwards`;
+            document.body.appendChild(conf);
+            setTimeout(() => conf.remove(), 3000);
         }
-        if (particles.length === 0) { cancelAnimationFrame(animationId); animationId = null; }
     }
+
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `@keyframes fall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
+    document.head.appendChild(styleSheet);
 </script>
 
 </body>
