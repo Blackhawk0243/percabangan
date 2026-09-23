@@ -190,6 +190,7 @@
         <p>Pilih kelasmu untuk memulai belajar logika koding!</p>
         
         <div style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            <button class="btn-main" style="background:#10b981; box-shadow:0 6px 0 #047857;" onclick="selectClass(3)">🧒 Kelas 3 SD</button>
             <button class="btn-main" onclick="selectClass(4)">👦 Kelas 4 SD</button>
             <button class="btn-main" style="background:var(--secondary); box-shadow:0 6px 0 #be185d;" onclick="selectClass(6)">🧑 Kelas 6 SD</button>
         </div>
@@ -203,7 +204,15 @@
             <p>Apa yang ingin kamu lakukan?</p>
             
             <button class="btn-main btn-secondary" onclick="switchScreen('classMenuScreen', 'materialScreen')">📚 Pelajari Materi</button>
-            <button class="btn-main" onclick="startGame()">🚀 Mainkan Game!</button>
+            
+            <div id="menuClass3" style="display:none; width:100%; align-items:center; flex-direction:column; margin-top:10px;">
+                <button class="btn-main" onclick="startGatekeeperGame()">👮‍♂️ Game 1: Logika JIKA (50 Soal)</button>
+                <button class="btn-main" style="background:var(--warning); box-shadow:0 6px 0 #b45309;" onclick="startConveyorGame(true)">🏭 Game 2: Sortir Mudah (10 Soal)</button>
+            </div>
+            
+            <div id="menuClass4" style="display:none; width:100%; align-items:center; flex-direction:column; margin-top:10px;">
+                <button class="btn-main" onclick="startConveyorGame(false)">🚀 Mainkan Game Sortir!</button>
+            </div>
         </div>
     </div>
 
@@ -212,6 +221,30 @@
         <button class="btn-back" onclick="switchScreen('materialScreen', 'classMenuScreen')">⬅ Kembali</button>
         <h1 style="margin-bottom: 20px;">Materi Logika</h1>
         
+        <!-- MATERI KELAS 3 -->
+        <div id="matClass3" style="display:none; padding-bottom: 30px;">
+            <div class="materi-card">
+                <h2>Konsep Dasar JIKA (IF)</h2>
+                <p>Halo! Komputer itu sangat pintar tapi harus diberi perintah yang jelas. Perintah paling dasar adalah <b>JIKA (IF)</b>.</p>
+                <p>Contoh: <b>JIKA</b> Hujan, <b>MAKA</b> Pakai Payung.</p>
+                <p>Jika syaratnya terpenuhi (benar-benar hujan), maka perintahnya dijalankan!</p>
+            </div>
+            <div class="materi-card" style="border-color: var(--warning); background: #fffbeb;">
+                <h2>JIKA TIDAK (ELSE)</h2>
+                <p>Bagaimana kalau tidak hujan? Komputer menggunakan perintah <b>JIKA TIDAK (ELSE)</b> untuk kondisi sisanya.</p>
+                <p>Contoh: <br><b>JIKA</b> Hujan { Pakai Payung } <br><b>JIKA TIDAK</b> { Main di Taman }</p>
+            </div>
+            <div class="materi-card">
+                <h2>Tanda Perbandingan Mudah</h2>
+                <ul>
+                    <li><b><span style="color:var(--danger); font-size:1.2rem;">&gt;</span> (Lebih Besar)</b>: Mulut buaya menghadap angka yang lebih besar. Contoh: 10 &gt; 5</li>
+                    <li><b><span style="color:var(--danger); font-size:1.2rem;">&lt;</span> (Lebih Kecil)</b>: Contoh: 2 &lt; 8</li>
+                    <li><b><span style="color:var(--primary); font-size:1.2rem;">==</span> (Sama Persis)</b>: Angkanya kembar. Contoh: 7 == 7</li>
+                </ul>
+            </div>
+            <button class="btn-main" onclick="startGatekeeperGame()">Mainkan Logika JIKA!</button>
+        </div>
+
         <!-- MATERI KELAS 4 -->
         <div id="matClass4" style="display:none; padding-bottom: 30px;">
             <div class="materi-card">
@@ -253,7 +286,7 @@
                 <p>Berbeda jika aturannya <code>Tinggi &gt;= 130</code>. Kalau ada tanda Sama Dengan (<b>=</b>), barulah angka yang pas boleh masuk.</p>
             </div>
             
-            <button class="btn-main" onclick="startGame()">Siap Tantangan 50 Soal? Main Game!</button>
+            <button class="btn-main" onclick="startConveyorGame(false)">Siap Tantangan 50 Soal? Main Game!</button>
         </div>
         
         <!-- MATERI KELAS 6 -->
@@ -317,6 +350,56 @@
         </div>
     </div>
 
+    <!-- SCREEN GATEKEEPER (KELAS 3) -->
+    <div id="gatekeeperScreen" class="screen hidden">
+        <button class="btn-back" onclick="switchScreen('gatekeeperScreen', 'classMenuScreen')">⬅ Keluar Game</button>
+        
+        <div class="game-header">
+            <div class="pill level-pill">🎫 Pengunjung <span id="gkLvlText">1</span>/50</div>
+            <div class="pill timer-pill" id="gkTimerPill">⏳ <span id="gkTimerText">35:00</span></div>
+            <div class="pill score-pill">⭐ Skor: <span id="gkScoreText">0</span></div>
+        </div>
+
+        <div class="game-body">
+            <div class="left-panel">
+                <div class="factory-stage" id="gkStage" style="background:#fef3c7; border-color:#f59e0b;">
+                    <h3 style="margin:0 0 10px; color:var(--text); font-family:'Fredoka'; text-align:center; z-index: 10; background: rgba(255,255,255,0.8); padding: 5px 15px; border-radius: 20px;">Gerbang Masuk</h3>
+                    
+                    <div class="conveyor-belt" style="background:transparent; border:none; bottom:10px;">
+                        <div class="factory-item" id="gkCharacter" style="border-color:#10b981; min-width:140px;">
+                            <div class="f-emoji" id="gkEmoji">🧑</div>
+                            <div class="f-stats" style="background:#d1fae5;">
+                                <div>Umur: <span class="f-val"><span id="gkUmur">10</span></span></div>
+                                <div>Tinggi: <span class="f-val"><span id="gkTinggi">130</span></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="code-monitor" id="gkCodeMonitor">
+                    <!-- Rules will be injected here -->
+                </div>
+
+                <div style="text-align: center; font-weight: 800; color: #64748b; margin-bottom: 8px;">Apakah pengunjung ini boleh masuk?</div>
+                <div class="bin-grid">
+                    <button class="btn-bin btn-hijau" id="gkBtnIzinkan" onclick="checkGatekeeper('IZINKAN')"><span class="bin-icon">✅</span> IZINKAN</button>
+                    <button class="btn-bin btn-merah" id="gkBtnTolak" onclick="checkGatekeeper('TOLAK')"><span class="bin-icon">❌</span> TOLAK</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="feedback-overlay" id="gkFbOverlay">
+            <div class="fb-card">
+                <div class="fb-icon" id="gkFbIcon">🎉</div>
+                <h2 class="fb-title" id="gkFbTitle">Tepat Sekali!</h2>
+                <p class="fb-text" id="gkFbDesc">Penjelasan diletakkan disini.</p>
+                <button class="btn-main" onclick="nextGatekeeperRound()" style="font-size: 1.1rem; padding: 10px 20px;">Pengunjung Selanjutnya ➡</button>
+            </div>
+        </div>
+    </div>
+
     <!-- SCREEN 5: Result -->
     <div id="resultScreen" class="screen hidden" style="justify-content: center; align-items: center;">
         <div style="font-size: 5rem; margin-bottom: 20px;" id="resultIcon">🏆</div>
@@ -346,13 +429,22 @@
     function selectClass(cls) {
         activeClass = cls;
         document.getElementById('classTitle').innerText = `Kelas ${cls} SD`;
+        
+        // Atur Materi
+        document.getElementById('matClass3').style.display = cls === 3 ? 'block' : 'none';
         document.getElementById('matClass4').style.display = cls === 4 ? 'block' : 'none';
         document.getElementById('matClass6').style.display = cls === 6 ? 'block' : 'none';
+        
+        // Atur Menu Game
+        document.getElementById('menuClass3').style.display = cls === 3 ? 'flex' : 'none';
+        document.getElementById('menuClass4').style.display = cls === 4 ? 'flex' : 'none';
+        
         switchScreen('introScreen', 'classMenuScreen');
     }
 
-    // --- GAME ENGINE: PABRIK SORTIR (CLASS 4) ---
-    const MAX_ROUNDS = 50; 
+    // --- GAME ENGINE: PABRIK SORTIR (CLASS 3 & 4) ---
+    let isConveyorEasy = false; 
+    let CONVEYOR_MAX_ROUNDS = 50; 
     let currentRound = 1;
     let score = 0;
     
@@ -371,9 +463,9 @@
 
     const emojis = ["📦", "🛢️", "💎", "🧪", "🧱", "⚙️", "🔋"];
 
-    function startTimer() {
+    function startTimer(minutes) {
         clearInterval(timerInterval);
-        timeRemaining = 35 * 60;
+        timeRemaining = minutes * 60;
         updateTimerDisplay();
         
         timerInterval = setInterval(() => {
@@ -423,22 +515,26 @@
         let prop2 = propsAvailable[Math.floor(Math.random() * propsAvailable.length)];
         while(prop2 === prop1) { prop2 = propsAvailable[Math.floor(Math.random() * propsAvailable.length)]; }
 
-        const opList = ['>', '<', '>=', '<=', '==', '!='];
+        const opList = isConveyorEasy ? ['>', '<', '=='] : ['>', '<', '>=', '<=', '==', '!='];
         
         let numBins = 3;
         let isBoundaryTrap = false;
         let isOrderTrap = false;
 
-        if (currentRound <= 10) {
-            numBins = 2; // Level 1: Cuma IF dan ELSE
-        } else if (currentRound <= 25) {
-            numBins = 3; // Level 2: IF, ELSE IF, ELSE (Tiga Pilihan Normal)
-        } else if (currentRound <= 40) {
-            numBins = 3; 
-            isBoundaryTrap = true; // Level 3: Angka dibuat pas dengan aturan (Jebakan = / >)
+        if (isConveyorEasy) {
+            numBins = 2; // Level 3 SD: Hanya 2 Pipa (IF dan ELSE)
         } else {
-            numBins = 3;
-            isOrderTrap = true; // Level 4: Jebakan Urutan. Syarat 1 dan 2 KEDUANYA BENAR!
+            if (currentRound <= 10) {
+                numBins = 2; 
+            } else if (currentRound <= 25) {
+                numBins = 3; 
+            } else if (currentRound <= 40) {
+                numBins = 3; 
+                isBoundaryTrap = true; 
+            } else {
+                numBins = 3;
+                isOrderTrap = true; 
+            }
         }
 
         rules = [];
@@ -521,12 +617,14 @@
         codeDiv.innerHTML += `<div class="code-line">}</div>`;
     }
 
-    function startGame() {
+    function startConveyorGame(isEasy) {
         if(activeClass === 6) {
-            alert("Mode permainan kelas 6 sedang dalam pengembangan (Pilih kelas 4 terlebih dahulu!)");
+            alert("Mode permainan kelas 6 sedang dalam pengembangan.");
             return;
         }
         
+        isConveyorEasy = isEasy;
+        CONVEYOR_MAX_ROUNDS = isEasy ? 10 : 50;
         currentRound = 1;
         score = 0;
         clearTimeout(moveTimeout);
@@ -539,7 +637,8 @@
         gs.classList.remove('hidden', 'left');
         setTimeout(() => gs.classList.add('active'), 100);
         
-        startTimer(); // Mulai Timer 35 Menit
+        // Waktu: 10 menit (Mudah) atau 35 menit (Normal)
+        startTimer(isEasy ? 10 : 35); 
         loadRound();
     }
 
@@ -550,7 +649,7 @@
         clearTimeout(moveTimeout);
         clearTimeout(penaltyTimeout);
         
-        if (currentRound > MAX_ROUNDS) {
+        if (currentRound > CONVEYOR_MAX_ROUNDS) {
             endGame(false); 
             return;
         }
@@ -577,9 +676,9 @@
     }
 
     function handleMissedItem() {
-        score = Math.max(0, score - 1); // Skor berkurang 1
+        let penaltyScore = isConveyorEasy ? 5 : 1;
+        score = Math.max(0, score - penaltyScore); 
         
-        // Waktu berkurang 5 detik sebagai hukuman
         timeRemaining -= 5;
         if (timeRemaining < 0) timeRemaining = 0;
         updateTimerDisplay();
@@ -598,7 +697,7 @@
         title.innerText = "Barang Terlewat!"; 
         title.style.color = "var(--warning)"; 
         icon.innerText = "💨";
-        document.getElementById('fbDesc').innerText = "Kotak barang mentok di ujung dan terjatuh! Skor kamu dikurangi 1 dan sisa waktu berkurang 5 detik.\n\nMenunggu barang selanjutnya (5 detik)...";
+        document.getElementById('fbDesc').innerText = `Kotak barang terjatuh! Skor dikurangi ${penaltyScore} dan sisa waktu berkurang 5 detik.\n\nMenunggu barang selanjutnya...`;
         
         btn.style.display = 'none'; 
         document.getElementById('fbOverlay').classList.add('show');
@@ -641,7 +740,8 @@
         }
 
         if (isCorrect) {
-            score += 2; // Tiap jawaban benar dapat 2 poin, Total: 100 poin
+            let correctPoints = isConveyorEasy ? 10 : 2;
+            score += correctPoints; 
             showFeedback(true, feedbackText);
         } else {
             document.getElementById('factoryStage').classList.add('shake-anim');
@@ -668,7 +768,7 @@
         }
         document.getElementById('fbDesc').innerText = desc;
         
-        if (currentRound === MAX_ROUNDS) {
+        if (currentRound === CONVEYOR_MAX_ROUNDS) {
              btn.innerText = "Lihat Laporan Akhir 🏆";
         } else {
              btn.innerText = "Lanjut Paket ➡";
@@ -703,9 +803,215 @@
             title.innerText = "Misi Selesai!";
             title.style.color = "var(--primary)";
             icon.innerText = "🏆";
-            desc.innerText = `Luar biasa! Kamu berhasil menyelesaikan seluruh 50 tantangan logika.`;
-            // Syarat konfeti kini di angka 80 karena nilai maksimumnya adalah 100
+            desc.innerText = `Luar biasa! Kamu berhasil menyelesaikan seluruh ${CONVEYOR_MAX_ROUNDS} tantangan logika.`;
             if(score >= 80) createConfetti();
+        }
+    }
+
+    // --- GAME ENGINE: GATEKEEPER (CLASS 3) ---
+    let gkCurrentRound = 1;
+    let gkScore = 0;
+    let gkTimeRemaining = 35 * 60;
+    let gkTimerInterval;
+    let gkMoveTimeout;
+    let gkPenaltyTimeout;
+    let gkExpected = '';
+    let gkRule = {};
+
+    function startGkTimer() {
+        clearInterval(gkTimerInterval);
+        gkTimeRemaining = 35 * 60;
+        updateGkTimerDisplay();
+        gkTimerInterval = setInterval(() => {
+            gkTimeRemaining--;
+            updateGkTimerDisplay();
+            if (gkTimeRemaining < 180) {
+                document.getElementById('gkTimerPill').style.background = "var(--danger)";
+                document.getElementById('gkTimerPill').style.color = "white";
+            }
+            if (gkTimeRemaining <= 0) { clearInterval(gkTimerInterval); endGkGame(true); }
+        }, 1000);
+    }
+    
+    function updateGkTimerDisplay() {
+        let m = Math.floor(gkTimeRemaining / 60);
+        let s = gkTimeRemaining % 60;
+        document.getElementById('gkTimerText').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function startGatekeeperGame() {
+        gkCurrentRound = 1;
+        gkScore = 0;
+        clearTimeout(gkMoveTimeout);
+        clearTimeout(gkPenaltyTimeout);
+        
+        const activeScreens = document.querySelectorAll('.screen.active');
+        activeScreens.forEach(el => { el.classList.remove('active'); el.classList.add('left'); setTimeout(() => el.classList.add('hidden'), 100); });
+        
+        const gs = document.getElementById('gatekeeperScreen');
+        gs.classList.remove('hidden', 'left');
+        setTimeout(() => gs.classList.add('active'), 100);
+        
+        startGkTimer();
+        loadGatekeeperRound();
+    }
+
+    function loadGatekeeperRound() {
+        document.getElementById('gkFbOverlay').classList.remove('show');
+        document.getElementById('gkBtnIzinkan').classList.remove('disabled');
+        document.getElementById('gkBtnTolak').classList.remove('disabled');
+        
+        clearTimeout(gkMoveTimeout);
+        clearTimeout(gkPenaltyTimeout);
+        
+        if (gkCurrentRound > 50) { endGkGame(false); return; }
+
+        generateGkData();
+        
+        document.getElementById('gkLvlText').innerText = gkCurrentRound;
+        document.getElementById('gkScoreText').innerText = gkScore;
+        
+        const fItem = document.getElementById('gkCharacter');
+        fItem.style.transition = 'none';
+        fItem.style.left = '-200px'; 
+        fItem.style.opacity = '1';
+        void fItem.offsetWidth; 
+        fItem.style.transition = 'left 15s linear';
+        fItem.style.left = '100%';
+        
+        gkMoveTimeout = setTimeout(() => { handleGkMissed(); }, 15000);
+    }
+
+    function generateGkData() {
+        const gkEmojis = ["🧑", "👧", "👨", "👩", "👴", "👵"];
+        const charEmoji = gkEmojis[Math.floor(Math.random() * gkEmojis.length)];
+        const umur = Math.floor(Math.random() * 50) + 5;
+        const tinggi = Math.floor(Math.random() * 100) + 90;
+        
+        document.getElementById('gkEmoji').innerText = charEmoji;
+        document.getElementById('gkUmur').innerText = umur;
+        document.getElementById('gkTinggi').innerText = tinggi;
+
+        const props = ['Umur', 'Tinggi'];
+        const prop = props[Math.floor(Math.random() * props.length)];
+        const ops = ['>', '<', '=='];
+        const op = ops[Math.floor(Math.random() * ops.length)];
+        
+        let limit = prop === 'Umur' ? umur + (Math.floor(Math.random()*5)-2) : tinggi + (Math.floor(Math.random()*10)-5);
+        
+        gkRule = { prop, op, limit };
+        
+        let conditionMet = false;
+        let val = prop === 'Umur' ? umur : tinggi;
+        if (op === '>') conditionMet = val > limit;
+        if (op === '<') conditionMet = val < limit;
+        if (op === '==') conditionMet = val == limit;
+
+        gkExpected = conditionMet ? 'IZINKAN' : 'TOLAK';
+
+        const codeDiv = document.getElementById('gkCodeMonitor');
+        codeDiv.innerHTML = `
+        <div style="color:#64748b; font-size:0.8rem; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:5px;">// ATURAN MASUK WAHANA</div>
+        <div class="code-line"><span class="kw-if">JIKA</span> ( <span class="kw-cond">${prop} ${op} ${limit}</span> ) {</div>
+        <div class="code-line" style="padding-left: 20px;"><span class="kw-act">Buka_Gerbang();</span> <span style="color:#64748b;font-size:0.8rem;">// IZINKAN</span></div>
+        <div class="code-line">} <span class="kw-else">JIKA TIDAK</span> {</div>
+        <div class="code-line" style="padding-left: 20px;"><span class="kw-act">Kunci_Gerbang();</span> <span style="color:#64748b;font-size:0.8rem;">// TOLAK</span></div>
+        <div class="code-line">}</div>`;
+    }
+
+    function checkGatekeeper(ans) {
+        clearTimeout(gkMoveTimeout); 
+        const fItem = document.getElementById('gkCharacter');
+        fItem.style.transition = 'none';
+        fItem.style.left = window.getComputedStyle(fItem).left;
+
+        document.getElementById('gkBtnIzinkan').classList.add('disabled');
+        document.getElementById('gkBtnTolak').classList.add('disabled');
+        
+        const isCorrect = (ans === gkExpected);
+        const val = gkRule.prop === 'Umur' ? document.getElementById('gkUmur').innerText : document.getElementById('gkTinggi').innerText;
+        
+        let text = `Sistem mengecek: Apakah ${gkRule.prop} (${val}) ${gkRule.op} ${gkRule.limit}?\n\n`;
+        if (gkExpected === 'IZINKAN') {
+            text += `Jawabannya BENAR! Maka pengunjung harus di-IZINKAN masuk.`;
+        } else {
+            text += `Jawabannya SALAH! Maka pengunjung harus di-TOLAK (karena masuk ke JIKA TIDAK).`;
+        }
+
+        if (isCorrect) {
+            gkScore += 2;
+            showGkFeedback(true, text);
+        } else {
+            document.getElementById('gkStage').classList.add('shake-anim');
+            setTimeout(() => document.getElementById('gkStage').classList.remove('shake-anim'), 400);
+            showGkFeedback(false, "Keputusanmu keliru!\n\n" + text);
+        }
+    }
+
+    function handleGkMissed() {
+        gkScore = Math.max(0, gkScore - 1);
+        gkTimeRemaining -= 5;
+        if (gkTimeRemaining < 0) gkTimeRemaining = 0;
+        updateGkTimerDisplay();
+        document.getElementById('gkScoreText').innerText = gkScore;
+        
+        document.getElementById('gkBtnIzinkan').classList.add('disabled');
+        document.getElementById('gkBtnTolak').classList.add('disabled');
+        
+        document.getElementById('gkCharacter').style.opacity = '0'; 
+        
+        showGkFeedback(false, "Pengunjung kabur karena kamu terlalu lama mencet tombol! Skor -1, Waktu -5 detik.");
+        document.getElementById('gkFbTitle').innerText = "Waktu Habis!";
+    }
+
+    function showGkFeedback(isSuccess, desc) {
+        const title = document.getElementById('gkFbTitle');
+        const icon = document.getElementById('gkFbIcon');
+        const btn = document.querySelector('#gkFbOverlay .btn-main');
+
+        btn.style.display = 'inline-flex'; 
+        if (isSuccess) {
+            title.innerText = "Keputusan Tepat!"; title.style.color = "var(--success)"; icon.innerText = "🎉";
+            btn.style.background = "var(--success)"; btn.style.boxShadow = "0 6px 0 #059669";
+        } else {
+            title.innerText = "Salah Tekan!"; title.style.color = "var(--danger)"; icon.innerText = "💥";
+            btn.style.background = "var(--warning)"; btn.style.boxShadow = "0 6px 0 #b45309";
+        }
+        document.getElementById('gkFbDesc').innerText = desc;
+        
+        if (gkCurrentRound === 50) btn.innerText = "Lihat Laporan Akhir 🏆";
+        else btn.innerText = "Pengunjung Selanjutnya ➡";
+        
+        setTimeout(() => document.getElementById('gkFbOverlay').classList.add('show'), 600);
+    }
+    
+    function nextGatekeeperRound() {
+        gkCurrentRound++;
+        loadGatekeeperRound();
+    }
+
+    function endGkGame(isTimeout) {
+        clearInterval(gkTimerInterval); 
+        clearTimeout(gkMoveTimeout); 
+        clearTimeout(gkPenaltyTimeout);
+        switchScreen('gatekeeperScreen', 'resultScreen');
+        document.getElementById('finalScore').innerText = gkScore;
+        
+        const title = document.getElementById('resultTitle');
+        const desc = document.getElementById('resultDesc');
+        const icon = document.getElementById('resultIcon');
+        
+        if (isTimeout) {
+            title.innerText = "Waktu Habis!";
+            title.style.color = "var(--danger)";
+            icon.innerText = "⏰";
+            desc.innerText = `Kamu kehabisan waktu di Pengunjung ke-${gkCurrentRound}.`;
+        } else {
+            title.innerText = "Shift Selesai!";
+            title.style.color = "var(--primary)";
+            icon.innerText = "🏆";
+            desc.innerText = `Luar biasa! Kamu berhasil menyeleksi 50 pengunjung gerbang.`;
+            if(gkScore >= 80) createConfetti();
         }
     }
 
