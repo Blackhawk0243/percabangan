@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -25,7 +26,9 @@
         html, body {
             font-family: 'Nunito', sans-serif;
             margin: 0; padding: 0;
-            width: 100vw; height: 100vh;
+            width: 100vw; 
+            height: 100vh;
+            height: 100dvh; /* Dynamic viewport untuk HP */
             overflow: hidden;
             background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
             background-size: 400% 400%;
@@ -40,8 +43,8 @@
         }
 
         .app-container {
-            width: 100%; max-width: 900px;
-            height: 100%; max-height: 100vh;
+            flex: 1; width: 100%; max-width: 900px;
+            height: 100%; max-height: 100dvh;
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             display: flex; flex-direction: column;
@@ -61,7 +64,9 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-            padding: 20px; z-index: 1; overflow-y: auto; overflow-x: hidden;
+            padding: 20px; 
+            padding-bottom: 40px; /* Ekstra padding agar bawah tidak terpotong */
+            z-index: 1; overflow-y: auto; overflow-x: hidden;
         }
 
         .screen.hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
@@ -82,13 +87,13 @@
         .btn-main {
             background: var(--primary); color: white; border: none; padding: 15px 30px;
             font-size: 1.2rem; border-radius: 50px; cursor: pointer; font-family: 'Fredoka', sans-serif;
-            box-shadow: 0 6px 0 var(--primary-dark); transition: all 0.1s; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 320px; margin: 8px auto;
+            box-shadow: 0 6px 0 var(--primary-dark); transition: all 0.1s; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 320px; margin: 8px auto; text-align: center; line-height: 1.3;
         }
         .btn-main:active { transform: translateY(6px); box-shadow: none; }
         .btn-secondary { background: var(--success); box-shadow: 0 6px 0 #059669; }
 
         .materi-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border: 2px solid #f1f5f9; }
-        .materi-card h2 { color: var(--primary-dark); margin-top: 0; font-family: 'Fredoka', sans-serif;}
+        .materi-card h2 { color: var(--primary-dark); margin-top: 0; font-family: 'Fredoka', sans-serif; font-size: 1.5rem; line-height: 1.3;}
         .materi-card ul { padding-left: 20px; line-height: 1.6; color: #334155; }
         .materi-card li { margin-bottom: 10px; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; margin: 15px 0; background: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
@@ -127,21 +132,29 @@
         .factory-item {
             background: white; border: 4px solid #fbbf24; border-radius: 16px; padding: 10px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 5;
-            display: flex; flex-direction: column; align-items: center; min-width: 160px;
+            display: flex; flex-direction: column; align-items: center; min-width: 150px;
             position: absolute; bottom: 10px; left: -200px;
         }
         
-        .f-emoji { font-size: 4.5rem; line-height: 1; margin-bottom: 5px; }
-        .f-stats { background: #f8fafc; width: 100%; border-radius: 8px; padding: 8px; font-size: 0.9rem; font-weight: 800; color: #475569;}
+        .f-emoji { font-size: 4rem; line-height: 1; margin-bottom: 5px; }
+        .f-stats { background: #f8fafc; width: 100%; border-radius: 8px; padding: 6px; font-size: 0.85rem; font-weight: 800; color: #475569;}
         .f-stats div { display: flex; justify-content: space-between; border-bottom: 1px dashed #cbd5e1; padding: 2px 0;}
         .f-stats div:last-child { border: none; }
-        .f-val { color: var(--primary-dark); font-family: 'Fredoka'; font-size: 1.1rem; }
+        .f-val { color: var(--primary-dark); font-family: 'Fredoka'; font-size: 1rem; }
 
         .code-monitor {
             background: var(--code-bg); border-radius: 20px; padding: 15px; color: var(--code-text);
-            font-family: 'Consolas', monospace; box-shadow: inset 0 0 0 4px #334155, 0 10px 25px rgba(0,0,0,0.2); font-size: 1rem; margin-bottom: 15px; width: 100%; overflow-x: auto;
+            font-family: 'Consolas', monospace; box-shadow: inset 0 0 0 4px #334155, 0 10px 25px rgba(0,0,0,0.2); 
+            font-size: 1rem; margin-bottom: 15px; width: 100%; overflow-x: hidden; /* Dibuat hidden karena sudah word-wrap */
         }
-        .code-line { margin: 6px 0; line-height: 1.5; white-space: nowrap; }
+        /* Mencegah teks terpotong */
+        .code-line { 
+            margin: 6px 0; 
+            line-height: 1.5; 
+            white-space: pre-wrap; /* Memaksa teks turun baris jika kepanjangan */
+            word-break: break-word;
+        }
+        
         .kw-if { color: #c678dd; font-weight: bold; }
         .kw-elif { color: #e5c07b; font-weight: bold; }
         .kw-else { color: #e06c75; font-weight: bold; }
@@ -152,14 +165,14 @@
         .bin-grid.three-bins { grid-template-columns: 1fr 1fr 1fr; }
         
         .btn-bin {
-            padding: 15px 5px; border-radius: 16px; border: none; font-size: 1.1rem; font-weight: bold; font-family: 'Fredoka', sans-serif; cursor: pointer; color: white; transition: all 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+            padding: 12px 5px; border-radius: 16px; border: none; font-size: 1rem; font-weight: bold; font-family: 'Fredoka', sans-serif; cursor: pointer; color: white; transition: all 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; text-align: center;
         }
         .btn-merah { background: #ef4444; box-shadow: 0 6px 0 #b91c1c; }
         .btn-biru { background: #3b82f6; box-shadow: 0 6px 0 #1d4ed8; }
         .btn-hijau { background: #10b981; box-shadow: 0 6px 0 #047857; }
         .btn-bin:active { transform: translateY(6px); box-shadow: none; }
         .btn-bin.disabled { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
-        .bin-icon { font-size: 2rem; }
+        .bin-icon { font-size: 1.8rem; }
 
         .feedback-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -168,11 +181,11 @@
             z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 20px;
         }
         .feedback-overlay.show { opacity: 1; pointer-events: all; }
-        .fb-card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; border: 4px solid white; max-width: 450px; width: 100%; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .fb-card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; border: 4px solid white; max-width: 450px; width: 100%; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow-y: auto;}
         .feedback-overlay.show .fb-card { transform: scale(1); }
-        .fb-icon { font-size: 4rem; margin-bottom: 10px; }
-        .fb-title { font-family: 'Fredoka'; font-size: 2rem; margin: 0 0 10px; }
-        .fb-text { color: #64748b; font-size: 1.1rem; margin-bottom: 20px; line-height: 1.5; font-weight: 600;}
+        .fb-icon { font-size: 3.5rem; margin-bottom: 10px; }
+        .fb-title { font-family: 'Fredoka'; font-size: 1.8rem; margin: 0 0 10px; }
+        .fb-text { color: #64748b; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; font-weight: 600; text-align: left; white-space: pre-wrap; word-break: break-word; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px dashed #cbd5e1;}
 
         @keyframes popIn { 0% { transform: scale(0) rotate(-10deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
@@ -180,7 +193,13 @@
         .confetti { position: absolute; width: 10px; height: 10px; z-index: 100; }
         @keyframes fall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        @media (max-width: 400px) { h1 { font-size: 1.8rem; } .code-monitor { font-size: 0.85rem; padding: 10px;} .f-emoji { font-size: 3rem;} }
+        @media (max-width: 400px) { 
+            h1 { font-size: 1.8rem; } 
+            .code-monitor { font-size: 0.85rem; padding: 10px;} 
+            .f-emoji { font-size: 3rem;} 
+            .btn-bin { font-size: 0.85rem; padding: 10px 5px;} 
+            .fb-card { padding: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -211,11 +230,12 @@
             
             <div id="menuClass3" style="display:none; width:100%; align-items:center; flex-direction:column; margin-top:10px;">
                 <button class="btn-main" onclick="startDailyGame()">🌞 Game 1: Logika Sehari-hari (50 Soal)</button>
-                <button class="btn-main" style="background:var(--warning); box-shadow:0 6px 0 #b45309;" onclick="startConveyorGame(3, true)">🏭 Game 2: Sortir Mudah (10 Soal)</button>
+                <button class="btn-main" style="background:var(--warning); box-shadow:0 6px 0 #b45309;" onclick="startConveyorGame(3, 'easy')">🏭 Game 2: Sortir Mudah (10 Soal)</button>
             </div>
             
             <div id="menuClass4" style="display:none; width:100%; align-items:center; flex-direction:column; margin-top:10px;">
-                <button class="btn-main" onclick="startConveyorGame(4, false)">🚀 Mainkan Pabrik Sortir (50 Soal)</button>
+                <button class="btn-main" onclick="startConveyorGame(4, 'math')">🏭 Game 1: Simbol Matematika (50 Soal)</button>
+                <button class="btn-main" style="background:var(--primary-dark); box-shadow:0 6px 0 #312e81;" onclick="startConveyorGame(4, 'logic')">🚀 Game 2: Logika AND &amp; OR (50 Soal)</button>
             </div>
 
             <div id="menuClass6" style="display:none; width:100%; align-items:center; flex-direction:column; margin-top:10px;">
@@ -304,25 +324,40 @@
                 </ul>
             </div>
 
+            <div class="materi-card" style="border-color: #6366f1; background: #e0e7ff;">
+                <h2>🤝 Teman Baru Robot: AND &amp; OR</h2>
+                <p>Kadang, robot harus mengecek lebih dari satu syarat sekaligus! Robot menggunakan kata ajaib <b>AND</b> serta <b>OR</b>.</p>
+                <ul>
+                    <li><b style="color:var(--primary-dark); font-size:1.1rem;">AND - Syarat Ketat! 😠</b><br>
+                    Semua syarat <b>HARUS BENAR</b>. Kalau ada satu saja yang salah, maka robot akan bilang GAGAL.<br>
+                    <i>Contoh: <code>(Berat > 10) AND (Suhu == 30)</code>. Kalau beratnya sudah pas, tapi suhunya salah, maka mesin TETAP MENOLAK!</i></li>
+                    <br>
+                    <li><b style="color:var(--secondary); font-size:1.1rem;">OR - Syarat Santai~ 😌</b><br>
+                    Cukup <b>SALAH SATU</b> syarat saja yang benar, maka robot akan bilang BERHASIL.<br>
+                    <i>Contoh: <code>(Energi == 100) OR (Berat < 50)</code>. Meskipun energi barang belum 100, tapi kalau beratnya kecil, barang itu tetap DITERIMA!</i></li>
+                </ul>
+            </div>
+
             <div class="materi-card" style="border-color: var(--danger); background: #fef2f2;">
-                <h2>⚠️ AWAS JEBAKAN ANGKA (HOTS) ⚠️</h2>
+                <h2>⚠ AWAS JEBAKAN ANGKA (HOTS) ⚠️</h2>
                 <p>Jika aturan tertulis <code>Tinggi &gt; 130</code>. Lalu datang anak dengan tinggi <b>pas 130 cm</b>. Apakah dia boleh masuk?</p>
                 <p><b>Jawabannya: TIDAK BOLEH!</b><br>Kenapa? Karena 130 <i>tidak lebih besar</i> dari 130 (angkanya sama). Komputer sangat tegas! Dia akan ditolak (masuk ke cabang JIKA TIDAK).</p>
                 <p>Berbeda jika aturannya <code>Tinggi &gt;= 130</code>. Kalau ada tanda Sama Dengan (<b>=</b>), barulah angka yang pas boleh masuk.</p>
             </div>
             
-            <button class="btn-main" onclick="startConveyorGame(4, false)">Siap Tantangan 50 Soal? Main Game!</button>
+            <button class="btn-main" onclick="startConveyorGame(4, 'math')" style="margin-bottom: 10px;">Main Game 1: Simbol Matematika</button>
+            <button class="btn-main" style="background:var(--primary-dark); box-shadow:0 6px 0 #312e81;" onclick="startConveyorGame(4, 'logic')">Main Game 2: Logika AND &amp; OR</button>
         </div>
         
         <!-- MATERI KELAS 6 -->
         <div id="matClass6" style="display:none; padding-bottom: 30px;">
             <div class="materi-card">
                 <h2>Gerbang Logika Lanjutan</h2>
-                <p>Di kelas 6, syarat yang diberikan bisa lebih dari satu di dalam sebuah kondisi JIKA. Kita menggunakan Gerbang Logika <b>DAN</b>, <b>ATAU</b>, serta <b>BUKAN</b>.</p>
+                <p>Di kelas 6, syarat yang diberikan bisa lebih dari satu di dalam sebuah kondisi JIKA. Kita menggunakan Gerbang Logika <b>AND</b>, <b>OR</b>, serta <b>NOT</b>.</p>
                 <ul>
-                    <li><b>DAN (AND):</b> Semua syarat harus BENAR. Jika salah satu saja salah, maka gagal. <br><i>(Contoh: Jika Nilai >= 80 DAN Absen == 0)</i></li>
-                    <li><b>ATAU (OR):</b> Cukup SATU syarat saja yang BENAR agar kondisi terpenuhi. <br><i>(Contoh: Jika Hujan == Benar ATAU Sakit == Benar)</i></li>
-                    <li><b>BUKAN (NOT):</b> Membalikkan keadaan. Jika awalnya Benar menjadi Salah.<br><i>(Contoh: BUKAN Sakit, artinya Sehat)</i></li>
+                    <li><b>AND:</b> Semua syarat harus BENAR. Jika salah satu saja salah, maka gagal. <br><i>(Contoh: Jika Nilai >= 80 AND Absen == 0)</i></li>
+                    <li><b>OR:</b> Cukup SATU syarat saja yang BENAR agar kondisi terpenuhi. <br><i>(Contoh: Jika Hujan == Benar OR Sakit == Benar)</i></li>
+                    <li><b>NOT:</b> Membalikkan keadaan. Jika awalnya Benar menjadi Salah.<br><i>(Contoh: NOT Sakit, artinya Sehat)</i></li>
                 </ul>
             </div>
             <button class="btn-main" onclick="startClass6Game()">Mulai Master Logika!</button>
@@ -345,7 +380,7 @@
                     <h3 style="margin:0 0 10px; color:var(--text); font-family:'Fredoka'; text-align:center; z-index: 10; background: rgba(255,255,255,0.8); padding: 5px 15px; border-radius: 20px;">Situasi Saat Ini</h3>
                     
                     <div class="conveyor-belt" style="background:transparent; border:none; bottom:10px;">
-                        <div class="factory-item" id="dlCharacter" style="border-color:#10b981; min-width:180px;">
+                        <div class="factory-item" id="dlCharacter" style="border-color:#10b981; min-width:160px;">
                             <div class="f-emoji" id="dlEmoji">🌧️</div>
                             <div class="f-stats" style="background:#d1fae5;">
                                 <div style="justify-content: center; font-size: 1.1rem; padding: 5px; color: var(--primary-dark);" id="dlFakta">Cuaca = Hujan</div>
@@ -371,19 +406,19 @@
             <div class="fb-card">
                 <div class="fb-icon" id="dlFbIcon">🎉</div>
                 <h2 class="fb-title" id="dlFbTitle">Tepat Sekali!</h2>
-                <p class="fb-text" id="dlFbDesc">Penjelasan diletakkan disini.</p>
+                <div class="fb-text" id="dlFbDesc">Penjelasan diletakkan disini.</div>
                 <button class="btn-main" onclick="nextDailyRound()" style="font-size: 1.1rem; padding: 10px 20px;">Soal Selanjutnya ➡</button>
             </div>
         </div>
     </div>
 
-    <!-- SCREEN GAME AREA (PABRIK SORTIR) -->
+    <!-- SCREEN GAME AREA (PABRIK SORTIR KELAS 3 & 4) -->
     <div id="gameScreen" class="screen hidden">
         <button class="btn-back" onclick="switchScreen('gameScreen', 'classMenuScreen')">⬅ Keluar Game</button>
         
         <div class="game-header">
             <div class="pill level-pill">📦 Paket <span id="lvlText">1</span>/50</div>
-            <div class="pill timer-pill" id="timerPill">⏳ <span id="timerText">35:00</span></div>
+            <div class="pill timer-pill" id="timerPill">⏳ <span id="timerText">60:00</span></div>
             <div class="pill score-pill">⭐ Skor: <span id="scoreText">0</span></div>
         </div>
 
@@ -423,7 +458,7 @@
             <div class="fb-card">
                 <div class="fb-icon" id="fbIcon">🎉</div>
                 <h2 class="fb-title" id="fbTitle">Tepat Sekali!</h2>
-                <p class="fb-text" id="fbDesc">Penjelasan diletakkan disini.</p>
+                <div class="fb-text" id="fbDesc">Penjelasan diletakkan disini.</div>
                 <button class="btn-main" onclick="nextRound()" style="font-size: 1.1rem; padding: 10px 20px;">Lanjut Paket ➡</button>
             </div>
         </div>
@@ -460,7 +495,7 @@
             <div class="fb-card">
                 <div class="fb-icon" id="c6FbIcon">🎉</div>
                 <h2 class="fb-title" id="c6FbTitle">Hebat!</h2>
-                <p class="fb-text" id="c6FbDesc">Penjelasan diletakkan disini.</p>
+                <div class="fb-text" id="c6FbDesc">Penjelasan diletakkan disini.</div>
                 <button class="btn-main" onclick="nextClass6Round()" style="font-size: 1.1rem; padding: 10px 20px;">Lanjut Level ➡</button>
             </div>
         </div>
@@ -508,6 +543,7 @@
         switchScreen('introScreen', 'classMenuScreen');
     }
 
+    // --- GAME ENGINE: LOGIKA SEHARI-HARI (CLASS 3) ---
     let dlCurrentRound = 1;
     let dlScore = 0;
     let dlTimeRemaining = 35 * 60;
@@ -593,7 +629,7 @@
 
     function generateDailyData() {
         dlCurrentScenario = dailyScenarios[Math.floor(Math.random() * dailyScenarios.length)];
-        dlConditionMet = Math.random() > 0.5; // 50% chance
+        dlConditionMet = Math.random() > 0.5; // 50% chance situasi sesuai syarat
 
         document.getElementById('dlEmoji').innerText = dlConditionMet ? dlCurrentScenario.emojiTrue : dlCurrentScenario.emojiFalse;
         document.getElementById('dlFakta').innerText = `${dlCurrentScenario.prop} = ${dlConditionMet ? dlCurrentScenario.val : dlCurrentScenario.valFalse}`;
@@ -613,6 +649,7 @@
         let btnTrue = `<button class="btn-bin btn-biru" onclick="checkDailyLogic('TRUE')"><span class="bin-icon">${dlCurrentScenario.iconTrue}</span> ${dlCurrentScenario.actTrue}</button>`;
         let btnFalse = `<button class="btn-bin btn-merah" onclick="checkDailyLogic('FALSE')"><span class="bin-icon">${dlCurrentScenario.iconFalse}</span> ${dlCurrentScenario.actFalse}</button>`;
         
+        // Acak posisi tombol agar pemain tidak hafal
         if (Math.random() > 0.5) btnGrid.innerHTML = btnTrue + btnFalse;
         else btnGrid.innerHTML = btnFalse + btnTrue;
     }
@@ -708,7 +745,9 @@
         }
     }
 
-    let isConveyorEasy = false; 
+
+    // --- GAME ENGINE: PABRIK SORTIR (CLASS 3 & 4) ---
+    let conveyorMode = 'easy'; // 'easy', 'math', 'logic'
     let CONVEYOR_MAX_ROUNDS = 50; 
     let currentRound = 1;
     let score = 0;
@@ -722,6 +761,7 @@
     let matchedRuleIndex = 0; 
 
     const emojis = ["📦", "🛢️", "💎", "🧪", "🧱", "⚙️", "🔋"];
+    const propsAvailable = ['Berat', 'Suhu', 'Energi'];
 
     function startTimer(minutes) {
         clearInterval(timerInterval);
@@ -759,6 +799,45 @@
         return false;
     }
 
+    function evaluateRule(rule) {
+        if (rule.type === 'else') return true;
+        let result = evalCondition(currentItem[rule.conds[0].prop], rule.conds[0].op, rule.conds[0].val);
+        for (let i = 0; i < rule.logOps.length; i++) {
+            let nextRes = evalCondition(currentItem[rule.conds[i+1].prop], rule.conds[i+1].op, rule.conds[i+1].val);
+            if (rule.logOps[i] === 'AND') result = result && nextRes;
+            if (rule.logOps[i] === 'OR') result = result || nextRes;
+        }
+        return result;
+    }
+
+    function buildConditions(numConds) {
+        let conds = [];
+        let logOps = [];
+        let availProps = [...propsAvailable];
+        const opList = (conveyorMode === 'easy') ? ['>', '<', '=='] : ['>', '<', '>=', '<=', '==', '!='];
+        
+        for(let i=0; i < numConds; i++) {
+            let pIdx = Math.floor(Math.random() * availProps.length);
+            let p = availProps[pIdx];
+            availProps.splice(pIdx, 1); // Cegah duplikasi properti di 1 baris
+            
+            let o = opList[Math.floor(Math.random() * opList.length)];
+            
+            // Perbedaan angka (Selisih) dibuat sangat tipis untuk level tinggi
+            let diff = 0;
+            if (conveyorMode === 'easy') diff = (Math.floor(Math.random() * 9) - 4); 
+            else diff = (Math.floor(Math.random() * 5) - 2); // Hanya selisih -2 s/d +2 agar menjebak
+            
+            let v = currentItem[p] + diff;
+            conds.push({prop: p, op: o, val: v});
+            
+            if (i < numConds - 1) {
+                logOps.push(Math.random() > 0.5 ? 'AND' : 'OR');
+            }
+        }
+        return {conds, logOps};
+    }
+
     function generateRoundData() {
         currentItem = {
             emoji: emojis[Math.floor(Math.random() * emojis.length)],
@@ -767,59 +846,55 @@
             Energi: Math.floor(Math.random() * 90) + 10
         };
 
-        const propsAvailable = ['Berat', 'Suhu', 'Energi'];
-        const prop1 = propsAvailable[Math.floor(Math.random() * propsAvailable.length)];
-        let prop2 = propsAvailable[Math.floor(Math.random() * propsAvailable.length)];
-        while(prop2 === prop1) { prop2 = propsAvailable[Math.floor(Math.random() * propsAvailable.length)]; }
+        let numBins = conveyorMode === 'easy' ? 2 : 3;
 
-        const opList = isConveyorEasy ? ['>', '<', '=='] : ['>', '<', '>=', '<=', '==', '!='];
-        
-        let numBins = 3;
-        let isBoundaryTrap = false;
-        let isOrderTrap = false;
+        // ACAK PIPA TUJUAN (Anti Spam)
+        let availableBins = [
+            { id: 'merah', label: 'Pipa Merah 🔴', kw: 'MERAH' },
+            { id: 'biru', label: 'Pipa Biru 🔵', kw: 'BIRU' },
+            { id: 'hijau', label: 'Pipa Hijau 🟢', kw: 'HIJAU' }
+        ].sort(() => Math.random() - 0.5); 
 
-        if (isConveyorEasy) {
-            numBins = 2; // Level 3 SD
-        } else {
-            if (currentRound <= 10) numBins = 2; 
-            else if (currentRound <= 25) numBins = 3; 
-            else if (currentRound <= 40) { numBins = 3; isBoundaryTrap = true; } 
-            else { numBins = 3; isOrderTrap = true; }
-        }
+        if (numBins === 2) availableBins = availableBins.slice(0, 2);
 
         rules = [];
 
-        // Aturan 1 (IF)
-        let op1 = opList[Math.floor(Math.random() * opList.length)];
-        let val1 = currentItem[prop1];
-        
-        if (!isBoundaryTrap && !isOrderTrap) val1 += (Math.random() > 0.5 ? 5 : -5);
-        if (isOrderTrap) { op1 = '>'; val1 = currentItem[prop1] - 5; }
-
-        rules.push({ type: 'if', kw: 'JIKA', prop: prop1, op: op1, val: val1, target: 'merah', label: 'Pipa Merah 🔴' });
-
-        // Aturan 2 (ELIF)
-        if (numBins === 3) {
-            let op2 = opList[Math.floor(Math.random() * opList.length)];
-            let val2 = currentItem[prop2];
+        for(let i = 0; i < numBins - 1; i++) {
+            let kw = i === 0 ? 'JIKA' : 'ATAU JIKA';
+            let type = i === 0 ? 'if' : 'elif';
             
-            if (!isBoundaryTrap && !isOrderTrap) val2 += (Math.random() > 0.5 ? 5 : -5);
-            if (isOrderTrap) { op2 = '<'; val2 = currentItem[prop2] + 5; }
-
-            rules.push({ type: 'elif', kw: 'ATAU JIKA', prop: prop2, op: op2, val: val2, target: 'biru', label: 'Pipa Biru 🔵' });
+            let numConds = 1;
+            if (conveyorMode === 'logic') {
+                numConds = Math.floor(Math.random() * 2) + 2; // 2 hingga 3 Kondisi
+            }
+            
+            let {conds, logOps} = buildConditions(numConds);
+            
+            // Jebakan HOTS untuk Mode Matematika
+            if (conveyorMode === 'math') {
+                let isTrap = Math.random() > 0.5; // 50% kemungkinan jebakan angka pas
+                if(isTrap) {
+                     conds[0].val = currentItem[conds[0].prop]; // Set nilai sama persis
+                     conds[0].op = Math.random() > 0.5 ? '>' : '<'; // Pasti akan GAGAL!
+                }
+            }
+            
+            rules.push({ type, kw, conds, logOps, target: availableBins[i].id, label: availableBins[i].label, kwTarget: availableBins[i].kw });
         }
+        
+        // Aturan TERAKHIR (ELSE)
+        rules.push({ type: 'else', kw: 'JIKA TIDAK', conds: [], logOps: [], target: availableBins[numBins - 1].id, label: availableBins[numBins - 1].label, kwTarget: availableBins[numBins - 1].kw });
 
-        // Aturan 3 (ELSE)
-        let elseTarget = numBins === 3 ? 'hijau' : 'biru';
-        let elseLabel = numBins === 3 ? 'Pipa Hijau 🟢' : 'Pipa Biru 🔵';
-        rules.push({ type: 'else', kw: 'JIKA TIDAK', target: elseTarget, label: elseLabel });
+        // Tentukan Jawaban yang Benar
+        expectedBin = rules[rules.length - 1].target; 
+        matchedRuleIndex = numBins === 3 ? 3 : 2;
 
-        if (evalCondition(currentItem[rules[0].prop], rules[0].op, rules[0].val)) {
-            expectedBin = rules[0].target; matchedRuleIndex = 1;
-        } else if (numBins === 3 && evalCondition(currentItem[rules[1].prop], rules[1].op, rules[1].val)) {
-            expectedBin = rules[1].target; matchedRuleIndex = 2;
-        } else {
-            expectedBin = rules[rules.length - 1].target; matchedRuleIndex = numBins === 3 ? 3 : 2;
+        for (let i = 0; i < rules.length - 1; i++) {
+            if (evaluateRule(rules[i])) {
+                expectedBin = rules[i].target;
+                matchedRuleIndex = i + 1;
+                break; // Berhenti mengecek karena sistem membaca dari atas ke bawah!
+            }
         }
     }
 
@@ -843,18 +918,33 @@
         rules.forEach((r, idx) => {
             let line = `<div class="code-line">`;
             if (idx > 0 && r.type !== 'else') line += `} `;
-            if (r.type === 'else') line += `} <span class="kw-else">${r.kw}</span> {`;
-            else line += `<span class="${r.type==='if'?'kw-if':'kw-elif'}">${r.kw}</span> ( <span class="kw-cond">${r.prop} ${r.op} ${r.val}</span> ) {`;
+            
+            if (r.type === 'else') {
+                line += `} <span class="kw-else">${r.kw}</span> {`;
+            } else {
+                let kwClass = r.type === 'if' ? 'kw-if' : 'kw-elif';
+                line += `<span class="${kwClass}">${r.kw}</span> ( `;
+                
+                let condStr = '';
+                for(let i=0; i < r.conds.length; i++) {
+                    condStr += `<span class="kw-cond">${r.conds[i].prop} ${r.conds[i].op} ${r.conds[i].val}</span>`;
+                    if (i < r.logOps.length) {
+                        let logColor = r.logOps[i] === 'AND' ? '#56b6c2' : '#c678dd';
+                        condStr += ` <strong style="color:${logColor}">${r.logOps[i]}</strong> `;
+                    }
+                }
+                line += `${condStr} ) {`;
+            }
             line += `</div>`;
-            line += `<div class="code-line" style="padding-left: 20px;"><span class="kw-act">Buka(${r.label});</span></div>`;
+            line += `<div class="code-line" style="padding-left: 20px;"><span class="kw-act">Buka(${r.kwTarget});</span></div>`;
             codeDiv.innerHTML += line;
         });
         codeDiv.innerHTML += `<div class="code-line">}</div>`;
     }
 
-    function startConveyorGame(cls, isEasy) {
-        isConveyorEasy = isEasy;
-        CONVEYOR_MAX_ROUNDS = isEasy ? 10 : 50;
+    function startConveyorGame(cls, mode) {
+        conveyorMode = mode;
+        CONVEYOR_MAX_ROUNDS = (mode === 'easy') ? 10 : 50; 
         currentRound = 1; score = 0;
         clearTimeout(moveTimeout); clearTimeout(penaltyTimeout);
         
@@ -865,7 +955,9 @@
         gs.classList.remove('hidden', 'left');
         setTimeout(() => gs.classList.add('active'), 100);
         
-        startTimer(isEasy ? 10 : 35); 
+        document.getElementById('lvlText').parentElement.innerHTML = `📦 Paket <span id="lvlText">1</span>/${CONVEYOR_MAX_ROUNDS}`;
+        
+        startTimer(mode === 'easy' ? 10 : 35); 
         loadRound();
     }
 
@@ -891,8 +983,8 @@
     }
 
     function handleMissedItem() {
-        score = Math.max(0, score - 1); 
-        timeRemaining -= 5;
+        score -= 1; // Hukuman nilai
+        timeRemaining -= 5; // Hukuman waktu
         if (timeRemaining < 0) timeRemaining = 0;
         updateTimerDisplay();
 
@@ -905,11 +997,33 @@
         const btn = document.querySelector('#fbOverlay .btn-main');
         
         title.innerText = "Barang Terlewat!"; title.style.color = "var(--warning)"; icon.innerText = "💨";
-        document.getElementById('fbDesc').innerText = `Kotak barang terjatuh karena telat merespon! Skor dikurangi 1 dan waktu dipotong 5 detik.\n\nMenunggu barang selanjutnya...`;
+        document.getElementById('fbDesc').innerText = `Kotak barang terjatuh karena telat merespon!\nSkor dikurangi 1 dan waktu dipotong 5 detik.\n\nMenunggu barang selanjutnya...`;
         btn.style.display = 'none'; 
         document.getElementById('fbOverlay').classList.add('show');
         
         penaltyTimeout = setTimeout(() => { document.getElementById('fbOverlay').classList.remove('show'); nextRound(); }, 5000);
+    }
+
+    function buildReason(rule) {
+        if(rule.type === 'else') return `Baris Terakhir (JIKA TIDAK)\nKarena semua aturan di atasnya GAGAL.`;
+        
+        let result = evalCondition(currentItem[rule.conds[0].prop], rule.conds[0].op, rule.conds[0].val);
+        let text = `🔸 ${rule.conds[0].prop} (${currentItem[rule.conds[0].prop]}) ${rule.conds[0].op} ${rule.conds[0].val} [${result ? 'BENAR':'SALAH'}]`;
+        
+        for (let i = 0; i < rule.logOps.length; i++) {
+            let nextRes = evalCondition(currentItem[rule.conds[i+1].prop], rule.conds[i+1].op, rule.conds[i+1].val);
+            text += `\n🔸 ${rule.logOps[i]} ${rule.conds[i+1].prop} (${currentItem[rule.conds[i+1].prop]}) ${rule.conds[i+1].op} ${rule.conds[i+1].val} [${nextRes ? 'BENAR':'SALAH'}]`;
+            
+            if (rule.logOps[i] === 'AND') result = result && nextRes;
+            if (rule.logOps[i] === 'OR') result = result || nextRes;
+        }
+        
+        if (rule.conds.length > 1) {
+            text += `\n➤ Hasil Gabungan Logika: ${result ? 'BENAR' : 'GAGAL'}`;
+        } else {
+            text += `\n➤ Hasil: ${result ? 'BENAR' : 'GAGAL'}`;
+        }
+        return text;
     }
 
     function checkBin(selectedBin) {
@@ -921,22 +1035,27 @@
         const isCorrect = (selectedBin === expectedBin);
         
         let feedbackText = "";
+
         if (matchedRuleIndex === 1) {
-            feedbackText += `Mesin membaca baris ke-1: ${rules[0].prop} (${currentItem[rules[0].prop]}) ${rules[0].op} ${rules[0].val}. Syarat ini BENAR! `;
-            feedbackText += `Mesin langsung membuang barang ke ${rules[0].label} tanpa mengecek syarat di bawahnya.`;
+            feedbackText += `Baris ke-1:\n${buildReason(rules[0])}\n\nKarena BENAR, mesin membuang ke ${rules[0].label} tanpa mengecek ke bawah.`;
         } else if (matchedRuleIndex === 2 && rules.length === 3) {
-            feedbackText += `Mesin membaca baris ke-1: Syarat GAGAL karena ${rules[0].prop} (${currentItem[rules[0].prop]}) BUKAN ${rules[0].op} ${rules[0].val}. \nLanjut ke baris ke-2: ${rules[1].prop} (${currentItem[rules[1].prop]}) ${rules[1].op} ${rules[1].val} BENAR! Masuk ke ${rules[1].label}.`;
+            feedbackText += `Baris ke-1:\n${buildReason(rules[0])}\n\nLanjut baris ke-2:\n${buildReason(rules[1])}\n\nKarena BENAR, mesin membuang ke ${rules[1].label}.`;
         } else {
-            feedbackText += `Semua syarat JIKA dan ATAU JIKA di atas bernilai SALAH. Mesin melempar barang ke keranjang sisanya (JIKA TIDAK), yaitu ${rules[rules.length-1].label}.`;
+            feedbackText += `Baris ke-1:\n${buildReason(rules[0])}\n\n`;
+            if (rules.length === 3) feedbackText += `Baris ke-2:\n${buildReason(rules[1])}\n\n`;
+            feedbackText += buildReason(rules[rules.length-1]) + `\nBarang dibuang ke ${rules[rules.length-1].label}.`;
         }
 
         if (isCorrect) {
-            let pts = isConveyorEasy ? 10 : 2; score += pts; 
+            let pts = (conveyorMode === 'easy') ? 10 : 2; // Maks 100
+            score += pts; 
             showFeedback(true, feedbackText);
         } else {
+            score -= 1; // Hukuman salah
+            document.getElementById('scoreText').innerText = score;
             document.getElementById('factoryStage').classList.add('shake-anim');
             setTimeout(() => document.getElementById('factoryStage').classList.remove('shake-anim'), 400);
-            showFeedback(false, `Salah Pipa! Barang seharusnya masuk ke pipa berwarna ${expectedBin.toUpperCase()}.\n\nALASAN MESIN:\n` + feedbackText);
+            showFeedback(false, `Salah Pipa! Barang seharusnya masuk ke ${expectedBin.toUpperCase()}.\n\nALASAN MESIN:\n` + feedbackText);
         }
     }
 
@@ -980,14 +1099,14 @@
         }
     }
 
+    // --- GAME ENGINE: MASTER LOGIKA (CLASS 6) ---
     const c6Levels = [
         { diff:"sedang", scene:"🌧️", desc:"Cuaca Hujan Deras", branches:[{ kw:"JIKA", cond:"hujan == benar", blank:true, options:[{text:"Pakai_Payung",correct:true},{text:"Siram_Tanaman",correct:false}] }, { kw:"JIKA TIDAK", cond:null, action:"Siram_Tanaman" }], feedbackOk:"Benar! Kalau hujan, butuh payung.", feedbackNo:"Kalau sedang hujan, bawa payung, bukan menyiram tanaman." },
         { diff:"sedang", scene:"🔋", desc:"Baterai Kritis: 5%", branches:[{ kw:"JIKA", cond:"baterai < 10", blank:true, options:[{text:"Cari_Charger",correct:true},{text:"Nyalakan_Senter",correct:false}] }, { kw:"JIKA TIDAK", cond:null, action:"Main_Game" }], feedbackOk:"Pintar! 5 memang kurang dari 10.", feedbackNo:"5 < 10 itu benar, cari charger dulu." },
-        { diff:"sulit", scene:"📚", desc:"Nilai MTK: 85, IPA: 90 (KKM 75)", branches:[{ kw:"JIKA", cond:"nilai_mtk >= 75 DAN nilai_ipa >= 75", blank:true, options:[{text:"Lulus_Kedua_Mapel",correct:true},{text:"Remedial",correct:false}] }, { kw:"JIKA TIDAK", cond:null, action:"Remedial" }], feedbackOk:"Betul! DAN artinya SEMUA syarat harus benar.", feedbackNo:"Keduanya >= 75, jadi Lulus." },
-        { diff:"sulit", scene:"💻", desc:"Baterai 45%, Sinyal Kuat", branches:[{ kw:"JIKA", cond:"baterai < 20 ATAU sinyal == lemah", action:"Cari_Charger" }, { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Lanjut_Belajar",correct:true},{text:"Matikan_Laptop",correct:false}] }], feedbackOk:"Tepat! Kedua syarat ATAU salah, jadi masuk JIKA TIDAK.", feedbackNo:"Baterai masih 45% dan sinyal kuat, kondisi ATAU salah semua." },
+        { diff:"sulit", scene:"📚", desc:"Nilai MTK: 85, IPA: 90 (KKM 75)", branches:[{ kw:"JIKA", cond:"nilai_mtk >= 75 AND nilai_ipa >= 75", blank:true, options:[{text:"Lulus_Kedua_Mapel",correct:true},{text:"Remedial",correct:false}] }, { kw:"JIKA TIDAK", cond:null, action:"Remedial" }], feedbackOk:"Betul! AND artinya SEMUA syarat harus benar.", feedbackNo:"Keduanya >= 75, jadi Lulus." },
+        { diff:"sulit", scene:"💻", desc:"Baterai 45%, Sinyal Kuat", branches:[{ kw:"JIKA", cond:"baterai < 20 OR sinyal == lemah", action:"Cari_Charger" }, { kw:"JIKA TIDAK", cond:null, blank:true, options:[{text:"Lanjut_Belajar",correct:true},{text:"Matikan_Laptop",correct:false}] }], feedbackOk:"Tepat! Kedua syarat OR salah, jadi masuk JIKA TIDAK.", feedbackNo:"Baterai masih 45% dan sinyal kuat, kondisi OR salah semua." },
         { diff:"sangat", scene:"📝", desc:"Nilai Ulangan: 80", branches:[{ kw:"JIKA", cond:"nilai >= 90", action:"Nilai_A" }, { kw:"ATAU JIKA", cond:"nilai >= 75", blank:true, options:[{text:"Nilai_B",correct:true},{text:"Nilai_A",correct:false}] }, { kw:"JIKA TIDAK", cond:null, action:"Nilai_C" }], feedbackOk:"Benar! 80 gagal di cabang pertama tapi lolos cabang kedua.", feedbackNo:"80 gagal di >= 90, cocok di ATAU JIKA (>= 75)." },
-        { diff:"sangat", scene:"🏠", desc:"Ada Gerakan, Alarm TIDAK Aktif", branches:[{ kw:"JIKA", cond:"gerakan == benar DAN BUKAN alarm_aktif", blank:true, options:[{text:"Nyalakan_Alarm",correct:true},{text:"Diam_Saja",correct:false}] }, { kw:"JIKA TIDAK", cond:null, action:"Diam_Saja" }], feedbackOk:"Misi Selesai! Kondisi terpenuhi.", feedbackNo:"Gerakan benar DAN alarm belum aktif, syarat DAN terpenuhi." },
-        // ... (Simplified for this file to ensure it fits nicely, keeping 6 powerful examples. Logic remains the same, scaleable to 20 easily).
+        { diff:"sangat", scene:"🏠", desc:"Ada Gerakan, Alarm TIDAK Aktif", branches:[{ kw:"JIKA", cond:"gerakan == benar AND NOT alarm_aktif", blank:true, options:[{text:"Nyalakan_Alarm",correct:true},{text:"Diam_Saja",correct:false}] }, { kw:"JIKA TIDAK", cond:null, action:"Diam_Saja" }], feedbackOk:"Misi Selesai! Kondisi terpenuhi.", feedbackNo:"Gerakan benar AND alarm belum aktif, syarat AND terpenuhi." },
     ];
 
     let c6CurrentIndex = 0;
@@ -1024,7 +1143,7 @@
             let headLine = '';
             if (idx > 0) headLine += '} ';
             headLine += `<span class="${kwClass}">${branch.kw}</span>`;
-            if (!isElse) headLine += ` ( <span class="kw-cond">${branch.cond.replace(/\bDAN\b/g, '<span style="color:#56b6c2">DAN</span>').replace(/\bATAU\b/g, '<span style="color:#56b6c2">ATAU</span>').replace(/\bBUKAN\b/g, '<span style="color:#d19a66">BUKAN</span>')}</span> )`;
+            if (!isElse) headLine += ` ( <span class="kw-cond">${(branch.cond||'').replace(/\bAND\b/g, '<span style="color:#56b6c2">AND</span>').replace(/\bOR\b/g, '<span style="color:#56b6c2">OR</span>').replace(/\bNOT\b/g, '<span style="color:#d19a66">NOT</span>')}</span> )`;
             headLine += ' {';
             htmlCode += `<div class="code-line">${headLine}</div>`;
 
