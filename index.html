@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -846,7 +845,13 @@
             Energi: Math.floor(Math.random() * 90) + 10
         };
 
-        let numBins = conveyorMode === 'easy' ? 2 : 3;
+        // NEW: Transisi Pipa berdasarkan Ronde
+        let numBins = 3;
+        if (conveyorMode === 'easy') {
+            numBins = 2;
+        } else if (conveyorMode === 'logic' && currentRound <= 25) {
+            numBins = 2; // Soal 1-25 hanya IF dan ELSE (2 Pipa)
+        }
 
         // ACAK PIPA TUJUAN (Anti Spam)
         let availableBins = [
@@ -865,7 +870,7 @@
             
             let numConds = 1;
             if (conveyorMode === 'logic') {
-                numConds = Math.floor(Math.random() * 2) + 2; // 2 hingga 3 Kondisi
+                numConds = 2; // NEW: Dibatasi HANYA 2 KONDISI, tidak ada 3 kondisi.
             }
             
             let {conds, logOps} = buildConditions(numConds);
@@ -915,49 +920,7 @@
         const codeDiv = document.getElementById('codeMonitor');
         codeDiv.innerHTML = `<div style="color:#64748b; font-size:0.8rem; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:5px;">// PROGRAM PENYORTIR MESIN</div>`;
         
-        rules.forEach((r, idx) => {
-            let line = `<div class="code-line">`;
-            if (idx > 0 && r.type !== 'else') line += `} `;
-            
-            if (r.type === 'else') {
-                line += `} <span class="kw-else">${r.kw}</span> {`;
-            } else {
-                let kwClass = r.type === 'if' ? 'kw-if' : 'kw-elif';
-                line += `<span class="${kwClass}">${r.kw}</span> ( `;
-                
-                let condStr = '';
-                for(let i=0; i < r.conds.length; i++) {
-                    condStr += `<span class="kw-cond">${r.conds[i].prop} ${r.conds[i].op} ${r.conds[i].val}</span>`;
-                    if (i < r.logOps.length) {
-                        let logColor = r.logOps[i] === 'AND' ? '#56b6c2' : '#c678dd';
-                        condStr += ` <strong style="color:${logColor}">${r.logOps[i]}</strong> `;
-                    }
-                }
-                line += `${condStr} ) {`;
-            }
-            line += `</div>`;
-            line += `<div class="code-line" style="padding-left: 20px;"><span class="kw-act">Buka(${r.kwTarget});</span></div>`;
-            codeDiv.innerHTML += line;
-        });
-        codeDiv.innerHTML += `<div class="code-line">}</div>`;
-    }
-
-    function startConveyorGame(cls, mode) {
-        conveyorMode = mode;
-        CONVEYOR_MAX_ROUNDS = (mode === 'easy') ? 10 : 50; 
-        currentRound = 1; score = 0;
-        clearTimeout(moveTimeout); clearTimeout(penaltyTimeout);
-        
-        const activeScreens = document.querySelectorAll('.screen.active');
-        activeScreens.forEach(el => { el.classList.remove('active'); el.classList.add('left'); setTimeout(() => el.classList.add('hidden'), 100); });
-        
-        const gs = document.getElementById('gameScreen');
-        gs.classList.remove('hidden', 'left');
-        setTimeout(() => gs.classList.add('active'), 100);
-        
-        document.getElementById('lvlText').parentElement.innerHTML = `📦 Paket <span id="lvlText">1</span>/${CONVEYOR_MAX_ROUNDS}`;
-        
-        startTimer(mode === 'easy' ? 10 : 35); 
+        startTimer(mode === 'easy' ? 10 : 60); 
         loadRound();
     }
 
@@ -977,9 +940,11 @@
         const fItem = document.getElementById('fItem');
         fItem.style.transition = 'none'; fItem.style.left = '-200px'; fItem.style.opacity = '1';
         void fItem.offsetWidth; 
-        fItem.style.transition = 'left 15s linear'; fItem.style.left = '100%';
+        fItem.style.transition = 'left 25s linear'; // NEW: Waktu laju diperlambat menjadi 25 detik
+        fItem.style.left = '100%';
         
-        moveTimeout = setTimeout(() => { handleMissedItem(); }, 15000);
+        // NEW: Timer peringatan disamakan menjadi 25 detik
+        moveTimeout = setTimeout(() => { handleMissedItem(); }, 25000); 
     }
 
     function handleMissedItem() {
@@ -1217,4 +1182,3 @@
 
 </body>
 </html>
-```
