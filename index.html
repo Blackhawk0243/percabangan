@@ -875,11 +875,16 @@
         // ACAK PIPA TUJUAN (Anti Spam)
         let availableBins = [
             { id: 'merah', label: 'Pipa Merah 🔴', kw: 'MERAH' },
-            { id: 'biru', label: 'Pipa Biru 🔵', kw: 'BIRU' },
-            { id: 'hijau', label: 'Pipa Hijau 🟢', kw: 'HIJAU' }
-        ].sort(() => Math.random() - 0.5); 
+            { id: 'biru', label: 'Pipa Biru 🔵', kw: 'BIRU' }
+        ];
 
-        if (numBins === 2) availableBins = availableBins.slice(0, 2);
+        // Tambahkan Pipa Hijau hanya jika mode 3 opsi
+        if (numBins === 3) {
+            availableBins.push({ id: 'hijau', label: 'Pipa Hijau 🟢', kw: 'HIJAU' });
+        }
+
+        // Acak posisinya
+        availableBins.sort(() => Math.random() - 0.5); 
 
         rules = [];
 
