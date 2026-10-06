@@ -759,8 +759,27 @@
     let expectedBin = ''; 
     let matchedRuleIndex = 0; 
 
-    const emojis = ["📦", "🛢️", "💎", "🧪", "🧱", "⚙️", "🔋"];
+    const emojis = ["📦", "🛢️️", "💎", "🧪", "🧱", "⚙️", "🔋"];
     const propsAvailable = ['Berat', 'Suhu', 'Energi'];
+
+    function startConveyorGame(cls, mode) {
+        conveyorMode = mode;
+        CONVEYOR_MAX_ROUNDS = (mode === 'easy') ? 10 : 50;
+        currentRound = 1;
+        score = 0;
+        clearTimeout(moveTimeout);
+        clearTimeout(penaltyTimeout);
+
+        const activeScreens = document.querySelectorAll('.screen.active');
+        activeScreens.forEach(el => { el.classList.remove('active'); el.classList.add('left'); setTimeout(() => el.classList.add('hidden'), 100); });
+        
+        const gs = document.getElementById('gameScreen');
+        gs.classList.remove('hidden', 'left');
+        setTimeout(() => gs.classList.add('active'), 100);
+        
+        startTimer(mode === 'easy' ? 10 : 35); 
+        loadRound();
+    }
 
     function startTimer(minutes) {
         clearInterval(timerInterval);
@@ -918,10 +937,33 @@
         }
 
         const codeDiv = document.getElementById('codeMonitor');
-        codeDiv.innerHTML = `<div style="color:#64748b; font-size:0.8rem; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:5px;">// PROGRAM PENYORTIR MESIN</div>`;
+        let htmlCode = `<div style="color:#64748b; font-size:0.8rem; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:5px;">// PROGRAM PENYORTIR MESIN</div>`;
         
-        startTimer(mode === 'easy' ? 10 : 60); 
-        loadRound();
+        rules.forEach((rule, idx) => {
+            const isElse = rule.type === 'else';
+            const isElif = rule.type === 'elif';
+            const kwClass = isElse ? 'kw-else' : (isElif ? 'kw-elif' : 'kw-if');
+
+            let headLine = '';
+            if (idx > 0) headLine += '} ';
+            headLine += `<span class="${kwClass}">${rule.kw}</span>`;
+            
+            if (!isElse) {
+                let condStr = '';
+                for(let i=0; i<rule.conds.length; i++) {
+                    condStr += `<span class="kw-cond">${rule.conds[i].prop} ${rule.conds[i].op} ${rule.conds[i].val}</span>`;
+                    if (i < rule.logOps.length) {
+                        condStr += ` <span style="color:#56b6c2">${rule.logOps[i]}</span> `;
+                    }
+                }
+                headLine += ` ( ${condStr} )`;
+            }
+            headLine += ' {';
+            htmlCode += `<div class="code-line">${headLine}</div>`;
+            htmlCode += `<div class="code-line" style="padding-left: 20px;"><span class="kw-act">Buang_ke_${rule.kwTarget}();</span></div>`;
+        });
+        htmlCode += `<div class="code-line">}</div>`;
+        codeDiv.innerHTML = htmlCode;
     }
 
     function loadRound() {
@@ -940,11 +982,12 @@
         const fItem = document.getElementById('fItem');
         fItem.style.transition = 'none'; fItem.style.left = '-200px'; fItem.style.opacity = '1';
         void fItem.offsetWidth; 
-        fItem.style.transition = 'left 25s linear'; // NEW: Waktu laju diperlambat menjadi 25 detik
+        
+        const speed = (conveyorMode === 'easy') ? 15 : 25;
+        fItem.style.transition = `left ${speed}s linear`;
         fItem.style.left = '100%';
         
-        // NEW: Timer peringatan disamakan menjadi 25 detik
-        moveTimeout = setTimeout(() => { handleMissedItem(); }, 25000); 
+        moveTimeout = setTimeout(() => { handleMissedItem(); }, speed * 1000); 
     }
 
     function handleMissedItem() {
