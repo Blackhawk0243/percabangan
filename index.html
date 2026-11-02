@@ -2,169 +2,230 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#6366f1">
     <title>Petualangan Robo-Code</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
             --primary-dark: #4f46e5;
+            --primary-soft: #e0e7ff;
             --secondary: #ec4899;
+            --secondary-dark: #be185d;
             --success: #10b981;
+            --success-dark: #059669;
             --danger: #ef4444;
             --warning: #f59e0b;
-            --bg: #f0fdfa;
-            --card-bg: rgba(255, 255, 255, 0.95);
+            --warning-dark: #b45309;
+            --card-bg: rgba(255, 255, 255, 0.94);
             --text: #1e293b;
+            --muted: #64748b;
+            --line: #e2e8f0;
             --code-bg: #1e1e2e;
-            --code-text: #a6accd;
+            --code-text: #cdd3f0;
         }
 
-        * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { -webkit-user-select: none; user-select: none; }
+        input, textarea { -webkit-user-select: text; user-select: text; }
 
-        html, body {
-            font-family: 'Nunito', sans-serif;
-            margin: 0; padding: 0;
-            width: 100vw; 
+        html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        body {
+            font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            color: var(--text);
             height: 100vh;
             height: 100dvh; /* Dynamic viewport untuk HP */
-            overflow: hidden;
-            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 50%, #ccfbf1 100%);
+            background-size: 300% 300%;
+            animation: gradientBG 18s ease infinite;
             display: flex; justify-content: center; align-items: center;
         }
-
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        @media (prefers-reduced-motion: reduce) { body { animation: none; } }
 
         .app-container {
-            flex: 1; width: 100%; max-width: 900px;
-            height: 100%; max-height: 100dvh;
+            width: 100%; max-width: 960px; height: 100%;
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            display: flex; flex-direction: column;
+            -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
             position: relative; overflow: hidden;
         }
-
         @media (min-width: 800px) {
             .app-container {
-                height: 95vh; max-height: 750px;
-                border-radius: 24px;
-                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-                border: 4px solid rgba(255, 255, 255, 0.8);
+                height: 95vh; height: 95dvh; max-height: 820px;
+                border-radius: 28px;
+                box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.28);
+                border: 4px solid rgba(255, 255, 255, 0.85);
             }
         }
 
+        /* ---------- LAYAR ---------- */
         .screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute; inset: 0;
             display: flex; flex-direction: column;
+            padding: 16px 16px calc(28px + env(safe-area-inset-bottom, 0px));
+            overflow-y: auto; overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-            padding: 20px; 
-            padding-bottom: 40px; /* Ekstra padding agar bawah tidak terpotong */
-            z-index: 1; overflow-y: auto; overflow-x: hidden;
+            z-index: 1;
         }
-
-        .screen.hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
-        .screen.active { transform: translateX(0); opacity: 1; pointer-events: all; }
+        @media (min-width: 800px) { .screen { padding: 24px 28px 32px; } }
+        .screen.hidden { transform: translateX(100%); opacity: 0; pointer-events: none; visibility: hidden; }
+        .screen.active { transform: translateX(0); opacity: 1; pointer-events: auto; }
         .screen.left { transform: translateX(-100%); opacity: 0; pointer-events: none; }
 
+        /* Konten di tengah tanpa terpotong saat layar pendek */
+        .center-wrap { margin: auto 0; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .wrap-narrow { width: 100%; max-width: 680px; margin: 0 auto; }
+
         .btn-back {
-            background: #e2e8f0; color: #475569; border: none; padding: 10px 20px;
-            border-radius: 20px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 4px 0 #cbd5e1; align-self: flex-start; margin-bottom: 15px; flex-shrink: 0;
+            background: #eef2f7; color: #475569; border: none; padding: 9px 18px;
+            border-radius: 999px; font: 800 0.95rem 'Nunito', sans-serif; cursor: pointer;
+            box-shadow: 0 4px 0 #cbd5e1; align-self: flex-start; margin-bottom: 14px; flex-shrink: 0;
             transition: transform 0.1s, box-shadow 0.1s;
         }
         .btn-back:active { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
 
-        h1 { font-family: 'Fredoka', sans-serif; color: var(--primary); font-size: 2.2rem; margin: 0 0 10px; text-align: center; line-height: 1.2; }
-        p { color: #64748b; text-align: center; margin-bottom: 18px; font-size: 1.1rem; line-height: 1.5; }
+        h1 { font-family: 'Fredoka', sans-serif; color: var(--primary); font-size: clamp(1.75rem, 5vw, 2.3rem); margin: 0 0 10px; text-align: center; line-height: 1.2; font-weight: 700; }
+        p { color: var(--muted); text-align: center; margin: 0 0 18px; font-size: 1.05rem; line-height: 1.55; }
 
         .btn-main {
-            background: var(--primary); color: white; border: none; padding: 15px 30px;
-            font-size: 1.2rem; border-radius: 50px; cursor: pointer; font-family: 'Fredoka', sans-serif;
-            box-shadow: 0 6px 0 var(--primary-dark); transition: all 0.1s; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 320px; margin: 8px auto; text-align: center; line-height: 1.3;
+            background: var(--primary); color: white; border: none; padding: 15px 28px;
+            font-size: 1.15rem; border-radius: 50px; cursor: pointer; font-family: 'Fredoka', sans-serif; font-weight: 600;
+            box-shadow: 0 6px 0 var(--primary-dark); transition: transform 0.1s, box-shadow 0.1s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; max-width: 340px; margin: 8px auto; text-align: center; line-height: 1.3;
         }
         .btn-main:active { transform: translateY(6px); box-shadow: none; }
-        .btn-secondary { background: var(--success); box-shadow: 0 6px 0 #059669; }
+        .btn-secondary { background: var(--success); box-shadow: 0 6px 0 var(--success-dark); }
+        .btn-exam { background: var(--secondary); box-shadow: 0 6px 0 var(--secondary-dark); }
+        .btn-ghost { background: #f1f5f9; color: #334155; box-shadow: 0 6px 0 #cbd5e1; }
+        button:focus-visible, input:focus-visible { outline: 3px solid #fbbf24; outline-offset: 3px; }
 
-        .materi-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border: 2px solid #f1f5f9; }
-        .materi-card h2 { color: var(--primary-dark); margin-top: 0; font-family: 'Fredoka', sans-serif; font-size: 1.5rem; line-height: 1.3;}
-        .materi-card ul { padding-left: 20px; line-height: 1.6; color: #334155; }
+        .hero-emoji { font-size: 4.6rem; line-height: 1; margin-bottom: 12px; animation: popIn 0.8s; }
+        .class-list { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+        .class-list .btn-main { margin: 0 auto; }
+
+        /* ---------- MENU KELAS ---------- */
+        .menu-list { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 12px; }
+        .menu-sub { display: none; flex-direction: column; gap: 12px; }
+        .menu-group-label { font-weight: 800; color: #94a3b8; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; margin: 8px 4px 0; }
+        .menu-card {
+            display: flex; align-items: center; gap: 14px; width: 100%;
+            background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 14px 16px;
+            cursor: pointer; text-align: left; box-shadow: 0 5px 0 #e2e8f0;
+            transition: transform 0.1s, box-shadow 0.1s, border-color 0.2s;
+            font-family: inherit; color: var(--text);
+        }
+        .menu-card:hover { border-color: #c7d2fe; }
+        .menu-card:active { transform: translateY(5px); box-shadow: none; }
+        .mc-icon { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; font-size: 1.7rem; flex-shrink: 0; }
+        .mc-body { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+        .mc-body b { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.08rem; line-height: 1.25; }
+        .mc-body small { color: var(--muted); font-weight: 700; font-size: 0.86rem; }
+        .mc-arrow { font-size: 1.7rem; color: #94a3b8; font-weight: 700; line-height: 1; }
+        .mc-badge { display: inline-block; background: var(--secondary); color: #fff; font-family: 'Nunito', sans-serif; font-size: 0.66rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: 2px; letter-spacing: 0.05em; }
+        .menu-card.featured { border-color: #fbcfe8; background: linear-gradient(135deg, #ffffff 0%, #fdf2f8 100%); box-shadow: 0 5px 0 #fbcfe8; }
+
+        /* ---------- MATERI ---------- */
+        .materi-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 18px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border: 2px solid #f1f5f9; }
+        .materi-card h2 { color: var(--primary-dark); margin: 0 0 12px; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.45rem; line-height: 1.3; }
+        .materi-card p { text-align: left; color: #334155; font-size: 1.02rem; margin-bottom: 12px; }
+        .materi-card ul { padding-left: 20px; line-height: 1.6; color: #334155; margin: 0; }
         .materi-card li { margin-bottom: 10px; }
+        .materi-card code, .q-text code, .rv-q code, .rv-exp code {
+            background: #eef2ff; color: #4338ca; padding: 1px 7px; border-radius: 6px;
+            font-family: 'Consolas', 'SFMono-Regular', Menlo, monospace; font-weight: 700; white-space: nowrap;
+        }
+        .materi-actions { display: flex; flex-direction: column; align-items: center; padding-bottom: 10px; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; margin: 15px 0; background: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         .svg-container { width: 100%; text-align: center; margin: 15px 0; }
         .svg-container svg { max-width: 100%; height: auto; border-radius: 12px; }
 
-        .game-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #e2e8f0; padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0; flex-wrap: wrap; gap: 10px;}
-        .pill { padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.9rem; }
-        .level-pill { background: #e0e7ff; color: var(--primary); }
+        /* ---------- GAME ---------- */
+        .game-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--line); padding-bottom: 10px; margin-bottom: 14px; flex-shrink: 0; flex-wrap: wrap; gap: 8px; }
+        .pill { padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.9rem; white-space: nowrap; }
+        .level-pill { background: var(--primary-soft); color: var(--primary); }
         .score-pill { background: #fef3c7; color: #d97706; }
-        .timer-pill { background: #fee2e2; color: #dc2626; font-family: 'Consolas', monospace; font-size: 1rem; transition: background 0.3s;}
+        .timer-pill { background: #fee2e2; color: #dc2626; font-family: 'Consolas', monospace; font-size: 1rem; transition: background 0.3s; }
 
-        .game-body { display: flex; flex-direction: column; gap: 15px; flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 20px;}
-        .left-panel, .right-panel { display: flex; flex-direction: column; width: 100%; }
-
+        .game-body { display: flex; flex-direction: column; gap: 14px; flex: 1 0 auto; }
+        .left-panel, .right-panel { display: flex; flex-direction: column; width: 100%; min-width: 0; }
         @media (min-width: 800px) {
             .game-body { flex-direction: row; align-items: stretch; gap: 20px; }
-            .left-panel { flex: 0 0 45%; }
+            .left-panel { flex: 0 0 44%; }
             .right-panel { flex: 1; justify-content: flex-start; }
         }
 
         .factory-stage {
-            background: #cbd5e1; border: 6px solid #94a3b8; border-radius: 20px; 
-            padding: 20px 10px; display: flex; flex-direction: column; align-items: center; 
-            position: relative; overflow: hidden; min-height: 250px;
+            background: #cbd5e1; border: 6px solid #94a3b8; border-radius: 20px;
+            padding: 14px 10px; display: flex; flex-direction: column; align-items: center;
+            position: relative; overflow: hidden; min-height: 260px;
         }
+        .stage-title { margin: 0; color: var(--text); font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem; text-align: center; z-index: 10; background: rgba(255,255,255,0.85); padding: 5px 15px; border-radius: 20px; }
         .conveyor-belt {
-            width: 110%; height: 60px; background: #334155; position: absolute; bottom: 30px;
+            width: 110%; height: 50px; background: #334155; position: absolute; bottom: 22px;
             border-top: 4px solid #475569; border-bottom: 4px solid #1e293b;
             background-image: repeating-linear-gradient(90deg, transparent, transparent 40px, #1e293b 40px, #1e293b 50px);
             animation: moveBelt 2s linear infinite; display: flex; justify-content: center; align-items: flex-end;
         }
         @keyframes moveBelt { 0% { background-position: 0 0; } 100% { background-position: 50px 0; } }
-        
         .factory-item {
-            background: white; border: 4px solid #fbbf24; border-radius: 16px; padding: 10px;
+            background: white; border: 4px solid #fbbf24; border-radius: 16px; padding: 8px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 5;
-            display: flex; flex-direction: column; align-items: center; min-width: 150px;
-            position: absolute; bottom: 10px; left: -200px;
+            display: flex; flex-direction: column; align-items: center; min-width: 140px;
+            position: absolute; bottom: 8px; left: -200px;
         }
-        
-        .f-emoji { font-size: 4rem; line-height: 1; margin-bottom: 5px; }
-        .f-stats { background: #f8fafc; width: 100%; border-radius: 8px; padding: 6px; font-size: 0.85rem; font-weight: 800; color: #475569;}
-        .f-stats div { display: flex; justify-content: space-between; border-bottom: 1px dashed #cbd5e1; padding: 2px 0;}
+        .f-emoji { font-size: 2.8rem; line-height: 1; margin-bottom: 5px; }
+        .f-stats { background: #f8fafc; width: 100%; border-radius: 8px; padding: 6px; font-size: 0.85rem; font-weight: 800; color: #475569; }
+        .f-stats div { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dashed #cbd5e1; padding: 2px 0; }
         .f-stats div:last-child { border: none; }
-        .f-val { color: var(--primary-dark); font-family: 'Fredoka'; font-size: 1rem; }
+        .f-val { color: var(--primary-dark); font-family: 'Fredoka', sans-serif; font-size: 1rem; }
+        @media (min-width: 800px) {
+            .factory-stage { min-height: 300px; padding: 20px 10px; }
+            .stage-title { font-size: 1.1rem; }
+            .conveyor-belt { height: 60px; bottom: 30px; }
+            .factory-item { bottom: 10px; padding: 10px; min-width: 150px; }
+            .f-emoji { font-size: 3.6rem; }
+        }
 
         .code-monitor {
-            background: var(--code-bg); border-radius: 20px; padding: 15px; color: var(--code-text);
-            font-family: 'Consolas', monospace; box-shadow: inset 0 0 0 4px #334155, 0 10px 25px rgba(0,0,0,0.2); 
-            font-size: 1rem; margin-bottom: 15px; width: 100%; overflow-x: hidden; /* Dibuat hidden karena sudah word-wrap */
+            background: var(--code-bg); border-radius: 18px; padding: 14px 16px 12px; color: var(--code-text);
+            font-family: 'Consolas', 'SFMono-Regular', Menlo, 'Courier New', monospace;
+            box-shadow: inset 0 0 0 3px #334155, 0 10px 25px rgba(0,0,0,0.15);
+            font-size: 0.98rem; margin-bottom: 14px; width: 100%; overflow-x: hidden;
         }
-        /* Mencegah teks terpotong */
-        .code-line { 
-            margin: 6px 0; 
-            line-height: 1.5; 
-            white-space: pre-wrap; /* Memaksa teks turun baris jika kepanjangan */
-            word-break: break-word;
-        }
-        
+        .code-title { display: flex; align-items: center; gap: 10px; color: #7f8aa8; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #334155; }
+        .code-title .dots { display: inline-flex; gap: 5px; }
+        .code-title .dots i { width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: block; }
+        .code-title .dots i:nth-child(2) { background: #f59e0b; }
+        .code-title .dots i:nth-child(3) { background: #10b981; }
+        .code-line { margin: 4px 0; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+
         .kw-if { color: #c678dd; font-weight: bold; }
         .kw-elif { color: #e5c07b; font-weight: bold; }
         .kw-else { color: #e06c75; font-weight: bold; }
         .kw-cond { color: #56b6c2; font-weight: bold; }
         .kw-act { color: #98c379; }
+        .kw-logic { color: #56b6c2; font-weight: bold; }
+        .kw-op { color: #f78c6c; font-weight: bold; }
+        .kw-num { color: #f78c6c; }
+        .kw-cmt { color: #64748b; font-style: italic; }
 
+        .ask-label { text-align: center; font-weight: 800; color: var(--muted); margin-bottom: 10px; }
         .bin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
         .bin-grid.three-bins { grid-template-columns: 1fr 1fr 1fr; }
-        
         .btn-bin {
-            padding: 12px 5px; border-radius: 16px; border: none; font-size: 1rem; font-weight: bold; font-family: 'Fredoka', sans-serif; cursor: pointer; color: white; transition: all 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; text-align: center;
+            padding: 12px 6px; border-radius: 16px; border: none; font-size: 1rem; font-weight: 600; font-family: 'Fredoka', sans-serif; cursor: pointer; color: white;
+            transition: transform 0.1s, box-shadow 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; text-align: center; line-height: 1.25; min-height: 64px;
         }
         .btn-merah { background: #ef4444; box-shadow: 0 6px 0 #b91c1c; }
         .btn-biru { background: #3b82f6; box-shadow: 0 6px 0 #1d4ed8; }
@@ -173,31 +234,162 @@
         .btn-bin.disabled { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
         .bin-icon { font-size: 1.8rem; }
 
+        /* ---------- POPUP (di luar layar yang bisa di-scroll, jadi selalu terlihat) ---------- */
         .feedback-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
+            position: absolute; inset: 0;
+            background: rgba(248, 250, 252, 0.82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 20px;
+            z-index: 50; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 16px;
         }
-        .feedback-overlay.show { opacity: 1; pointer-events: all; }
-        .fb-card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center; border: 4px solid white; max-width: 450px; width: 100%; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow-y: auto;}
+        .feedback-overlay.show { opacity: 1; pointer-events: auto; }
+        .fb-card {
+            background: white; padding: 26px 22px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center;
+            border: 4px solid white; max-width: 460px; width: 100%; transform: scale(0.85);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: calc(100% - 8px); overflow-y: auto;
+        }
         .feedback-overlay.show .fb-card { transform: scale(1); }
-        .fb-icon { font-size: 3.5rem; margin-bottom: 10px; }
-        .fb-title { font-family: 'Fredoka'; font-size: 1.8rem; margin: 0 0 10px; }
-        .fb-text { color: #64748b; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; font-weight: 600; text-align: left; white-space: pre-wrap; word-break: break-word; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px dashed #cbd5e1;}
+        .fb-icon { font-size: 3.3rem; margin-bottom: 8px; line-height: 1; }
+        .fb-title { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.7rem; margin: 0 0 10px; }
+        .fb-text { color: #475569; font-size: 0.95rem; margin-bottom: 18px; line-height: 1.55; font-weight: 600; text-align: left; white-space: pre-wrap; word-break: break-word; background: #f8fafc; padding: 14px; border-radius: 12px; border: 1px dashed #cbd5e1; }
+        .fb-card .btn-main { font-size: 1.08rem; padding: 12px 20px; }
+        .cf-text { color: #475569; font-weight: 600; margin-bottom: 16px; }
+        .cf-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .cf-actions .btn-main { flex: 1 1 150px; margin: 6px 0; font-size: 1rem; padding: 12px 14px; max-width: none; }
 
         @keyframes popIn { 0% { transform: scale(0) rotate(-10deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
         .shake-anim { animation: shake 0.4s ease-in-out; }
-        .confetti { position: absolute; width: 10px; height: 10px; z-index: 100; }
+        .confetti { position: fixed; top: -12px; width: 10px; height: 10px; z-index: 100; pointer-events: none; }
         @keyframes fall { 0% { transform: translateY(-10px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        @media (max-width: 400px) { 
-            h1 { font-size: 1.8rem; } 
-            .code-monitor { font-size: 0.85rem; padding: 10px;} 
-            .f-emoji { font-size: 3rem;} 
-            .btn-bin { font-size: 0.85rem; padding: 10px 5px;} 
-            .fb-card { padding: 20px; }
+        .result-box { background: rgba(255,255,255,0.85); padding: 18px 40px; border-radius: 20px; border: 2px dashed #cbd5e1; margin-bottom: 18px; text-align: center; }
+        .result-box h3 { margin: 0; color: var(--muted); }
+        .result-box .big { font-family: 'Fredoka', sans-serif; font-size: 4.2rem; font-weight: 700; color: var(--primary); margin: 6px 0 0; line-height: 1.1; }
+
+        /* ---------- UJIAN SUMATIF ---------- */
+        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 480px; margin-bottom: 14px; }
+        .info-chip { background: var(--primary-soft); border-radius: 16px; padding: 12px 6px; text-align: center; }
+        .info-chip b { display: block; font-family: 'Fredoka', sans-serif; font-size: 1.7rem; color: var(--primary-dark); line-height: 1.1; }
+        .info-chip span { font-size: 0.78rem; font-weight: 800; color: #4338ca; }
+        .panel-card { width: 100%; max-width: 480px; background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 16px 18px; margin-bottom: 14px; text-align: left; }
+        .panel-card h3 { margin: 0 0 8px; font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--primary-dark); font-size: 1.1rem; }
+        .panel-card ul { margin: 0; padding-left: 20px; color: #334155; line-height: 1.55; font-size: 0.95rem; }
+        .panel-card li { margin-bottom: 6px; }
+        .field { display: block; font-weight: 800; color: #334155; font-size: 0.92rem; margin-bottom: 12px; }
+        .field input { display: block; width: 100%; margin-top: 6px; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--line); font: 600 16px 'Nunito', sans-serif; color: var(--text); background: #f8fafc; }
+        .field input:focus { outline: none; border-color: var(--primary); background: #fff; }
+        .form-err { color: var(--danger); font-weight: 800; font-size: 0.9rem; min-height: 1.2em; }
+        .resume-box { width: 100%; max-width: 480px; background: #fffbeb; border: 2px solid #fcd34d; border-radius: 18px; padding: 14px 16px; margin-bottom: 14px; text-align: left; }
+        .resume-box > b { color: #92400e; }
+        .resume-box p { text-align: left; margin: 4px 0 10px; font-size: 0.95rem; color: #78350f; }
+        .resume-box .btn-main { margin: 0; max-width: none; font-size: 1rem; padding: 12px 16px; }
+
+        #sumatifScreen { overflow: hidden; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+        .exam-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-shrink: 0; margin-bottom: 10px; }
+        .exam-top .btn-back { margin-bottom: 0; }
+        .exam-student { font-weight: 800; color: var(--muted); font-size: 0.9rem; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+        .ex-progress { height: 8px; background: #eef2ff; border-radius: 999px; overflow: hidden; flex-shrink: 0; margin-bottom: 12px; }
+        .ex-progress div { height: 100%; width: 0; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 999px; transition: width 0.3s; }
+        .exam-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; padding: 2px 2px 14px; }
+        .exam-inner { max-width: 760px; margin: 0 auto; }
+        .q-card { background: #fff; border: 2px solid var(--line); border-radius: 20px; padding: 16px; margin-bottom: 14px; }
+        .q-sec { display: inline-block; background: var(--primary-soft); color: var(--primary-dark); font-weight: 800; font-size: 0.78rem; padding: 4px 12px; border-radius: 999px; margin-bottom: 10px; }
+        .q-text { font-size: 1.12rem; font-weight: 700; line-height: 1.55; color: var(--text); }
+        .q-num { font-family: 'Fredoka', sans-serif; color: var(--primary); font-weight: 700; margin-right: 6px; }
+        .fakta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+        .fakta-label { font-weight: 800; color: var(--muted); font-size: 0.85rem; }
+        .fakta { background: #ecfdf5; border: 2px solid #a7f3d0; color: #065f46; font-weight: 800; font-size: 0.92rem; padding: 5px 12px; border-radius: 12px; }
+        .q-card .code-monitor { margin: 12px 0 0; }
+        .opt-list { display: flex; flex-direction: column; gap: 10px; }
+        .opt-btn {
+            display: flex; align-items: center; gap: 12px; width: 100%; background: #fff; border: 2px solid var(--line); border-radius: 16px;
+            padding: 12px 14px; cursor: pointer; text-align: left; font: 700 1.02rem 'Nunito', sans-serif; color: var(--text);
+            box-shadow: 0 4px 0 #e2e8f0; transition: transform 0.1s, box-shadow 0.1s, border-color 0.15s, background 0.15s;
+        }
+        .opt-btn:hover { border-color: #c7d2fe; }
+        .opt-btn:active { transform: translateY(4px); box-shadow: none; }
+        .opt-letter { width: 34px; height: 34px; border-radius: 50%; background: #f1f5f9; color: #475569; display: grid; place-items: center; font-family: 'Fredoka', sans-serif; font-weight: 700; flex-shrink: 0; }
+        .opt-btn.selected { border-color: var(--primary); background: #eef2ff; box-shadow: 0 4px 0 #a5b4fc; }
+        .opt-btn.selected .opt-letter { background: var(--primary); color: #fff; }
+        .opt-text { flex: 1; line-height: 1.4; min-width: 0; word-break: break-word; }
+        .mono { font-family: 'Consolas', 'SFMono-Regular', Menlo, monospace; font-size: 0.96rem; }
+        .light-code .kw-if { color: #9333ea; } .light-code .kw-elif { color: #b45309; } .light-code .kw-else { color: #dc2626; }
+        .light-code .kw-logic { color: #0e7490; } .light-code .kw-op, .light-code .kw-num { color: #c2410c; } .light-code .kw-act { color: #15803d; }
+        .exam-nav { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; flex-shrink: 0; padding-top: 10px; border-top: 2px dashed var(--line); width: 100%; max-width: 764px; margin: 0 auto; }
+        .nav-btn { border: none; border-radius: 14px; padding: 12px 10px; font: 600 1rem 'Fredoka', sans-serif; cursor: pointer; background: #f1f5f9; color: #334155; box-shadow: 0 4px 0 #cbd5e1; transition: transform 0.1s, box-shadow 0.1s; }
+        .nav-btn:active { transform: translateY(4px); box-shadow: none; }
+        .nav-btn:disabled { opacity: 0.45; pointer-events: none; }
+        .nav-next { background: var(--primary); color: #fff; box-shadow: 0 4px 0 var(--primary-dark); }
+        .nav-next.submit { background: var(--secondary); box-shadow: 0 4px 0 var(--secondary-dark); }
+        .nav-grid { padding: 12px 14px; }
+        @media (max-width: 420px) { .nav-btn { font-size: 0.92rem; padding: 11px 6px; } .nav-grid .lbl { display: none; } #sumatifScreen .lbl-long { display: none; } #sumatifScreen .pill { padding: 6px 11px; } }
+
+        .num-card { max-width: 540px; }
+        .num-legend { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; font-size: 0.82rem; font-weight: 800; color: var(--muted); margin-bottom: 8px; }
+        .num-legend i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 2px solid #cbd5e1; background: #fff; vertical-align: -2px; margin-right: 5px; }
+        .num-legend i.done { background: var(--primary); border-color: var(--primary); }
+        .num-legend i.cur { border-color: var(--secondary); border-width: 3px; }
+        .num-info { font-weight: 800; color: #b45309; font-size: 0.9rem; margin-bottom: 12px; }
+        .num-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin-bottom: 10px; }
+        @media (max-width: 520px) { .num-grid { grid-template-columns: repeat(7, 1fr); } }
+        .num-btn { height: 40px; border-radius: 10px; border: 2px solid #cbd5e1; background: #fff; font: 700 0.95rem 'Fredoka', sans-serif; color: #475569; cursor: pointer; padding: 0; }
+        .num-btn.done { background: var(--primary); border-color: var(--primary); color: #fff; }
+        .num-btn.cur { outline: 3px solid var(--secondary); outline-offset: 1px; }
+
+        .score-card { background: #fff; border: 2px solid var(--line); border-radius: 24px; padding: 20px; text-align: center; margin-bottom: 16px; }
+        .score-label { font-weight: 800; color: var(--muted); font-size: 0.9rem; }
+        .score-big { font-family: 'Fredoka', sans-serif; font-size: 4.2rem; font-weight: 700; color: var(--primary); line-height: 1.05; }
+        .score-big small { font-size: 1.4rem; color: #94a3b8; margin-left: 4px; }
+        .predikat { display: inline-block; margin: 10px 0 16px; padding: 6px 16px; border-radius: 999px; font-weight: 800; }
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        @media (max-width: 420px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+        .stat { border-radius: 14px; padding: 10px 6px; }
+        .stat b { display: block; font-family: 'Fredoka', sans-serif; font-size: 1.45rem; line-height: 1.15; }
+        .stat span { font-size: 0.8rem; font-weight: 800; }
+        .stat.ok { background: #ecfdf5; color: #047857; }
+        .stat.bad { background: #fef2f2; color: #b91c1c; }
+        .stat.empty { background: #f1f5f9; color: #475569; }
+        .stat.time { background: #fffbeb; color: #b45309; }
+        .sec-row { margin-bottom: 12px; }
+        .sec-head { display: flex; justify-content: space-between; gap: 8px; font-weight: 800; font-size: 0.92rem; color: #334155; margin-bottom: 5px; }
+        .sec-bar { height: 10px; background: #f1f5f9; border-radius: 999px; overflow: hidden; }
+        .sec-bar div { height: 100%; border-radius: 999px; }
+        .sec-tip { margin-top: 6px; background: #fffbeb; border-radius: 12px; padding: 10px 12px; color: #92400e; font-weight: 700; font-size: 0.92rem; line-height: 1.5; }
+        .result-actions { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-bottom: 8px; }
+        .result-meta { text-align: center; color: var(--muted); font-weight: 700; margin-bottom: 16px; }
+
+        .filter-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+        .chip-btn { border: 2px solid var(--line); background: #fff; color: #475569; font: 800 0.9rem 'Nunito', sans-serif; padding: 8px 14px; border-radius: 999px; cursor: pointer; }
+        .chip-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+        .rv-item { background: #fff; border: 2px solid var(--line); border-left-width: 8px; border-radius: 18px; padding: 14px 16px; margin-bottom: 12px; }
+        .rv-item.ok { border-left-color: var(--success); }
+        .rv-item.bad { border-left-color: var(--danger); }
+        .rv-item.empty { border-left-color: #94a3b8; }
+        .rv-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+        .rv-head .q-sec { margin-bottom: 0; }
+        .rv-status { font-weight: 800; font-size: 0.82rem; padding: 3px 10px; border-radius: 999px; }
+        .rv-status.ok { background: #dcfce7; color: #166534; }
+        .rv-status.bad { background: #fee2e2; color: #991b1b; }
+        .rv-status.empty { background: #f1f5f9; color: #475569; }
+        .rv-q { font-weight: 700; line-height: 1.5; margin: 8px 0; }
+        .rv-item .fakta-row { margin: 0 0 8px; }
+        .rv-item .code-monitor { font-size: 0.88rem; padding: 10px 12px; margin: 8px 0; }
+        .rv-opt { display: flex; gap: 8px; align-items: flex-start; padding: 7px 10px; border-radius: 10px; margin: 4px 0; font-weight: 700; font-size: 0.95rem; background: #f8fafc; color: #475569; }
+        .rv-opt .rv-opt-text { flex: 1; min-width: 0; word-break: break-word; }
+        .rv-opt.correct { background: #ecfdf5; color: #065f46; }
+        .rv-opt.chosen-wrong { background: #fef2f2; color: #991b1b; }
+        .rv-tag { font-size: 0.72rem; font-weight: 800; background: rgba(0,0,0,0.07); padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+        .rv-exp { margin-top: 10px; background: #eef2ff; border-radius: 12px; padding: 10px 12px; font-size: 0.93rem; color: #3730a3; line-height: 1.5; font-weight: 600; }
+
+        .toast { position: absolute; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: #1e293b; color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 800; font-size: 0.92rem; opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s; z-index: 80; width: max-content; max-width: 90%; text-align: center; }
+        .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+        @media (max-width: 400px) {
+            .code-monitor { font-size: 0.86rem; padding: 10px 12px; }
+            .btn-bin { font-size: 0.86rem; padding: 10px 5px; }
+            .fb-card { padding: 20px 16px; }
+            .q-text { font-size: 1.04rem; }
+            .opt-btn { font-size: 0.96rem; padding: 10px 12px; }
         }
     </style>
 </head>
@@ -206,50 +398,87 @@
 <div class="app-container">
 
     <!-- SCREEN 1: Menu Utama -->
-    <div id="introScreen" class="screen active" style="justify-content: center; align-items: center;">
-        <div style="font-size: 5rem; margin-bottom: 10px; animation: popIn 1s;">🎮</div>
-        <h1>Petualangan<br>Robo-Code</h1>
-        <p>Pilih kelasmu untuk memulai belajar logika koding!</p>
-        
-        <div style="width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
-            <button class="btn-main" style="background:#10b981; box-shadow:0 6px 0 #047857;" onclick="selectClass(3)">🧒 Kelas 3 SD</button>
-            <button class="btn-main" onclick="selectClass(4)">👦 Kelas 4 SD</button>
-            <button class="btn-main" style="background:var(--secondary); box-shadow:0 6px 0 #be185d;" onclick="selectClass(6)">🧑 Kelas 6 SD</button>
+    <div id="introScreen" class="screen active">
+        <div class="center-wrap">
+            <div class="hero-emoji">🎮</div>
+            <h1>Petualangan<br>Robo-Code</h1>
+            <p>Pilih kelasmu untuk memulai belajar logika koding!</p>
+            <div class="class-list">
+                <button class="btn-main btn-secondary" onclick="selectClass(3)">🧒 Kelas 3 SD</button>
+                <button class="btn-main" onclick="selectClass(4)">👦 Kelas 4 SD</button>
+                <button class="btn-main btn-exam" onclick="selectClass(6)">🧑 Kelas 6 SD</button>
+            </div>
         </div>
     </div>
 
     <!-- SCREEN 2: Menu Kelas -->
     <div id="classMenuScreen" class="screen hidden">
-        <button class="btn-back" onclick="switchScreen('classMenuScreen', 'introScreen')">⬅ Kembali</button>
-        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+        <button class="btn-back" onclick="showScreen('introScreen')">⬅ Kembali</button>
+        <div class="center-wrap">
             <h1 id="classTitle">Kelas ?</h1>
             <p>Apa yang ingin kamu lakukan?</p>
-            
-            <button class="btn-main btn-secondary" onclick="switchScreen('classMenuScreen', 'materialScreen')">📚 Pelajari Materi</button>
-            
-            <div id="menuClass3" style="display:none; width:100%; align-items:center; flex-direction:column; margin-top:10px;">
-                <button class="btn-main" onclick="startDailyGame()">🌞 Game 1: Logika Sehari-hari (50 Soal)</button>
-                <button class="btn-main" style="background:var(--warning); box-shadow:0 6px 0 #b45309;" onclick="startConveyorGame(3, 'easy')">🏭 Game 2: Sortir Mudah (10 Soal)</button>
-            </div>
-            
-            <div id="menuClass4" style="display:none; width:100%; align-items:center; flex-direction:column; margin-top:10px;">
-                <button class="btn-main" onclick="startConveyorGame(4, 'math')">🏭 Game 1: Simbol Matematika (50 Soal)</button>
-                <button class="btn-main" style="background:var(--primary-dark); box-shadow:0 6px 0 #312e81;" onclick="startConveyorGame(4, 'logic')">🚀 Game 2: Logika AND &amp; OR (50 Soal)</button>
-            </div>
 
-            <div id="menuClass6" style="display:none; width:100%; align-items:center; flex-direction:column; margin-top:10px;">
-                <button class="btn-main" onclick="startClass6Game()">🧠 Master Logika Kode (20 Soal)</button>
+            <div class="menu-list">
+                <button class="menu-card" onclick="showScreen('materialScreen')">
+                    <span class="mc-icon" style="background:#d1fae5">📚</span>
+                    <span class="mc-body"><b>Pelajari Materi</b><small>Baca dulu sebelum bermain</small></span>
+                    <span class="mc-arrow">›</span>
+                </button>
+
+                <div id="menuClass3" class="menu-sub">
+                    <div class="menu-group-label">Permainan</div>
+                    <button class="menu-card" onclick="startDailyGame()">
+                        <span class="mc-icon" style="background:#fef3c7">🌞</span>
+                        <span class="mc-body"><b>Game 1: Logika Sehari-hari</b><small>50 soal · 35 menit</small></span>
+                        <span class="mc-arrow">›</span>
+                    </button>
+                    <button class="menu-card" onclick="startConveyorGame(3, 'easy')">
+                        <span class="mc-icon" style="background:#ffedd5">🏭</span>
+                        <span class="mc-body"><b>Game 2: Sortir Mudah</b><small>10 soal · 10 menit</small></span>
+                        <span class="mc-arrow">›</span>
+                    </button>
+                </div>
+
+                <div id="menuClass4" class="menu-sub">
+                    <div class="menu-group-label">Permainan</div>
+                    <button class="menu-card" onclick="startConveyorGame(4, 'math')">
+                        <span class="mc-icon" style="background:#e0e7ff">🏭</span>
+                        <span class="mc-body"><b>Game 1: Simbol Matematika</b><small>50 soal · 35 menit</small></span>
+                        <span class="mc-arrow">›</span>
+                    </button>
+                    <button class="menu-card" onclick="startConveyorGame(4, 'logic')">
+                        <span class="mc-icon" style="background:#ede9fe">🚀</span>
+                        <span class="mc-body"><b>Game 2: Logika AND &amp; OR</b><small>50 soal · 35 menit</small></span>
+                        <span class="mc-arrow">›</span>
+                    </button>
+                    <div class="menu-group-label">Penilaian</div>
+                    <button class="menu-card featured" onclick="openSumatifIntro()">
+                        <span class="mc-icon" style="background:#fce7f3">📝</span>
+                        <span class="mc-body"><b>Ujian Sumatif<span class="mc-badge">BARU</span></b><small><span class="sumatif-count">50</span> soal pilihan ganda · <span class="sumatif-minutes">60</span> menit</small></span>
+                        <span class="mc-arrow">›</span>
+                    </button>
+                </div>
+
+                <div id="menuClass6" class="menu-sub">
+                    <div class="menu-group-label">Permainan</div>
+                    <button class="menu-card" onclick="startClass6Game()">
+                        <span class="mc-icon" style="background:#fce7f3">🧠</span>
+                        <span class="mc-body"><b>Master Logika Kode</b><small id="c6CountLabel">Tanpa batas waktu</small></span>
+                        <span class="mc-arrow">›</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- SCREEN 3: Materi Pembelajaran -->
     <div id="materialScreen" class="screen hidden">
-        <button class="btn-back" onclick="switchScreen('materialScreen', 'classMenuScreen')">⬅ Kembali</button>
-        <h1 style="margin-bottom: 20px;">Materi Logika</h1>
-        
+        <button class="btn-back" onclick="showScreen('classMenuScreen')">⬅ Kembali</button>
+        <h1 style="margin-bottom: 18px;">Materi Logika</h1>
+
+        <div class="wrap-narrow">
         <!-- MATERI KELAS 3 -->
-        <div id="matClass3" style="display:none; padding-bottom: 30px;">
+        <div id="matClass3" style="display:none;">
             <div class="materi-card">
                 <h2>Konsep Dasar JIKA (IF)</h2>
                 <p>Halo! Komputer itu sangat pintar tapi harus diberi perintah yang jelas. Perintah paling dasar adalah <b>JIKA (IF)</b>.</p>
@@ -269,16 +498,18 @@
                     <li><b><span style="color:var(--primary); font-size:1.2rem;">==</span> (Sama Persis)</b>: Angkanya kembar. Contoh: 7 == 7</li>
                 </ul>
             </div>
-            <button class="btn-main" onclick="startDailyGame()">Mainkan Logika JIKA!</button>
+            <div class="materi-actions">
+                <button class="btn-main" onclick="startDailyGame()">Mainkan Logika JIKA!</button>
+            </div>
         </div>
 
         <!-- MATERI KELAS 4 -->
-        <div id="matClass4" style="display:none; padding-bottom: 30px;">
+        <div id="matClass4" style="display:none;">
             <div class="materi-card">
                 <h2>Konsep JIKA - MAKA (If-Else)</h2>
                 <p>Komputer itu ibarat robot penurut. Agar robot bisa mengambil keputusan, kita gunakan aturan <b>JIKA (IF)</b> dan <b>JIKA TIDAK (ELSE)</b>.</p>
                 <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/KmrVYIfcJ74" title="Konsep Dasar Percabangan" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/KmrVYIfcJ74" title="Konsep Dasar Percabangan" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
 
@@ -286,20 +517,18 @@
                 <h2>⚙️ Aturan Mesin Bertingkat (Sangat Penting!)</h2>
                 <p>Bagaimana jika pilihannya lebih dari dua? Mesin akan menggunakan <b>ATAU JIKA (ELSE IF)</b>. Aturan paling penting: <b>Mesin SELALU membaca dari ATAS ke BAWAH.</b></p>
                 <div class="svg-container">
-                    <svg viewBox="0 0 300 250" style="width: 100%; max-width: 300px; height: auto;">
-                        <rect x="50" y="10" width="200" height="40" rx="10" fill="#c678dd"/>
-                        <text x="150" y="35" fill="white" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">1. JIKA (Kondisi 1)</text>
-                        <line x1="150" y1="50" x2="150" y2="80" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
-                        
-                        <rect x="50" y="80" width="200" height="40" rx="10" fill="#e5c07b"/>
-                        <text x="150" y="105" fill="white" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">2. ATAU JIKA (Kondisi 2)</text>
-                        <line x1="150" y1="120" x2="150" y2="150" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
-                        
-                        <rect x="50" y="150" width="200" height="40" rx="10" fill="#e06c75"/>
-                        <text x="150" y="175" fill="white" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">3. JIKA TIDAK (Sisanya)</text>
+                    <svg viewBox="0 0 300 200" style="width: 100%; max-width: 300px; height: auto;">
                         <defs>
                             <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" /></marker>
                         </defs>
+                        <rect x="50" y="10" width="200" height="40" rx="10" fill="#c678dd"/>
+                        <text x="150" y="35" fill="white" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">1. JIKA (Kondisi 1)</text>
+                        <line x1="150" y1="50" x2="150" y2="76" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+                        <rect x="50" y="80" width="200" height="40" rx="10" fill="#e5c07b"/>
+                        <text x="150" y="105" fill="white" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">2. ATAU JIKA (Kondisi 2)</text>
+                        <line x1="150" y1="120" x2="150" y2="146" stroke="#334155" stroke-width="3" marker-end="url(#arrow)"/>
+                        <rect x="50" y="150" width="200" height="40" rx="10" fill="#e06c75"/>
+                        <text x="150" y="175" fill="white" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">3. JIKA TIDAK (Sisanya)</text>
                     </svg>
                 </div>
                 <ul>
@@ -307,7 +536,7 @@
                     <li>Jika Syarat 1 <b>SALAH</b>, mesin baru turun untuk mengecek Syarat 2.</li>
                     <li>Jika semua syarat salah, mesin akan masuk ke keranjang sampah (JIKA TIDAK).</li>
                 </ul>
-                <p style="color: var(--danger); font-weight: bold; text-align: left; background: #fee2e2; padding: 10px; border-radius: 8px;">Jebakan: Jika Syarat 1 dan Syarat 2 sama-sama BENAR, mesin akan TETAP memilih Syarat 1 karena letaknya paling atas!</p>
+                <p style="color: var(--danger); font-weight: bold; background: #fee2e2; padding: 10px 12px; border-radius: 10px; margin: 12px 0 0;">Jebakan: Jika Syarat 1 dan Syarat 2 sama-sama BENAR, mesin akan TETAP memilih Syarat 1 karena letaknya paling atas!</p>
             </div>
 
             <div class="materi-card">
@@ -329,44 +558,49 @@
                 <ul>
                     <li><b style="color:var(--primary-dark); font-size:1.1rem;">AND - Syarat Ketat! 😠</b><br>
                     Semua syarat <b>HARUS BENAR</b>. Kalau ada satu saja yang salah, maka robot akan bilang GAGAL.<br>
-                    <i>Contoh: <code>(Berat > 10) AND (Suhu == 30)</code>. Kalau beratnya sudah pas, tapi suhunya salah, maka mesin TETAP MENOLAK!</i></li>
-                    <br>
-                    <li><b style="color:var(--secondary); font-size:1.1rem;">OR - Syarat Santai~ 😌</b><br>
+                    <i>Contoh: <code>(Berat &gt; 10) AND (Suhu == 30)</code>. Kalau beratnya sudah pas, tapi suhunya salah, maka mesin TETAP MENOLAK!</i></li>
+                    <li style="margin-top:14px;"><b style="color:var(--secondary); font-size:1.1rem;">OR - Syarat Santai~ 😌</b><br>
                     Cukup <b>SALAH SATU</b> syarat saja yang benar, maka robot akan bilang BERHASIL.<br>
-                    <i>Contoh: <code>(Energi == 100) OR (Berat < 50)</code>. Meskipun energi barang belum 100, tapi kalau beratnya kecil, barang itu tetap DITERIMA!</i></li>
+                    <i>Contoh: <code>(Energi == 100) OR (Berat &lt; 50)</code>. Meskipun energi barang belum 100, tapi kalau beratnya kecil, barang itu tetap DITERIMA!</i></li>
                 </ul>
             </div>
 
             <div class="materi-card" style="border-color: var(--danger); background: #fef2f2;">
-                <h2>⚠ AWAS JEBAKAN ANGKA (HOTS) ⚠️</h2>
+                <h2>⚠️ AWAS JEBAKAN ANGKA (HOTS) ⚠️</h2>
                 <p>Jika aturan tertulis <code>Tinggi &gt; 130</code>. Lalu datang anak dengan tinggi <b>pas 130 cm</b>. Apakah dia boleh masuk?</p>
                 <p><b>Jawabannya: TIDAK BOLEH!</b><br>Kenapa? Karena 130 <i>tidak lebih besar</i> dari 130 (angkanya sama). Komputer sangat tegas! Dia akan ditolak (masuk ke cabang JIKA TIDAK).</p>
-                <p>Berbeda jika aturannya <code>Tinggi &gt;= 130</code>. Kalau ada tanda Sama Dengan (<b>=</b>), barulah angka yang pas boleh masuk.</p>
+                <p style="margin-bottom:0;">Berbeda jika aturannya <code>Tinggi &gt;= 130</code>. Kalau ada tanda Sama Dengan (<b>=</b>), barulah angka yang pas boleh masuk.</p>
             </div>
-            
-            <button class="btn-main" onclick="startConveyorGame(4, 'math')" style="margin-bottom: 10px;">Main Game 1: Simbol Matematika</button>
-            <button class="btn-main" style="background:var(--primary-dark); box-shadow:0 6px 0 #312e81;" onclick="startConveyorGame(4, 'logic')">Main Game 2: Logika AND &amp; OR</button>
+
+            <div class="materi-actions">
+                <button class="btn-main" onclick="startConveyorGame(4, 'math')">Main Game 1: Simbol Matematika</button>
+                <button class="btn-main" style="background:var(--primary-dark); box-shadow:0 6px 0 #312e81;" onclick="startConveyorGame(4, 'logic')">Main Game 2: Logika AND &amp; OR</button>
+                <button class="btn-main btn-exam" onclick="openSumatifIntro()">📝 Ikuti Ujian Sumatif</button>
+            </div>
         </div>
-        
+
         <!-- MATERI KELAS 6 -->
-        <div id="matClass6" style="display:none; padding-bottom: 30px;">
+        <div id="matClass6" style="display:none;">
             <div class="materi-card">
                 <h2>Gerbang Logika Lanjutan</h2>
                 <p>Di kelas 6, syarat yang diberikan bisa lebih dari satu di dalam sebuah kondisi JIKA. Kita menggunakan Gerbang Logika <b>AND</b>, <b>OR</b>, serta <b>NOT</b>.</p>
                 <ul>
-                    <li><b>AND:</b> Semua syarat harus BENAR. Jika salah satu saja salah, maka gagal. <br><i>(Contoh: Jika Nilai >= 80 AND Absen == 0)</i></li>
+                    <li><b>AND:</b> Semua syarat harus BENAR. Jika salah satu saja salah, maka gagal. <br><i>(Contoh: Jika Nilai &gt;= 80 AND Absen == 0)</i></li>
                     <li><b>OR:</b> Cukup SATU syarat saja yang BENAR agar kondisi terpenuhi. <br><i>(Contoh: Jika Hujan == Benar OR Sakit == Benar)</i></li>
                     <li><b>NOT:</b> Membalikkan keadaan. Jika awalnya Benar menjadi Salah.<br><i>(Contoh: NOT Sakit, artinya Sehat)</i></li>
                 </ul>
             </div>
-            <button class="btn-main" onclick="startClass6Game()">Mulai Master Logika!</button>
+            <div class="materi-actions">
+                <button class="btn-main" onclick="startClass6Game()">Mulai Master Logika!</button>
+            </div>
+        </div>
         </div>
     </div>
 
     <!-- SCREEN LOGIKA SEHARI-HARI (KELAS 3) -->
     <div id="dailyScreen" class="screen hidden">
-        <button class="btn-back" onclick="switchScreen('dailyScreen', 'classMenuScreen')">⬅ Keluar Game</button>
-        
+        <button class="btn-back" onclick="exitDailyGame()">⬅ Keluar Game</button>
+
         <div class="game-header">
             <div class="pill level-pill">🎫 Soal <span id="dlLvlText">1</span>/50</div>
             <div class="pill timer-pill" id="dlTimerPill">⏳ <span id="dlTimerText">35:00</span></div>
@@ -376,13 +610,12 @@
         <div class="game-body">
             <div class="left-panel">
                 <div class="factory-stage" id="dlStage" style="background:#fef3c7; border-color:#f59e0b;">
-                    <h3 style="margin:0 0 10px; color:var(--text); font-family:'Fredoka'; text-align:center; z-index: 10; background: rgba(255,255,255,0.8); padding: 5px 15px; border-radius: 20px;">Situasi Saat Ini</h3>
-                    
-                    <div class="conveyor-belt" style="background:transparent; border:none; bottom:10px;">
+                    <h3 class="stage-title">Situasi Saat Ini</h3>
+                    <div class="conveyor-belt" style="background:transparent; border:none; bottom:10px; animation:none;">
                         <div class="factory-item" id="dlCharacter" style="border-color:#10b981; min-width:160px;">
                             <div class="f-emoji" id="dlEmoji">🌧️</div>
                             <div class="f-stats" style="background:#d1fae5;">
-                                <div style="justify-content: center; font-size: 1.1rem; padding: 5px; color: var(--primary-dark);" id="dlFakta">Cuaca = Hujan</div>
+                                <div style="justify-content: center; font-size: 1.05rem; padding: 5px; color: var(--primary-dark);" id="dlFakta">Cuaca = Hujan</div>
                             </div>
                         </div>
                     </div>
@@ -390,42 +623,27 @@
             </div>
 
             <div class="right-panel">
-                <div class="code-monitor" id="dlCodeMonitor">
-                    <!-- Rules will be injected here -->
-                </div>
-
-                <div style="text-align: center; font-weight: 800; color: #64748b; margin-bottom: 8px;">Berdasarkan fakta, apa yang dilakukan robot?</div>
-                <div class="bin-grid" id="dlBtnGrid">
-                    <!-- Buttons injected here -->
-                </div>
-            </div>
-        </div>
-
-        <div class="feedback-overlay" id="dlFbOverlay">
-            <div class="fb-card">
-                <div class="fb-icon" id="dlFbIcon">🎉</div>
-                <h2 class="fb-title" id="dlFbTitle">Tepat Sekali!</h2>
-                <div class="fb-text" id="dlFbDesc">Penjelasan diletakkan disini.</div>
-                <button class="btn-main" onclick="nextDailyRound()" style="font-size: 1.1rem; padding: 10px 20px;">Soal Selanjutnya ➡</button>
+                <div class="code-monitor" id="dlCodeMonitor"></div>
+                <div class="ask-label">Berdasarkan fakta, apa yang dilakukan robot?</div>
+                <div class="bin-grid" id="dlBtnGrid"></div>
             </div>
         </div>
     </div>
 
     <!-- SCREEN GAME AREA (PABRIK SORTIR KELAS 3 & 4) -->
     <div id="gameScreen" class="screen hidden">
-        <button class="btn-back" onclick="switchScreen('gameScreen', 'classMenuScreen')">⬅ Keluar Game</button>
-        
+        <button class="btn-back" onclick="exitConveyorGame()">⬅ Keluar Game</button>
+
         <div class="game-header">
-            <div class="pill level-pill">📦 Paket <span id="lvlText">1</span>/50</div>
-            <div class="pill timer-pill" id="timerPill">⏳ <span id="timerText">60:00</span></div>
+            <div class="pill level-pill">📦 Paket <span id="lvlText">1</span>/<span id="lvlMax">50</span></div>
+            <div class="pill timer-pill" id="timerPill">⏳ <span id="timerText">35:00</span></div>
             <div class="pill score-pill">⭐ Skor: <span id="scoreText">0</span></div>
         </div>
 
         <div class="game-body">
             <div class="left-panel">
                 <div class="factory-stage" id="factoryStage">
-                    <h3 style="margin:0 0 10px; color:var(--text); font-family:'Fredoka'; text-align:center; z-index: 10; background: rgba(255,255,255,0.8); padding: 5px 15px; border-radius: 20px;">Inspeksi Barang</h3>
-                    
+                    <h3 class="stage-title">Inspeksi Barang</h3>
                     <div class="conveyor-belt">
                         <div class="factory-item" id="fItem">
                             <div class="f-emoji" id="fEmoji">📦</div>
@@ -440,11 +658,8 @@
             </div>
 
             <div class="right-panel">
-                <div class="code-monitor" id="codeMonitor">
-                    <!-- Code lines will be injected here -->
-                </div>
-
-                <div style="text-align: center; font-weight: 800; color: #64748b; margin-bottom: 8px;">Tebak, kemana mesin membuang barang ini?</div>
+                <div class="code-monitor" id="codeMonitor"></div>
+                <div class="ask-label">Tebak, ke mana mesin membuang barang ini?</div>
                 <div class="bin-grid three-bins" id="binGrid">
                     <button class="btn-bin btn-merah" onclick="checkBin('merah')"><span class="bin-icon">🔴</span> Pipa Merah</button>
                     <button class="btn-bin btn-biru" onclick="checkBin('biru')"><span class="bin-icon">🔵</span> Pipa Biru</button>
@@ -452,97 +667,280 @@
                 </div>
             </div>
         </div>
-
-        <div class="feedback-overlay" id="fbOverlay">
-            <div class="fb-card">
-                <div class="fb-icon" id="fbIcon">🎉</div>
-                <h2 class="fb-title" id="fbTitle">Tepat Sekali!</h2>
-                <div class="fb-text" id="fbDesc">Penjelasan diletakkan disini.</div>
-                <button class="btn-main" onclick="nextRound()" style="font-size: 1.1rem; padding: 10px 20px;">Lanjut Paket ➡</button>
-            </div>
-        </div>
     </div>
 
     <!-- SCREEN KELAS 6 (MASTER LOGIKA) -->
     <div id="class6Screen" class="screen hidden">
-        <button class="btn-back" onclick="switchScreen('class6Screen', 'classMenuScreen')">⬅ Keluar Game</button>
-        
+        <button class="btn-back" onclick="exitClass6Game()">⬅ Keluar Game</button>
+
         <div class="game-header">
-            <div class="pill level-pill" id="c6LvlText">Level 1/20</div>
+            <div class="pill level-pill" id="c6LvlText">Level 1</div>
             <div class="pill score-pill" id="c6ScoreText">⭐ Skor: 0</div>
         </div>
 
         <div class="game-body">
             <div class="left-panel">
-                <div class="factory-stage" style="background:#f8fafc; border: 2px dashed #cbd5e1; justify-content: center; min-height: 180px;">
-                    <div style="font-size: 3.5rem; z-index: 2;" id="c6Emoji">🌧️</div>
-                    <div style="margin-top: 10px; font-weight: 800; color: #475569; background: white; padding: 8px 16px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;" id="c6Condition">Kondisi</div>
+                <div class="factory-stage" style="background:#f8fafc; border: 2px dashed #cbd5e1; justify-content: center; min-height: 190px;">
+                    <div style="font-size: 3.5rem; z-index: 2; line-height:1;" id="c6Emoji">🌧️</div>
+                    <div style="margin-top: 12px; font-weight: 800; color: #475569; background: white; padding: 8px 16px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-align: center;" id="c6Condition">Kondisi</div>
                 </div>
             </div>
 
             <div class="right-panel">
-                <div class="code-monitor" id="c6CodeMonitor" style="margin-bottom: 10px;">
-                    <!-- Code Editor Area -->
-                </div>
-                <div class="bin-grid" id="c6Options" style="grid-template-columns: 1fr 1fr;">
-                    <!-- Options injected here -->
-                </div>
-            </div>
-        </div>
-
-        <div class="feedback-overlay" id="c6FbOverlay">
-            <div class="fb-card">
-                <div class="fb-icon" id="c6FbIcon">🎉</div>
-                <h2 class="fb-title" id="c6FbTitle">Hebat!</h2>
-                <div class="fb-text" id="c6FbDesc">Penjelasan diletakkan disini.</div>
-                <button class="btn-main" onclick="nextClass6Round()" style="font-size: 1.1rem; padding: 10px 20px;">Lanjut Level ➡</button>
+                <div class="code-monitor" id="c6CodeMonitor"></div>
+                <div class="ask-label">Pilih perintah yang tepat untuk mengisi ???</div>
+                <div class="bin-grid" id="c6Options"></div>
             </div>
         </div>
     </div>
 
-    <!-- SCREEN RESULT -->
-    <div id="resultScreen" class="screen hidden" style="justify-content: center; align-items: center;">
-        <div style="font-size: 5rem; margin-bottom: 20px;" id="resultIcon">🏆</div>
-        <h1 id="resultTitle">Misi Selesai!</h1>
-        <p id="resultDesc">Tugasmu telah berakhir.</p>
-        <div style="background: rgba(255,255,255,0.8); padding: 20px 40px; border-radius: 20px; border: 2px dashed #cbd5e1; margin-bottom: 20px; text-align: center;">
-            <h3 style="margin:0; color:#64748b;">Skor Akhir (Maks: 100)</h3>
-            <h1 style="font-size:4.5rem; color:var(--primary); margin:10px 0;"> <span id="finalScore">100</span></h1>
+    <!-- SCREEN RESULT (GAME) -->
+    <div id="resultScreen" class="screen hidden">
+        <div class="center-wrap">
+            <div class="hero-emoji" id="resultIcon">🏆</div>
+            <h1 id="resultTitle">Misi Selesai!</h1>
+            <p id="resultDesc">Tugasmu telah berakhir.</p>
+            <div class="result-box">
+                <h3>Skor Akhir (Maks: 100)</h3>
+                <div class="big" id="finalScore">100</div>
+            </div>
+            <button class="btn-main" onclick="goHome()">Kembali ke Menu 🏠</button>
         </div>
-        <button class="btn-main" onclick="location.reload()">Kembali ke Menu 🏠</button>
     </div>
 
+    <!-- ================= UJIAN SUMATIF KELAS 4 ================= -->
+    <div id="sumatifIntroScreen" class="screen hidden">
+        <button class="btn-back" onclick="showScreen('classMenuScreen')">⬅ Kembali</button>
+        <div class="center-wrap">
+            <div class="hero-emoji">📝</div>
+            <h1>Ujian Sumatif<br>Logika Kelas 4</h1>
+            <p style="max-width:480px;">Uji semua yang sudah kamu pelajari: JIKA, tanda perbandingan, ATAU JIKA, serta AND &amp; OR.</p>
+
+            <div class="info-grid">
+                <div class="info-chip"><b class="sumatif-count">50</b><span>Soal pilihan ganda</span></div>
+                <div class="info-chip"><b class="sumatif-minutes">60</b><span>Menit</span></div>
+                <div class="info-chip"><b>100</b><span>Nilai maksimal</span></div>
+            </div>
+
+            <div class="panel-card">
+                <h3>📋 Aturan Ujian</h3>
+                <ul>
+                    <li>Jawaban <b>tidak langsung dinilai</b>. Nilai dan pembahasan muncul setelah kamu menekan <b>Kumpulkan</b>.</li>
+                    <li>Kamu boleh pindah soal dan mengganti jawaban sebelum dikumpulkan.</li>
+                    <li>Jika waktu habis, jawaban otomatis dikumpulkan.</li>
+                </ul>
+            </div>
+
+            <div id="resumeBox" class="resume-box" style="display:none;"></div>
+
+            <div class="panel-card">
+                <label class="field">Nama Lengkap
+                    <input id="exNama" type="text" maxlength="40" autocomplete="off" placeholder="Tulis namamu" onkeydown="if(event.key==='Enter') startSumatif()">
+                </label>
+                <label class="field">No. Absen <span style="font-weight:600; color:#94a3b8;">(boleh dikosongkan)</span>
+                    <input id="exAbsen" type="text" inputmode="numeric" maxlength="3" autocomplete="off" placeholder="Contoh: 12" onkeydown="if(event.key==='Enter') startSumatif()">
+                </label>
+                <div class="form-err" id="exFormErr"></div>
+            </div>
+
+            <button class="btn-main btn-exam" onclick="startSumatif()">Mulai Ujian 🚀</button>
+        </div>
+    </div>
+
+    <div id="sumatifScreen" class="screen hidden">
+        <div class="exam-top">
+            <button class="btn-back" onclick="exitSumatifRequest()">⬅ Keluar</button>
+            <div class="exam-student" id="exStudent">👤</div>
+        </div>
+        <div class="game-header">
+            <div class="pill level-pill">📝 Soal <span id="exNo">1</span>/<span id="exTotal">50</span></div>
+            <div class="pill timer-pill" id="exTimerPill">⏳ <span id="exTimerText">60:00</span></div>
+            <div class="pill score-pill">✅ <span class="lbl-long">Terjawab </span><span id="exAnswered">0</span>/<span class="sumatif-count">50</span></div>
+        </div>
+        <div class="ex-progress"><div id="exProgressBar"></div></div>
+
+        <div class="exam-body" id="examBody">
+            <div class="exam-inner">
+                <div class="q-card">
+                    <span class="q-sec" id="exSec">Bagian A</span>
+                    <div class="q-text" id="exQ"></div>
+                    <div class="fakta-row" id="exFakta"></div>
+                    <div class="code-monitor" id="exCode"></div>
+                </div>
+                <div class="opt-list" id="exOpts"></div>
+            </div>
+        </div>
+
+        <div class="exam-nav">
+            <button class="nav-btn" id="exPrev" onclick="prevQ()">⬅ Kembali</button>
+            <button class="nav-btn nav-grid" onclick="openNumGrid()">🔢<span class="lbl"> Daftar</span></button>
+            <button class="nav-btn nav-next" id="exNext" onclick="nextQ()">Lanjut ➡</button>
+        </div>
+    </div>
+
+    <div id="sumatifResultScreen" class="screen hidden">
+        <div class="wrap-narrow">
+            <div style="text-align:center;">
+                <div class="hero-emoji" id="srIcon">🏆</div>
+                <h1 id="srTitle">Ujian Selesai!</h1>
+                <div class="result-meta" id="srName"></div>
+            </div>
+
+            <div class="score-card">
+                <div class="score-label">NILAI AKHIR</div>
+                <div class="score-big"><span id="srScore">0</span><small>/100</small></div>
+                <div class="predikat" id="srPredikat">Baik</div>
+                <div class="stat-grid">
+                    <div class="stat ok"><b id="srBenar">0</b><span>Benar</span></div>
+                    <div class="stat bad"><b id="srSalah">0</b><span>Salah</span></div>
+                    <div class="stat empty"><b id="srKosong">0</b><span>Kosong</span></div>
+                    <div class="stat time"><b id="srWaktu">0</b><span>Waktu</span></div>
+                </div>
+            </div>
+
+            <div class="materi-card">
+                <h2>📊 Hasil per Bagian</h2>
+                <div id="srSections"></div>
+            </div>
+
+            <div class="result-actions">
+                <button class="btn-main btn-secondary" onclick="openReview()">📖 Lihat Pembahasan</button>
+                <button class="btn-main" onclick="copyResult()">📋 Salin Hasil untuk Guru</button>
+                <button class="btn-main btn-ghost" onclick="goHome()">🏠 Kembali ke Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="reviewScreen" class="screen hidden">
+        <button class="btn-back" onclick="showScreen('sumatifResultScreen')">⬅ Kembali ke Hasil</button>
+        <h1>Pembahasan Soal</h1>
+        <div class="filter-row">
+            <button class="chip-btn active" data-f="all" onclick="filterReview('all')">Semua Soal</button>
+            <button class="chip-btn" data-f="wrong" onclick="filterReview('wrong')">Salah &amp; Kosong (<span id="wrongCount">0</span>)</button>
+        </div>
+        <div class="wrap-narrow" id="reviewList"></div>
+    </div>
+
+    <!-- ================= POPUP ================= -->
+    <div class="feedback-overlay" id="dlFbOverlay">
+        <div class="fb-card">
+            <div class="fb-icon" id="dlFbIcon">🎉</div>
+            <h2 class="fb-title" id="dlFbTitle">Tepat Sekali!</h2>
+            <div class="fb-text" id="dlFbDesc">Penjelasan diletakkan di sini.</div>
+            <button class="btn-main" onclick="nextDailyRound()">Soal Selanjutnya ➡</button>
+        </div>
+    </div>
+
+    <div class="feedback-overlay" id="fbOverlay">
+        <div class="fb-card">
+            <div class="fb-icon" id="fbIcon">🎉</div>
+            <h2 class="fb-title" id="fbTitle">Tepat Sekali!</h2>
+            <div class="fb-text" id="fbDesc">Penjelasan diletakkan di sini.</div>
+            <button class="btn-main" onclick="nextRound()">Lanjut Paket ➡</button>
+        </div>
+    </div>
+
+    <div class="feedback-overlay" id="c6FbOverlay">
+        <div class="fb-card">
+            <div class="fb-icon" id="c6FbIcon">🎉</div>
+            <h2 class="fb-title" id="c6FbTitle">Hebat!</h2>
+            <div class="fb-text" id="c6FbDesc">Penjelasan diletakkan di sini.</div>
+            <button class="btn-main" onclick="nextClass6Round()">Lanjut Level ➡</button>
+        </div>
+    </div>
+
+    <div class="feedback-overlay" id="numOverlay" onclick="if (event.target === this) closeNumGrid()">
+        <div class="fb-card num-card">
+            <h2 class="fb-title" style="color:var(--primary);">Daftar Soal</h2>
+            <div class="num-legend"><span><i class="done"></i>Sudah dijawab</span><span><i></i>Belum</span><span><i class="cur"></i>Sedang dibuka</span></div>
+            <div class="num-info" id="numInfo"></div>
+            <div class="num-grid" id="numGrid"></div>
+            <div class="cf-actions">
+                <button class="btn-main btn-ghost" onclick="closeNumGrid()">Tutup</button>
+                <button class="btn-main btn-exam" onclick="closeNumGrid(); requestSubmit();">📤 Kumpulkan</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="feedback-overlay" id="confirmOverlay">
+        <div class="fb-card">
+            <div class="fb-icon" id="cfIcon">🤔</div>
+            <h2 class="fb-title" id="cfTitle" style="color:var(--text);">Yakin?</h2>
+            <p class="cf-text" id="cfText"></p>
+            <div class="cf-actions">
+                <button class="btn-main btn-ghost" id="cfCancel">Batal</button>
+                <button class="btn-main" id="cfOk">Ya</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
 </div>
 
 <script>
+    // =====================================================
+    //  NAVIGASI & UTILITAS UMUM
+    // =====================================================
     let activeClass = 4;
-    
-    function switchScreen(hideId, showId) {
-        const hideEl = document.getElementById(hideId);
-        const showEl = document.getElementById(showId);
-        hideEl.classList.remove('active'); hideEl.classList.add('left');
-        showEl.classList.remove('hidden', 'left');
-        setTimeout(() => { hideEl.classList.add('hidden'); showEl.classList.add('active'); }, 100);
+    const $ = id => document.getElementById(id);
+    const isActive = id => $(id).classList.contains('active');
+
+    function hideAllOverlays() {
+        document.querySelectorAll('.feedback-overlay.show').forEach(o => o.classList.remove('show'));
     }
+
+    function showScreen(showId) {
+        hideAllOverlays();
+        document.querySelectorAll('.screen').forEach(el => {
+            if (el.id === showId || !el.classList.contains('active')) return;
+            el.classList.remove('active');
+            el.classList.add('left');
+            setTimeout(() => {
+                if (!el.classList.contains('active')) { el.classList.remove('left'); el.classList.add('hidden'); }
+            }, 420);
+        });
+        const showEl = $(showId);
+        showEl.classList.remove('hidden', 'left');
+        showEl.classList.add('active');
+        showEl.scrollTop = 0;
+    }
+
+    // Tetap disediakan agar pemanggilan lama tidak error
+    function switchScreen(hideId, showId) { showScreen(showId); }
 
     function selectClass(cls) {
         activeClass = cls;
-        document.getElementById('classTitle').innerText = `Kelas ${cls} SD`;
-        
-        // Atur Materi
-        document.getElementById('matClass3').style.display = cls === 3 ? 'block' : 'none';
-        document.getElementById('matClass4').style.display = cls === 4 ? 'block' : 'none';
-        document.getElementById('matClass6').style.display = cls === 6 ? 'block' : 'none';
-        
-        // Atur Menu Game
-        document.getElementById('menuClass3').style.display = cls === 3 ? 'flex' : 'none';
-        document.getElementById('menuClass4').style.display = cls === 4 ? 'flex' : 'none';
-        document.getElementById('menuClass6').style.display = cls === 6 ? 'flex' : 'none';
-        
-        switchScreen('introScreen', 'classMenuScreen');
+        $('classTitle').innerText = `Kelas ${cls} SD`;
+        [3, 4, 6].forEach(c => {
+            $('matClass' + c).style.display = (c === cls) ? 'block' : 'none';
+            $('menuClass' + c).style.display = (c === cls) ? 'flex' : 'none';
+        });
+        showScreen('classMenuScreen');
     }
 
-    // --- GAME ENGINE: LOGIKA SEHARI-HARI (CLASS 3) ---
+    function goHome() { showScreen('introScreen'); }
+
+    function fmtTime(sec) {
+        const m = Math.floor(sec / 60), s = sec % 60;
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+    function resetTimerPill(id) { const el = $(id); el.style.background = ''; el.style.color = ''; el.classList.remove('shake-anim'); }
+    function warnTimerPill(id) { const el = $(id); el.style.background = 'var(--danger)'; el.style.color = 'white'; el.classList.add('shake-anim'); }
+    function codeTitle(t) { return `<div class="code-title"><span class="dots"><i></i><i></i><i></i></span>${t}</div>`; }
+
+    function showResult({ title, color, icon, desc, score, confetti }) {
+        $('resultTitle').innerText = title;
+        $('resultTitle').style.color = color;
+        $('resultIcon').innerText = icon;
+        $('resultDesc').innerText = desc;
+        $('finalScore').innerText = Math.max(0, score);
+        showScreen('resultScreen');
+        if (confetti) createConfetti();
+    }
+
+    // =====================================================
+    //  GAME ENGINE: LOGIKA SEHARI-HARI (KELAS 3)
+    // =====================================================
     let dlCurrentRound = 1;
     let dlScore = 0;
     let dlTimeRemaining = 35 * 60;
@@ -568,101 +966,91 @@
     function startDlTimer() {
         clearInterval(dlTimerInterval);
         dlTimeRemaining = 35 * 60;
+        resetTimerPill('dlTimerPill');
         updateDlTimerDisplay();
         dlTimerInterval = setInterval(() => {
             dlTimeRemaining--;
             updateDlTimerDisplay();
-            if (dlTimeRemaining < 180) {
-                document.getElementById('dlTimerPill').style.background = "var(--danger)";
-                document.getElementById('dlTimerPill').style.color = "white";
-                document.getElementById('dlTimerPill').classList.add('shake-anim');
-            }
+            if (dlTimeRemaining < 180) warnTimerPill('dlTimerPill');
             if (dlTimeRemaining <= 0) { clearInterval(dlTimerInterval); endDlGame(true); }
         }, 1000);
     }
-    
-    function updateDlTimerDisplay() {
-        let m = Math.floor(dlTimeRemaining / 60);
-        let s = dlTimeRemaining % 60;
-        document.getElementById('dlTimerText').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    }
+
+    function updateDlTimerDisplay() { $('dlTimerText').innerText = fmtTime(Math.max(0, dlTimeRemaining)); }
 
     function startDailyGame() {
         dlCurrentRound = 1;
         dlScore = 0;
         clearTimeout(dlMoveTimeout);
-        
-        const activeScreens = document.querySelectorAll('.screen.active');
-        activeScreens.forEach(el => { el.classList.remove('active'); el.classList.add('left'); setTimeout(() => el.classList.add('hidden'), 100); });
-        
-        const gs = document.getElementById('dailyScreen');
-        gs.classList.remove('hidden', 'left');
-        setTimeout(() => gs.classList.add('active'), 100);
-        
+        showScreen('dailyScreen');
         startDlTimer();
         loadDailyRound();
     }
 
+    function exitDailyGame() {
+        clearInterval(dlTimerInterval);
+        clearTimeout(dlMoveTimeout);
+        showScreen('classMenuScreen');
+    }
+
     function loadDailyRound() {
-        document.getElementById('dlFbOverlay').classList.remove('show');
+        $('dlFbOverlay').classList.remove('show');
         document.querySelectorAll('#dlBtnGrid .btn-bin').forEach(b => b.classList.remove('disabled'));
         clearTimeout(dlMoveTimeout);
-        
+
         if (dlCurrentRound > 50) { endDlGame(false); return; }
 
         generateDailyData();
-        
-        document.getElementById('dlLvlText').innerText = dlCurrentRound;
-        document.getElementById('dlScoreText').innerText = dlScore;
-        
-        const fItem = document.getElementById('dlCharacter');
+
+        $('dlLvlText').innerText = dlCurrentRound;
+        $('dlScoreText').innerText = dlScore;
+
+        const fItem = $('dlCharacter');
         fItem.style.transition = 'none';
-        fItem.style.left = '-200px'; 
+        fItem.style.left = '-200px';
         fItem.style.opacity = '1';
-        void fItem.offsetWidth; 
+        void fItem.offsetWidth;
         fItem.style.transition = 'left 15s linear';
         fItem.style.left = '100%';
-        
+
         dlMoveTimeout = setTimeout(() => { handleDlMissed(); }, 15000);
     }
 
     function generateDailyData() {
         dlCurrentScenario = dailyScenarios[Math.floor(Math.random() * dailyScenarios.length)];
-        dlConditionMet = Math.random() > 0.5; // 50% chance situasi sesuai syarat
+        dlConditionMet = Math.random() > 0.5; // 50% kemungkinan situasi sesuai syarat
 
-        document.getElementById('dlEmoji').innerText = dlConditionMet ? dlCurrentScenario.emojiTrue : dlCurrentScenario.emojiFalse;
-        document.getElementById('dlFakta').innerText = `${dlCurrentScenario.prop} = ${dlConditionMet ? dlCurrentScenario.val : dlCurrentScenario.valFalse}`;
+        $('dlEmoji').innerText = dlConditionMet ? dlCurrentScenario.emojiTrue : dlCurrentScenario.emojiFalse;
+        $('dlFakta').innerText = `${dlCurrentScenario.prop} = ${dlConditionMet ? dlCurrentScenario.val : dlCurrentScenario.valFalse}`;
 
         dlExpected = dlConditionMet ? 'TRUE' : 'FALSE';
 
-        const codeDiv = document.getElementById('dlCodeMonitor');
-        codeDiv.innerHTML = `
-        <div style="color:#64748b; font-size:0.8rem; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:5px;">// PROGRAM AKTIVITAS ROBOT</div>
+        $('dlCodeMonitor').innerHTML = `
+        ${codeTitle('PROGRAM AKTIVITAS ROBOT')}
         <div class="code-line"><span class="kw-if">JIKA</span> ( <span class="kw-cond">${dlCurrentScenario.prop} == ${dlCurrentScenario.val}</span> ) {</div>
         <div class="code-line" style="padding-left: 20px;"><span class="kw-act">${dlCurrentScenario.actTrue.replace(/ /g, '_')}();</span></div>
         <div class="code-line">} <span class="kw-else">JIKA TIDAK</span> {</div>
         <div class="code-line" style="padding-left: 20px;"><span class="kw-act">${dlCurrentScenario.actFalse.replace(/ /g, '_')}();</span></div>
         <div class="code-line">}</div>`;
 
-        const btnGrid = document.getElementById('dlBtnGrid');
-        let btnTrue = `<button class="btn-bin btn-biru" onclick="checkDailyLogic('TRUE')"><span class="bin-icon">${dlCurrentScenario.iconTrue}</span> ${dlCurrentScenario.actTrue}</button>`;
-        let btnFalse = `<button class="btn-bin btn-merah" onclick="checkDailyLogic('FALSE')"><span class="bin-icon">${dlCurrentScenario.iconFalse}</span> ${dlCurrentScenario.actFalse}</button>`;
-        
+        const btnGrid = $('dlBtnGrid');
+        const btnTrue = `<button class="btn-bin btn-biru" onclick="checkDailyLogic('TRUE')"><span class="bin-icon">${dlCurrentScenario.iconTrue}</span> ${dlCurrentScenario.actTrue}</button>`;
+        const btnFalse = `<button class="btn-bin btn-merah" onclick="checkDailyLogic('FALSE')"><span class="bin-icon">${dlCurrentScenario.iconFalse}</span> ${dlCurrentScenario.actFalse}</button>`;
+
         // Acak posisi tombol agar pemain tidak hafal
-        if (Math.random() > 0.5) btnGrid.innerHTML = btnTrue + btnFalse;
-        else btnGrid.innerHTML = btnFalse + btnTrue;
+        btnGrid.innerHTML = Math.random() > 0.5 ? btnTrue + btnFalse : btnFalse + btnTrue;
     }
 
     function checkDailyLogic(ans) {
-        clearTimeout(dlMoveTimeout); 
-        const fItem = document.getElementById('dlCharacter');
+        clearTimeout(dlMoveTimeout);
+        const fItem = $('dlCharacter');
         fItem.style.transition = 'none';
         fItem.style.left = window.getComputedStyle(fItem).left;
 
         document.querySelectorAll('#dlBtnGrid .btn-bin').forEach(b => b.classList.add('disabled'));
-        
+
         const isCorrect = (ans === dlExpected);
-        
+
         let text = `Fakta saat ini: ${dlCurrentScenario.prop} = ${dlConditionMet ? dlCurrentScenario.val : dlCurrentScenario.valFalse}.\n\n`;
         if (dlConditionMet) {
             text += `Karena syarat BENAR, maka robot masuk ke cabang JIKA dan memilih: ${dlCurrentScenario.actTrue}.`;
@@ -674,32 +1062,30 @@
             dlScore += 2;
             showDlFeedback(true, "Logika yang bagus!\n\n" + text);
         } else {
-            document.getElementById('dlStage').classList.add('shake-anim');
-            setTimeout(() => document.getElementById('dlStage').classList.remove('shake-anim'), 400);
+            $('dlStage').classList.add('shake-anim');
+            setTimeout(() => $('dlStage').classList.remove('shake-anim'), 400);
             showDlFeedback(false, "Keputusanmu keliru!\n\n" + text);
         }
     }
 
     function handleDlMissed() {
         dlScore = Math.max(0, dlScore - 1);
-        dlTimeRemaining -= 5;
-        if (dlTimeRemaining < 0) dlTimeRemaining = 0;
+        dlTimeRemaining = Math.max(0, dlTimeRemaining - 5);
         updateDlTimerDisplay();
-        document.getElementById('dlScoreText').innerText = dlScore;
-        
+        $('dlScoreText').innerText = dlScore;
+
         document.querySelectorAll('#dlBtnGrid .btn-bin').forEach(b => b.classList.add('disabled'));
-        document.getElementById('dlCharacter').style.opacity = '0'; 
-        
+        $('dlCharacter').style.opacity = '0';
+
         showDlFeedback(false, "Situasi terlewat karena terlalu lama berpikir! Skor -1, Waktu -5 detik.");
-        document.getElementById('dlFbTitle').innerText = "Waktu Habis!";
+        $('dlFbTitle').innerText = "Waktu Habis!";
     }
 
     function showDlFeedback(isSuccess, desc) {
-        const title = document.getElementById('dlFbTitle');
-        const icon = document.getElementById('dlFbIcon');
+        const title = $('dlFbTitle');
+        const icon = $('dlFbIcon');
         const btn = document.querySelector('#dlFbOverlay .btn-main');
 
-        btn.style.display = 'inline-flex'; 
         if (isSuccess) {
             title.innerText = "Keputusan Tepat!"; title.style.color = "var(--success)"; icon.innerText = "🎉";
             btn.style.background = "var(--success)"; btn.style.boxShadow = "0 6px 0 #059669";
@@ -707,59 +1093,44 @@
             title.innerText = "Kurang Tepat!"; title.style.color = "var(--danger)"; icon.innerText = "💥";
             btn.style.background = "var(--warning)"; btn.style.boxShadow = "0 6px 0 #b45309";
         }
-        document.getElementById('dlFbDesc').innerText = desc;
-        
-        if (dlCurrentRound === 50) btn.innerText = "Lihat Laporan Akhir 🏆";
-        else btn.innerText = "Soal Selanjutnya ➡";
-        
-        setTimeout(() => document.getElementById('dlFbOverlay').classList.add('show'), 600);
+        $('dlFbDesc').innerText = desc;
+        btn.innerText = (dlCurrentRound === 50) ? "Lihat Laporan Akhir 🏆" : "Soal Selanjutnya ➡";
+
+        setTimeout(() => { if (isActive('dailyScreen')) $('dlFbOverlay').classList.add('show'); }, 600);
     }
-    
+
     function nextDailyRound() {
         dlCurrentRound++;
         loadDailyRound();
     }
 
     function endDlGame(isTimeout) {
-        clearInterval(dlTimerInterval); 
-        clearTimeout(dlMoveTimeout); 
-        switchScreen('dailyScreen', 'resultScreen');
-        document.getElementById('finalScore').innerText = dlScore;
-        
-        const title = document.getElementById('resultTitle');
-        const desc = document.getElementById('resultDesc');
-        const icon = document.getElementById('resultIcon');
-        
+        clearInterval(dlTimerInterval);
+        clearTimeout(dlMoveTimeout);
         if (isTimeout) {
-            title.innerText = "Waktu Habis!";
-            title.style.color = "var(--danger)";
-            icon.innerText = "⏰";
-            desc.innerText = `Kamu kehabisan waktu di Soal ke-${dlCurrentRound}.`;
+            showResult({ title: "Waktu Habis!", color: "var(--danger)", icon: "⏰", desc: `Kamu kehabisan waktu di Soal ke-${dlCurrentRound}.`, score: dlScore, confetti: false });
         } else {
-            title.innerText = "Misi Selesai!";
-            title.style.color = "var(--primary)";
-            icon.innerText = "🏆";
-            desc.innerText = `Luar biasa! Kamu berhasil menjawab 50 soal logika sehari-hari dengan skor ${dlScore}/100.`;
-            if(dlScore >= 80) createConfetti();
+            showResult({ title: "Misi Selesai!", color: "var(--primary)", icon: "🏆", desc: `Luar biasa! Kamu berhasil menjawab 50 soal logika sehari-hari dengan skor ${dlScore}/100.`, score: dlScore, confetti: dlScore >= 80 });
         }
     }
 
-
-    // --- GAME ENGINE: PABRIK SORTIR (CLASS 3 & 4) ---
+    // =====================================================
+    //  GAME ENGINE: PABRIK SORTIR (KELAS 3 & 4)
+    // =====================================================
     let conveyorMode = 'easy'; // 'easy', 'math', 'logic'
-    let CONVEYOR_MAX_ROUNDS = 50; 
+    let CONVEYOR_MAX_ROUNDS = 50;
     let currentRound = 1;
     let score = 0;
-    let timeRemaining = 35 * 60; 
+    let timeRemaining = 35 * 60;
     let timerInterval;
-    let moveTimeout; 
-    let penaltyTimeout; 
+    let moveTimeout;
+    let penaltyTimeout;
     let currentItem = {};
     let rules = [];
-    let expectedBin = ''; 
-    let matchedRuleIndex = 0; 
+    let expectedBin = '';
+    let matchedRuleIndex = 0;
 
-    const emojis = ["📦", "🛢️️", "💎", "🧪", "🧱", "⚙️", "🔋"];
+    const emojis = ["📦", "🛢️", "💎", "🧪", "🧱", "⚙️", "🔋"];
     const propsAvailable = ['Berat', 'Suhu', 'Energi'];
 
     function startConveyorGame(cls, mode) {
@@ -769,43 +1140,38 @@
         score = 0;
         clearTimeout(moveTimeout);
         clearTimeout(penaltyTimeout);
+        $('lvlMax').innerText = CONVEYOR_MAX_ROUNDS;
 
-        const activeScreens = document.querySelectorAll('.screen.active');
-        activeScreens.forEach(el => { el.classList.remove('active'); el.classList.add('left'); setTimeout(() => el.classList.add('hidden'), 100); });
-        
-        const gs = document.getElementById('gameScreen');
-        gs.classList.remove('hidden', 'left');
-        setTimeout(() => gs.classList.add('active'), 100);
-        
-        startTimer(mode === 'easy' ? 10 : 35); 
+        showScreen('gameScreen');
+        startTimer(mode === 'easy' ? 10 : 35);
         loadRound();
+    }
+
+    function exitConveyorGame() {
+        clearInterval(timerInterval);
+        clearTimeout(moveTimeout);
+        clearTimeout(penaltyTimeout);
+        showScreen('classMenuScreen');
     }
 
     function startTimer(minutes) {
         clearInterval(timerInterval);
         timeRemaining = minutes * 60;
+        resetTimerPill('timerPill');
         updateTimerDisplay();
-        
+
         timerInterval = setInterval(() => {
             timeRemaining--;
             updateTimerDisplay();
-            if (timeRemaining < 180) {
-                document.getElementById('timerPill').style.background = "var(--danger)";
-                document.getElementById('timerPill').style.color = "white";
-                document.getElementById('timerPill').classList.add('shake-anim');
-            }
+            if (timeRemaining < 180) warnTimerPill('timerPill');
             if (timeRemaining <= 0) {
                 clearInterval(timerInterval);
-                endGame(true); 
+                endGame(true);
             }
         }, 1000);
     }
 
-    function updateTimerDisplay() {
-        let m = Math.floor(timeRemaining / 60);
-        let s = timeRemaining % 60;
-        document.getElementById('timerText').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    }
+    function updateTimerDisplay() { $('timerText').innerText = fmtTime(Math.max(0, timeRemaining)); }
 
     function evalCondition(val, op, limit) {
         if (op === '>') return val > limit;
@@ -821,7 +1187,7 @@
         if (rule.type === 'else') return true;
         let result = evalCondition(currentItem[rule.conds[0].prop], rule.conds[0].op, rule.conds[0].val);
         for (let i = 0; i < rule.logOps.length; i++) {
-            let nextRes = evalCondition(currentItem[rule.conds[i+1].prop], rule.conds[i+1].op, rule.conds[i+1].val);
+            const nextRes = evalCondition(currentItem[rule.conds[i + 1].prop], rule.conds[i + 1].op, rule.conds[i + 1].val);
             if (rule.logOps[i] === 'AND') result = result && nextRes;
             if (rule.logOps[i] === 'OR') result = result || nextRes;
         }
@@ -829,31 +1195,29 @@
     }
 
     function buildConditions(numConds) {
-        let conds = [];
-        let logOps = [];
-        let availProps = [...propsAvailable];
+        const conds = [];
+        const logOps = [];
+        const availProps = [...propsAvailable];
         const opList = (conveyorMode === 'easy') ? ['>', '<', '=='] : ['>', '<', '>=', '<=', '==', '!='];
-        
-        for(let i=0; i < numConds; i++) {
-            let pIdx = Math.floor(Math.random() * availProps.length);
-            let p = availProps[pIdx];
+
+        for (let i = 0; i < numConds; i++) {
+            const pIdx = Math.floor(Math.random() * availProps.length);
+            const p = availProps[pIdx];
             availProps.splice(pIdx, 1); // Cegah duplikasi properti di 1 baris
-            
-            let o = opList[Math.floor(Math.random() * opList.length)];
-            
-            // Perbedaan angka (Selisih) dibuat sangat tipis untuk level tinggi
+
+            const o = opList[Math.floor(Math.random() * opList.length)];
+
+            // Selisih angka dibuat tipis untuk level tinggi
             let diff = 0;
-            if (conveyorMode === 'easy') diff = (Math.floor(Math.random() * 9) - 4); 
+            if (conveyorMode === 'easy') diff = (Math.floor(Math.random() * 9) - 4);
             else diff = (Math.floor(Math.random() * 5) - 2); // Hanya selisih -2 s/d +2 agar menjebak
-            
-            let v = currentItem[p] + diff;
-            conds.push({prop: p, op: o, val: v});
-            
-            if (i < numConds - 1) {
-                logOps.push(Math.random() > 0.5 ? 'AND' : 'OR');
-            }
+
+            const v = currentItem[p] + diff;
+            conds.push({ prop: p, op: o, val: v });
+
+            if (i < numConds - 1) logOps.push(Math.random() > 0.5 ? 'AND' : 'OR');
         }
-        return {conds, logOps};
+        return { conds, logOps };
     }
 
     function generateRoundData() {
@@ -864,86 +1228,69 @@
             Energi: Math.floor(Math.random() * 90) + 10
         };
 
-        // NEW: Transisi Pipa berdasarkan Ronde
+        // Transisi jumlah pipa berdasarkan ronde
         let numBins = 3;
-        if (conveyorMode === 'easy') {
-            numBins = 2;
-        } else if (conveyorMode === 'logic' && currentRound <= 25) {
-            numBins = 2; // Soal 1-25 hanya IF dan ELSE (2 Pipa)
-        }
+        if (conveyorMode === 'easy') numBins = 2;
+        else if (conveyorMode === 'logic' && currentRound <= 25) numBins = 2; // Soal 1-25 hanya IF dan ELSE (2 Pipa)
 
-        // ACAK PIPA TUJUAN (Anti Spam)
-        let availableBins = [
+        // Acak pipa tujuan (anti spam)
+        const availableBins = [
             { id: 'merah', label: 'Pipa Merah 🔴', kw: 'MERAH' },
             { id: 'biru', label: 'Pipa Biru 🔵', kw: 'BIRU' }
         ];
-
-        // Tambahkan Pipa Hijau hanya jika mode 3 opsi
-        if (numBins === 3) {
-            availableBins.push({ id: 'hijau', label: 'Pipa Hijau 🟢', kw: 'HIJAU' });
-        }
-
-        // Acak posisinya
-        availableBins.sort(() => Math.random() - 0.5); 
+        if (numBins === 3) availableBins.push({ id: 'hijau', label: 'Pipa Hijau 🟢', kw: 'HIJAU' });
+        availableBins.sort(() => Math.random() - 0.5);
 
         rules = [];
 
-        for(let i = 0; i < numBins - 1; i++) {
-            let kw = i === 0 ? 'JIKA' : 'ATAU JIKA';
-            let type = i === 0 ? 'if' : 'elif';
-            
-            let numConds = 1;
-            if (conveyorMode === 'logic') {
-                numConds = 2; // NEW: Dibatasi HANYA 2 KONDISI, tidak ada 3 kondisi.
-            }
-            
-            let {conds, logOps} = buildConditions(numConds);
-            
+        for (let i = 0; i < numBins - 1; i++) {
+            const kw = i === 0 ? 'JIKA' : 'ATAU JIKA';
+            const type = i === 0 ? 'if' : 'elif';
+            const numConds = (conveyorMode === 'logic') ? 2 : 1; // Maksimal 2 kondisi
+
+            const { conds, logOps } = buildConditions(numConds);
+
             // Jebakan HOTS untuk Mode Matematika
-            if (conveyorMode === 'math') {
-                let isTrap = Math.random() > 0.5; // 50% kemungkinan jebakan angka pas
-                if(isTrap) {
-                     conds[0].val = currentItem[conds[0].prop]; // Set nilai sama persis
-                     conds[0].op = Math.random() > 0.5 ? '>' : '<'; // Pasti akan GAGAL!
-                }
+            if (conveyorMode === 'math' && Math.random() > 0.5) {
+                conds[0].val = currentItem[conds[0].prop]; // Nilai sama persis
+                conds[0].op = Math.random() > 0.5 ? '>' : '<'; // Pasti GAGAL!
             }
-            
+
             rules.push({ type, kw, conds, logOps, target: availableBins[i].id, label: availableBins[i].label, kwTarget: availableBins[i].kw });
         }
-        
+
         // Aturan TERAKHIR (ELSE)
         rules.push({ type: 'else', kw: 'JIKA TIDAK', conds: [], logOps: [], target: availableBins[numBins - 1].id, label: availableBins[numBins - 1].label, kwTarget: availableBins[numBins - 1].kw });
 
-        // Tentukan Jawaban yang Benar
-        expectedBin = rules[rules.length - 1].target; 
+        // Tentukan jawaban yang benar
+        expectedBin = rules[rules.length - 1].target;
         matchedRuleIndex = numBins === 3 ? 3 : 2;
 
         for (let i = 0; i < rules.length - 1; i++) {
             if (evaluateRule(rules[i])) {
                 expectedBin = rules[i].target;
                 matchedRuleIndex = i + 1;
-                break; // Berhenti mengecek karena sistem membaca dari atas ke bawah!
+                break; // Berhenti mengecek karena mesin membaca dari atas ke bawah!
             }
         }
     }
 
     function renderGameUI() {
-        document.getElementById('fEmoji').innerText = currentItem.emoji;
-        document.getElementById('fBerat').innerText = currentItem.Berat;
-        document.getElementById('fSuhu').innerText = currentItem.Suhu;
-        document.getElementById('fEnergi').innerText = currentItem.Energi;
+        $('fEmoji').innerText = currentItem.emoji;
+        $('fBerat').innerText = currentItem.Berat;
+        $('fSuhu').innerText = currentItem.Suhu;
+        $('fEnergi').innerText = currentItem.Energi;
 
-        const binGrid = document.getElementById('binGrid');
-        const btnHijau = document.getElementById('btnHijau');
+        const binGrid = $('binGrid');
+        const btnHijau = $('btnHijau');
         if (rules.length === 2) {
             binGrid.classList.remove('three-bins'); btnHijau.style.display = 'none';
         } else {
             binGrid.classList.add('three-bins'); btnHijau.style.display = 'flex';
         }
 
-        const codeDiv = document.getElementById('codeMonitor');
-        let htmlCode = `<div style="color:#64748b; font-size:0.8rem; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:5px;">// PROGRAM PENYORTIR MESIN</div>`;
-        
+        let htmlCode = codeTitle('PROGRAM PENYORTIR MESIN');
+
         rules.forEach((rule, idx) => {
             const isElse = rule.type === 'else';
             const isElif = rule.type === 'elif';
@@ -952,14 +1299,12 @@
             let headLine = '';
             if (idx > 0) headLine += '} ';
             headLine += `<span class="${kwClass}">${rule.kw}</span>`;
-            
+
             if (!isElse) {
                 let condStr = '';
-                for(let i=0; i<rule.conds.length; i++) {
+                for (let i = 0; i < rule.conds.length; i++) {
                     condStr += `<span class="kw-cond">${rule.conds[i].prop} ${rule.conds[i].op} ${rule.conds[i].val}</span>`;
-                    if (i < rule.logOps.length) {
-                        condStr += ` <span style="color:#56b6c2">${rule.logOps[i]}</span> `;
-                    }
+                    if (i < rule.logOps.length) condStr += ` <span style="color:#56b6c2">${rule.logOps[i]}</span> `;
                 }
                 headLine += ` ( ${condStr} )`;
             }
@@ -968,87 +1313,80 @@
             htmlCode += `<div class="code-line" style="padding-left: 20px;"><span class="kw-act">Buang_ke_${rule.kwTarget}();</span></div>`;
         });
         htmlCode += `<div class="code-line">}</div>`;
-        codeDiv.innerHTML = htmlCode;
+        $('codeMonitor').innerHTML = htmlCode;
     }
 
     function loadRound() {
-        document.getElementById('fbOverlay').classList.remove('show');
+        $('fbOverlay').classList.remove('show');
         document.querySelectorAll('#binGrid .btn-bin').forEach(b => b.classList.remove('disabled'));
         clearTimeout(moveTimeout); clearTimeout(penaltyTimeout);
-        
+
         if (currentRound > CONVEYOR_MAX_ROUNDS) { endGame(false); return; }
 
         generateRoundData();
         renderGameUI();
 
-        document.getElementById('lvlText').innerText = currentRound;
-        document.getElementById('scoreText').innerText = score;
-        
-        const fItem = document.getElementById('fItem');
+        $('lvlText').innerText = currentRound;
+        $('scoreText').innerText = score;
+
+        const fItem = $('fItem');
         fItem.style.transition = 'none'; fItem.style.left = '-200px'; fItem.style.opacity = '1';
-        void fItem.offsetWidth; 
-        
+        void fItem.offsetWidth;
+
         const speed = (conveyorMode === 'easy') ? 15 : 25;
         fItem.style.transition = `left ${speed}s linear`;
         fItem.style.left = '100%';
-        
-        moveTimeout = setTimeout(() => { handleMissedItem(); }, speed * 1000); 
+
+        moveTimeout = setTimeout(() => { handleMissedItem(); }, speed * 1000);
     }
 
     function handleMissedItem() {
         score -= 1; // Hukuman nilai
-        timeRemaining -= 5; // Hukuman waktu
-        if (timeRemaining < 0) timeRemaining = 0;
+        timeRemaining = Math.max(0, timeRemaining - 5); // Hukuman waktu
         updateTimerDisplay();
 
-        document.getElementById('scoreText').innerText = score;
+        $('scoreText').innerText = score;
         document.querySelectorAll('#binGrid .btn-bin').forEach(b => b.classList.add('disabled'));
-        document.getElementById('fItem').style.opacity = '0'; 
-        
-        const title = document.getElementById('fbTitle');
-        const icon = document.getElementById('fbIcon');
+        $('fItem').style.opacity = '0';
+
+        const title = $('fbTitle');
+        const icon = $('fbIcon');
         const btn = document.querySelector('#fbOverlay .btn-main');
-        
+
         title.innerText = "Barang Terlewat!"; title.style.color = "var(--warning)"; icon.innerText = "💨";
-        document.getElementById('fbDesc').innerText = `Kotak barang terjatuh karena telat merespon!\nSkor dikurangi 1 dan waktu dipotong 5 detik.\n\nMenunggu barang selanjutnya...`;
-        btn.style.display = 'none'; 
-        document.getElementById('fbOverlay').classList.add('show');
-        
-        penaltyTimeout = setTimeout(() => { document.getElementById('fbOverlay').classList.remove('show'); nextRound(); }, 5000);
+        $('fbDesc').innerText = `Kotak barang terjatuh karena telat merespon!\nSkor dikurangi 1 dan waktu dipotong 5 detik.\n\nMenunggu barang selanjutnya...`;
+        btn.style.display = 'none';
+        $('fbOverlay').classList.add('show');
+
+        penaltyTimeout = setTimeout(() => { $('fbOverlay').classList.remove('show'); nextRound(); }, 5000);
     }
 
     function buildReason(rule) {
-        if(rule.type === 'else') return `Baris Terakhir (JIKA TIDAK)\nKarena semua aturan di atasnya GAGAL.`;
-        
+        if (rule.type === 'else') return `Baris Terakhir (JIKA TIDAK)\nKarena semua aturan di atasnya GAGAL.`;
+
         let result = evalCondition(currentItem[rule.conds[0].prop], rule.conds[0].op, rule.conds[0].val);
-        let text = `🔸 ${rule.conds[0].prop} (${currentItem[rule.conds[0].prop]}) ${rule.conds[0].op} ${rule.conds[0].val} [${result ? 'BENAR':'SALAH'}]`;
-        
+        let text = `🔸 ${rule.conds[0].prop} (${currentItem[rule.conds[0].prop]}) ${rule.conds[0].op} ${rule.conds[0].val} [${result ? 'BENAR' : 'SALAH'}]`;
+
         for (let i = 0; i < rule.logOps.length; i++) {
-            let nextRes = evalCondition(currentItem[rule.conds[i+1].prop], rule.conds[i+1].op, rule.conds[i+1].val);
-            text += `\n🔸 ${rule.logOps[i]} ${rule.conds[i+1].prop} (${currentItem[rule.conds[i+1].prop]}) ${rule.conds[i+1].op} ${rule.conds[i+1].val} [${nextRes ? 'BENAR':'SALAH'}]`;
-            
+            const nextRes = evalCondition(currentItem[rule.conds[i + 1].prop], rule.conds[i + 1].op, rule.conds[i + 1].val);
+            text += `\n🔸 ${rule.logOps[i]} ${rule.conds[i + 1].prop} (${currentItem[rule.conds[i + 1].prop]}) ${rule.conds[i + 1].op} ${rule.conds[i + 1].val} [${nextRes ? 'BENAR' : 'SALAH'}]`;
             if (rule.logOps[i] === 'AND') result = result && nextRes;
             if (rule.logOps[i] === 'OR') result = result || nextRes;
         }
-        
-        if (rule.conds.length > 1) {
-            text += `\n➤ Hasil Gabungan Logika: ${result ? 'BENAR' : 'GAGAL'}`;
-        } else {
-            text += `\n➤ Hasil: ${result ? 'BENAR' : 'GAGAL'}`;
-        }
+
+        text += rule.conds.length > 1 ? `\n➤ Hasil Gabungan Logika: ${result ? 'BENAR' : 'GAGAL'}` : `\n➤ Hasil: ${result ? 'BENAR' : 'GAGAL'}`;
         return text;
     }
 
     function checkBin(selectedBin) {
-        clearTimeout(moveTimeout); 
-        const fItem = document.getElementById('fItem');
+        clearTimeout(moveTimeout);
+        const fItem = $('fItem');
         fItem.style.transition = 'none'; fItem.style.left = window.getComputedStyle(fItem).left;
 
         document.querySelectorAll('#binGrid .btn-bin').forEach(b => b.classList.add('disabled'));
         const isCorrect = (selectedBin === expectedBin);
-        
-        let feedbackText = "";
 
+        let feedbackText = "";
         if (matchedRuleIndex === 1) {
             feedbackText += `Baris ke-1:\n${buildReason(rules[0])}\n\nKarena BENAR, mesin membuang ke ${rules[0].label} tanpa mengecek ke bawah.`;
         } else if (matchedRuleIndex === 2 && rules.length === 3) {
@@ -1056,28 +1394,27 @@
         } else {
             feedbackText += `Baris ke-1:\n${buildReason(rules[0])}\n\n`;
             if (rules.length === 3) feedbackText += `Baris ke-2:\n${buildReason(rules[1])}\n\n`;
-            feedbackText += buildReason(rules[rules.length-1]) + `\nBarang dibuang ke ${rules[rules.length-1].label}.`;
+            feedbackText += buildReason(rules[rules.length - 1]) + `\nBarang dibuang ke ${rules[rules.length - 1].label}.`;
         }
 
         if (isCorrect) {
-            let pts = (conveyorMode === 'easy') ? 10 : 2; // Maks 100
-            score += pts; 
+            score += (conveyorMode === 'easy') ? 10 : 2; // Maks 100
             showFeedback(true, feedbackText);
         } else {
             score -= 1; // Hukuman salah
-            document.getElementById('scoreText').innerText = score;
-            document.getElementById('factoryStage').classList.add('shake-anim');
-            setTimeout(() => document.getElementById('factoryStage').classList.remove('shake-anim'), 400);
+            $('scoreText').innerText = score;
+            $('factoryStage').classList.add('shake-anim');
+            setTimeout(() => $('factoryStage').classList.remove('shake-anim'), 400);
             showFeedback(false, `Salah Pipa! Barang seharusnya masuk ke ${expectedBin.toUpperCase()}.\n\nALASAN MESIN:\n` + feedbackText);
         }
     }
 
     function showFeedback(isSuccess, desc) {
-        const title = document.getElementById('fbTitle');
-        const icon = document.getElementById('fbIcon');
+        const title = $('fbTitle');
+        const icon = $('fbIcon');
         const btn = document.querySelector('#fbOverlay .btn-main');
 
-        btn.style.display = 'inline-flex'; 
+        btn.style.display = 'flex';
         if (isSuccess) {
             title.innerText = "Logika Sempurna!"; title.style.color = "var(--success)"; icon.innerText = "🎉";
             btn.style.background = "var(--success)"; btn.style.boxShadow = "0 6px 0 #059669";
@@ -1085,34 +1422,26 @@
             title.innerText = "Pabrik Macet!"; title.style.color = "var(--danger)"; icon.innerText = "💥";
             btn.style.background = "var(--warning)"; btn.style.boxShadow = "0 6px 0 #b45309";
         }
-        document.getElementById('fbDesc').innerText = desc;
-        if (currentRound === CONVEYOR_MAX_ROUNDS) btn.innerText = "Lihat Laporan Akhir 🏆"; else btn.innerText = "Lanjut Paket ➡";
-        
-        setTimeout(() => document.getElementById('fbOverlay').classList.add('show'), 600);
+        $('fbDesc').innerText = desc;
+        btn.innerText = (currentRound === CONVEYOR_MAX_ROUNDS) ? "Lihat Laporan Akhir 🏆" : "Lanjut Paket ➡";
+
+        setTimeout(() => { if (isActive('gameScreen')) $('fbOverlay').classList.add('show'); }, 600);
     }
 
     function nextRound() { currentRound++; loadRound(); }
 
     function endGame(isTimeout) {
         clearInterval(timerInterval); clearTimeout(moveTimeout); clearTimeout(penaltyTimeout);
-        switchScreen('gameScreen', 'resultScreen');
-        document.getElementById('finalScore').innerText = score;
-        
-        const title = document.getElementById('resultTitle');
-        const desc = document.getElementById('resultDesc');
-        const icon = document.getElementById('resultIcon');
-        
         if (isTimeout) {
-            title.innerText = "Waktu Habis!"; title.style.color = "var(--danger)"; icon.innerText = "⏰";
-            desc.innerText = `Kamu kehabisan waktu di Soal ke-${currentRound}. Latih lagi kecepatanmu!`;
+            showResult({ title: "Waktu Habis!", color: "var(--danger)", icon: "⏰", desc: `Kamu kehabisan waktu di Soal ke-${currentRound}. Latih lagi kecepatanmu!`, score, confetti: false });
         } else {
-            title.innerText = "Misi Selesai!"; title.style.color = "var(--primary)"; icon.innerText = "🏆";
-            desc.innerText = `Luar biasa! Kamu berhasil menyelesaikan seluruh ${CONVEYOR_MAX_ROUNDS} tantangan logika.`;
-            if(score >= 80) createConfetti();
+            showResult({ title: "Misi Selesai!", color: "var(--primary)", icon: "🏆", desc: `Luar biasa! Kamu berhasil menyelesaikan seluruh ${CONVEYOR_MAX_ROUNDS} tantangan logika.`, score, confetti: score >= 80 });
         }
     }
 
-    // --- GAME ENGINE: MASTER LOGIKA (CLASS 6) ---
+    // =====================================================
+    //  GAME ENGINE: MASTER LOGIKA (KELAS 6)
+    // =====================================================
     const c6Levels = [
         { diff:"sedang", scene:"🌧️", desc:"Cuaca Hujan Deras", branches:[{ kw:"JIKA", cond:"hujan == benar", blank:true, options:[{text:"Pakai_Payung",correct:true},{text:"Siram_Tanaman",correct:false}] }, { kw:"JIKA TIDAK", cond:null, action:"Siram_Tanaman" }], feedbackOk:"Benar! Kalau hujan, butuh payung.", feedbackNo:"Kalau sedang hujan, bawa payung, bukan menyiram tanaman." },
         { diff:"sedang", scene:"🔋", desc:"Baterai Kritis: 5%", branches:[{ kw:"JIKA", cond:"baterai < 10", blank:true, options:[{text:"Cari_Charger",correct:true},{text:"Nyalakan_Senter",correct:false}] }, { kw:"JIKA TIDAK", cond:null, action:"Main_Game" }], feedbackOk:"Pintar! 5 memang kurang dari 10.", feedbackNo:"5 < 10 itu benar, cari charger dulu." },
@@ -1128,26 +1457,23 @@
 
     function startClass6Game() {
         c6CurrentIndex = 0; c6CorrectCount = 0;
-        const activeScreens = document.querySelectorAll('.screen.active');
-        activeScreens.forEach(el => { el.classList.remove('active'); el.classList.add('left'); setTimeout(() => el.classList.add('hidden'), 100); });
-        
-        const gs = document.getElementById('class6Screen');
-        gs.classList.remove('hidden', 'left');
-        setTimeout(() => gs.classList.add('active'), 100);
+        showScreen('class6Screen');
         loadClass6Round();
     }
+
+    function exitClass6Game() { showScreen('classMenuScreen'); }
 
     function loadClass6Round() {
         if (c6CurrentIndex >= c6Levels.length) { endClass6Game(); return; }
         const data = c6Levels[c6CurrentIndex];
 
-        document.getElementById('c6LvlText').innerText = `Level ${c6CurrentIndex+1}/${c6Levels.length}`;
-        document.getElementById('c6ScoreText').innerText = `⭐ Skor: ${c6CorrectCount * (100/c6Levels.length)}`;
-        document.getElementById('c6Emoji').innerText = data.scene;
-        document.getElementById('c6Condition').innerText = data.desc;
-        document.getElementById('c6FbOverlay').classList.remove('show');
+        $('c6LvlText').innerText = `Level ${c6CurrentIndex + 1}/${c6Levels.length}`;
+        $('c6ScoreText').innerText = `⭐ Skor: ${Math.round(c6CorrectCount * 100 / c6Levels.length)}`;
+        $('c6Emoji').innerText = data.scene;
+        $('c6Condition').innerText = data.desc;
+        $('c6FbOverlay').classList.remove('show');
 
-        let htmlCode = '';
+        let htmlCode = codeTitle('PROGRAM ROBOT');
         data.branches.forEach((branch, idx) => {
             const isElse = branch.kw === 'JIKA TIDAK';
             const isElif = branch.kw === 'ATAU JIKA';
@@ -1156,35 +1482,47 @@
             let headLine = '';
             if (idx > 0) headLine += '} ';
             headLine += `<span class="${kwClass}">${branch.kw}</span>`;
-            if (!isElse) headLine += ` ( <span class="kw-cond">${(branch.cond||'').replace(/\bAND\b/g, '<span style="color:#56b6c2">AND</span>').replace(/\bOR\b/g, '<span style="color:#56b6c2">OR</span>').replace(/\bNOT\b/g, '<span style="color:#d19a66">NOT</span>')}</span> )`;
+            if (!isElse) {
+                const condHtml = (branch.cond || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(/\bAND\b/g, '<span style="color:#56b6c2">AND</span>')
+                    .replace(/\bOR\b/g, '<span style="color:#56b6c2">OR</span>')
+                    .replace(/\bNOT\b/g, '<span style="color:#d19a66">NOT</span>');
+                headLine += ` ( <span class="kw-cond">${condHtml}</span> )`;
+            }
             headLine += ' {';
             htmlCode += `<div class="code-line">${headLine}</div>`;
 
-            let actionHtml = branch.blank ? `<span class="kw-act">Lakukan(<span id="c6DynamicSlot" style="border-bottom: 2px dashed #94a3b8; padding: 0 10px; color:#fff;">???</span>);</span>` : `<span class="kw-act">Lakukan(${branch.action});</span>`;
+            const actionHtml = branch.blank
+                ? `<span class="kw-act">Lakukan(<span id="c6DynamicSlot" style="border-bottom: 2px dashed #94a3b8; padding: 0 10px; color:#fff;">???</span>);</span>`
+                : `<span class="kw-act">Lakukan(${branch.action});</span>`;
             htmlCode += `<div class="code-line" style="padding-left: 20px;">${actionHtml}</div>`;
         });
         htmlCode += `<div class="code-line">}</div>`;
-        document.getElementById('c6CodeMonitor').innerHTML = htmlCode;
-        c6CurrentSlot = document.getElementById('c6DynamicSlot');
+        $('c6CodeMonitor').innerHTML = htmlCode;
+        c6CurrentSlot = $('c6DynamicSlot');
 
         const blankBranch = data.branches.find(b => b.blank);
-        const optContainer = document.getElementById('c6Options');
+        const optContainer = $('c6Options');
         optContainer.innerHTML = '';
         [...blankBranch.options].sort(() => Math.random() - 0.5).forEach(opt => {
-            optContainer.innerHTML += `<button class="btn-bin btn-biru" onclick="checkClass6('${opt.correct}', '${opt.text}')" style="box-shadow:none; padding:10px;">${opt.text}</button>`;
+            const b = document.createElement('button');
+            b.className = 'btn-bin btn-biru';
+            b.innerText = opt.text;
+            b.onclick = () => checkClass6(opt.correct, opt.text);
+            optContainer.appendChild(b);
         });
     }
 
-    function checkClass6(isCorrectStr, text) {
-        if(c6CurrentSlot) c6CurrentSlot.innerText = text;
-        const isCorrect = isCorrectStr === 'true';
-        if(isCorrect) c6CorrectCount++;
+    function checkClass6(isCorrect, text) {
+        document.querySelectorAll('#c6Options .btn-bin').forEach(b => b.classList.add('disabled')); // cegah klik ganda
+        if (c6CurrentSlot) c6CurrentSlot.innerText = text;
+        if (isCorrect) c6CorrectCount++;
         showClass6Feedback(isCorrect, isCorrect ? c6Levels[c6CurrentIndex].feedbackOk : c6Levels[c6CurrentIndex].feedbackNo);
     }
 
     function showClass6Feedback(isSuccess, message) {
-        const title = document.getElementById('c6FbTitle');
-        const icon = document.getElementById('c6FbIcon');
+        const title = $('c6FbTitle');
+        const icon = $('c6FbIcon');
         const btn = document.querySelector('#c6FbOverlay .btn-main');
 
         if (isSuccess) {
@@ -1193,25 +1531,19 @@
         } else {
             title.innerText = "Kurang Tepat"; title.style.color = "var(--danger)"; icon.innerText = "🔧";
             btn.style.background = "var(--primary)"; btn.style.boxShadow = "0 6px 0 var(--primary-dark)";
-            document.getElementById('c6Emoji').parentElement.classList.add('shake-anim');
-            setTimeout(() => document.getElementById('c6Emoji').parentElement.classList.remove('shake-anim'), 400);
+            $('c6Emoji').parentElement.classList.add('shake-anim');
+            setTimeout(() => $('c6Emoji').parentElement.classList.remove('shake-anim'), 400);
         }
-        document.getElementById('c6FbDesc').innerText = message;
-        if (c6CurrentIndex === c6Levels.length - 1) btn.innerText = "Lihat Laporan Akhir 🏆"; else btn.innerText = "Lanjut Level ➡";
-        setTimeout(() => document.getElementById('c6FbOverlay').classList.add('show'), 600);
+        $('c6FbDesc').innerText = message;
+        btn.innerText = (c6CurrentIndex === c6Levels.length - 1) ? "Lihat Laporan Akhir 🏆" : "Lanjut Level ➡";
+        setTimeout(() => { if (isActive('class6Screen')) $('c6FbOverlay').classList.add('show'); }, 600);
     }
 
     function nextClass6Round() { c6CurrentIndex++; loadClass6Round(); }
 
     function endClass6Game() {
-        switchScreen('class6Screen', 'resultScreen');
         const finalScore = Math.round((c6CorrectCount / c6Levels.length) * 100);
-        document.getElementById('finalScore').innerText = finalScore;
-        const title = document.getElementById('resultTitle');
-        const desc = document.getElementById('resultDesc');
-        title.innerText = "Misi Selesai!"; title.style.color = "var(--primary)";
-        desc.innerText = `Kamu berhasil menyelesaikan Analisis Logika Kelas 6.`;
-        if (finalScore >= 80) createConfetti();
+        showResult({ title: "Misi Selesai!", color: "var(--primary)", icon: "🏆", desc: "Kamu berhasil menyelesaikan Analisis Logika Kelas 6.", score: finalScore, confetti: finalScore >= 80 });
     }
 
     function createConfetti() {
@@ -1223,9 +1555,675 @@
             conf.style.left = Math.random() * 100 + 'vw';
             conf.style.animation = `fall ${Math.random() * 2 + 1}s linear forwards`;
             document.body.appendChild(conf);
-            setTimeout(() => conf.remove(), 3000);
+            setTimeout(() => conf.remove(), 3200);
         }
     }
+
+    // =====================================================
+    //  UJIAN SUMATIF KELAS 4
+    //  Ubah angka di bawah ini jika perlu.
+    // =====================================================
+    const SUMATIF_MINUTES = 60;   // lama ujian (menit)
+    const SUMATIF_KKTP = 75;      // batas tuntas (KKTP)
+    const SUMATIF_KEY = 'roboCode_sumatif_k4_v1';
+    const SUMATIF_SECTIONS = {
+        A: 'Konsep JIKA & JIKA TIDAK',
+        B: 'Tanda Perbandingan',
+        C: 'Aturan Bertingkat (ATAU JIKA)',
+        D: 'Logika AND & OR',
+        E: 'Analisis & Penalaran (HOTS)'
+    };
+
+    /*  BANK SOAL
+        s = bagian, q = pertanyaan (`teks` = kode kecil), fakta = data yang diketahui,
+        code = program, o = pilihan jawaban, a = indeks jawaban benar (0 = pilihan pertama),
+        p = pembahasan, mono = pilihan jawaban berupa kode.
+        Urutan pilihan diacak otomatis untuk setiap siswa.                                   */
+    const NILAI_CODE = ['JIKA ( Nilai >= 90 ) {', '  Dapat_A();', '} ATAU JIKA ( Nilai >= 75 ) {', '  Dapat_B();', '} JIKA TIDAK {', '  Dapat_C();', '}'];
+    const PIPA3_CODE = ['JIKA ( Berat > 50 ) {', '  Buang_ke_MERAH();', '} ATAU JIKA ( Suhu > 25 ) {', '  Buang_ke_BIRU();', '} JIKA TIDAK {', '  Buang_ke_HIJAU();', '}'];
+
+    const sumatifSoal = [
+        // ================= BAGIAN A: KONSEP JIKA & JIKA TIDAK (No. 1–10) =================
+        { s:'A', q:'Perintah yang dipakai komputer untuk mengambil keputusan berdasarkan sebuah syarat adalah ....',
+          o:['JIKA (IF)', 'ULANGI (LOOP)', 'CETAK (PRINT)', 'SIMPAN (SAVE)'], a:0,
+          p:'JIKA (IF) dipakai untuk mengecek syarat. Kalau syaratnya BENAR, perintah di dalamnya dijalankan.' },
+
+        { s:'A', q:'Perhatikan program dan fakta berikut. Apa yang dilakukan robot?', fakta:['Cuaca = Hujan'],
+          code:['JIKA ( Cuaca == Hujan ) {', '  Pakai_Payung();', '} JIKA TIDAK {', '  Main_di_Luar();', '}'],
+          o:['Pakai Payung', 'Main di Luar', 'Pakai Payung lalu Main di Luar', 'Tidak melakukan apa-apa'], a:0,
+          p:'Cuaca memang Hujan, jadi syaratnya BENAR. Robot menjalankan cabang JIKA: Pakai Payung.' },
+
+        { s:'A', q:'Lampu lalu lintas sedang menyala HIJAU. Apa yang dilakukan robot?', fakta:['Lampu = Hijau'],
+          code:['JIKA ( Lampu == Merah ) {', '  Berhenti();', '} JIKA TIDAK {', '  Jalan_Terus();', '}'],
+          o:['Jalan Terus', 'Berhenti', 'Berhenti lalu Jalan Terus', 'Menunggu lampu kuning'], a:0,
+          p:'Lampu Hijau, jadi syarat `Lampu == Merah` SALAH. Robot masuk ke cabang JIKA TIDAK: Jalan Terus.' },
+
+        { s:'A', q:'Bagian JIKA TIDAK (ELSE) akan dijalankan ketika ....',
+          o:['syarat pada JIKA bernilai SALAH', 'syarat pada JIKA bernilai BENAR', 'program baru saja dimulai', 'semua perintah sudah selesai'], a:0,
+          p:'JIKA TIDAK adalah jalan "sisanya". Cabang ini hanya dijalankan kalau syarat pada JIKA SALAH.' },
+
+        { s:'A', q:'Dalam satu percabangan JIKA – JIKA TIDAK, berapa cabang yang dijalankan robot?',
+          o:['Hanya satu cabang', 'Kedua cabang sekaligus', 'Tidak ada cabang yang dijalankan', 'Tergantung panjang programnya'], a:0,
+          p:'Robot selalu memilih SATU jalan saja: cabang JIKA (syarat benar) atau cabang JIKA TIDAK (syarat salah).' },
+
+        { s:'A', q:'Kalimat berikut yang merupakan contoh percabangan JIKA – MAKA adalah ....',
+          o:['Jika lapar, maka makan nasi.', 'Saya makan nasi setiap pagi.', 'Nasi itu berwarna putih.', 'Ibu membeli nasi di warung.'], a:0,
+          p:'Percabangan selalu punya syarat (lapar) dan tindakan (makan nasi). Kalimat lainnya tidak punya syarat.' },
+
+        { s:'A', q:'Badan Rina sudah bersih. Apa yang dilakukan Rina sesuai program berikut?', fakta:['Badan = Bersih'],
+          code:['JIKA ( Badan == Kotor ) {', '  Mandi();', '} JIKA TIDAK {', '  Baca_Buku();', '}'],
+          o:['Baca Buku', 'Mandi', 'Mandi lalu Baca Buku', 'Tidur siang'], a:0,
+          p:'Badan Bersih, jadi syarat `Badan == Kotor` SALAH. Rina menjalankan cabang JIKA TIDAK: Baca Buku.' },
+
+        { s:'A', q:'Pada program berikut, bagian yang disebut SYARAT (kondisi) adalah ....',
+          code:['JIKA ( Baterai == Habis ) {', '  Cas_HP();', '} JIKA TIDAK {', '  Nonton_Video();', '}'],
+          o:['Baterai == Habis', 'Cas_HP()', 'Nonton_Video()', 'JIKA TIDAK'], a:0, mono:true,
+          p:'Syarat adalah bagian yang dicek di dalam tanda kurung ( ) tepat setelah kata JIKA.' },
+
+        { s:'A', q:'Hari ini tanahnya kering. Apa yang dilakukan robot penyiram tanaman?', fakta:['Tanah = Kering'],
+          code:['JIKA ( Tanah == Kering ) {', '  Siram_Tanaman();', '} JIKA TIDAK {', '  Istirahat();', '}'],
+          o:['Siram Tanaman', 'Istirahat', 'Siram Tanaman dan Istirahat', 'Mencabut Tanaman'], a:0,
+          p:'Tanah Kering, jadi syaratnya BENAR. Robot menjalankan cabang JIKA: Siram Tanaman.' },
+
+        { s:'A', q:'Program berikut belum lengkap. Perintah yang paling tepat untuk mengisi ??? adalah ....',
+          code:['JIKA ( Mata == Ngantuk ) {', '  ???', '} JIKA TIDAK {', '  Belajar();', '}'],
+          o:['Tidur();', 'Belajar();', 'Main_Game();', 'Begadang();'], a:0, mono:true,
+          p:'Kalau mata ngantuk, tindakan yang masuk akal adalah tidur. Kalau tidak ngantuk, baru belajar.' },
+
+        // ================= BAGIAN B: TANDA PERBANDINGAN (No. 11–22) =================
+        { s:'B', q:'Tanda `>` dibaca ....',
+          o:['lebih besar dari', 'lebih kecil dari', 'sama dengan', 'tidak sama dengan'], a:0,
+          p:'Tanda > artinya angka di kiri LEBIH BESAR dari angka di kanan. Contoh: `10 > 5`.' },
+
+        { s:'B', q:'Pernyataan berikut yang bernilai BENAR adalah ....',
+          o:['15 > 9', '4 > 12', '7 < 3', '20 < 20'], a:0, mono:true,
+          p:'15 memang lebih besar dari 9. Pilihan lain salah: 4 tidak lebih dari 12, 7 tidak kurang dari 3, dan 20 tidak kurang dari 20 (angkanya sama).' },
+
+        { s:'B', q:'Tanda `>=` artinya ....',
+          o:['lebih besar dari atau sama dengan (minimal)', 'lebih kecil dari atau sama dengan (maksimal)', 'lebih besar dari saja', 'tidak sama dengan'], a:0,
+          p:'>= artinya "minimal" atau "paling sedikit". Angka yang pas sama dengan batasnya juga dianggap BENAR.' },
+
+        { s:'B', q:'Tanda `!=` artinya ....',
+          o:['tidak sama dengan', 'sama persis', 'lebih besar dari', 'lebih kecil dari atau sama dengan'], a:0,
+          p:'!= artinya TIDAK SAMA. Syaratnya BENAR kalau kedua angka berbeda.' },
+
+        { s:'B', q:'Pernyataan `8 == 8` bernilai ....',
+          o:['BENAR, karena kedua angka sama persis', 'SALAH, karena angkanya sama', 'BENAR, karena 8 lebih besar dari 8', 'SALAH, karena == artinya tidak sama'], a:0,
+          p:'Tanda == mengecek apakah kedua angka kembar. 8 dan 8 kembar, jadi BENAR.' },
+
+        { s:'B', q:'Sebuah wahana memakai aturan berikut. Tinggi Andi tepat 130 cm. Apa yang terjadi?', fakta:['Tinggi Andi = 130 cm'],
+          code:['JIKA ( Tinggi > 130 ) {', '  Boleh_Masuk();', '} JIKA TIDAK {', '  Dilarang_Masuk();', '}'],
+          o:['Dilarang Masuk, karena 130 tidak lebih besar dari 130', 'Boleh Masuk, karena tingginya sudah 130', 'Boleh Masuk, karena 130 sama dengan 130', 'Robot bingung lalu berhenti'], a:0,
+          p:'`130 > 130` itu SALAH karena angkanya sama, bukan lebih besar. Andi masuk ke cabang JIKA TIDAK: Dilarang Masuk.' },
+
+        { s:'B', q:'Aturan wahana diubah seperti berikut. Tinggi Andi tetap 130 cm. Apa yang terjadi sekarang?', fakta:['Tinggi Andi = 130 cm'],
+          code:['JIKA ( Tinggi >= 130 ) {', '  Boleh_Masuk();', '} JIKA TIDAK {', '  Dilarang_Masuk();', '}'],
+          o:['Boleh Masuk', 'Dilarang Masuk', 'Boleh Masuk lalu Dilarang Masuk', 'Tidak terjadi apa-apa'], a:0,
+          p:'Ada tanda sama dengan (=). `130 >= 130` itu BENAR, jadi Andi Boleh Masuk.' },
+
+        { s:'B', q:'Lift barang hanya boleh dinaiki jika beratnya PALING BANYAK 200 kg. Syarat yang tepat adalah ....',
+          o:['Berat <= 200', 'Berat >= 200', 'Berat < 200', 'Berat != 200'], a:0, mono:true,
+          p:'"Paling banyak" artinya maksimal, dan berat tepat 200 kg masih boleh. Jadi pakai tanda <=.' },
+
+        { s:'B', q:'Peserta lomba lari harus berumur MINIMAL 9 tahun. Syarat yang tepat adalah ....',
+          o:['Umur >= 9', 'Umur > 9', 'Umur <= 9', 'Umur == 9'], a:0, mono:true,
+          p:'"Minimal" artinya paling sedikit, dan anak berumur tepat 9 tahun sudah boleh ikut. Jadi pakai tanda >=.' },
+
+        { s:'B', q:'Sebuah barang masuk ke mesin sortir. Ke pipa mana barang ini dibuang?', fakta:['Berat = 25 kg'],
+          code:['JIKA ( Berat != 25 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
+          o:['Pipa BIRU', 'Pipa MERAH', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
+          p:'`25 != 25` artinya "25 tidak sama dengan 25". Itu SALAH karena angkanya sama. Barang masuk JIKA TIDAK: Pipa BIRU.' },
+
+        { s:'B', q:'Suhu ruangan saat ini 28 °C. Syarat manakah yang bernilai BENAR?', fakta:['Suhu = 28 °C'],
+          o:['Suhu <= 28', 'Suhu > 28', 'Suhu < 28', 'Suhu != 28'], a:0, mono:true,
+          p:'`28 <= 28` BENAR karena ada tanda sama dengan. Tiga syarat lainnya SALAH karena suhunya tepat 28.' },
+
+        { s:'B', q:'Angka berat berikut yang membuat syarat `Berat > 40` bernilai SALAH adalah ....',
+          o:['40', '41', '45', '60'], a:0,
+          p:'`40 > 40` itu SALAH karena angkanya sama. Angka 41, 45, dan 60 semuanya lebih besar dari 40.' },
+
+        // ================= BAGIAN C: ATURAN BERTINGKAT / ATAU JIKA (No. 23–32) =================
+        { s:'C', q:'Perintah ATAU JIKA (ELSE IF) dipakai ketika ....',
+          o:['pilihannya lebih dari dua', 'pilihannya hanya satu', 'program ingin diulang terus-menerus', 'robot ingin berhenti bekerja'], a:0,
+          p:'JIKA – JIKA TIDAK hanya punya dua jalan. Kalau pilihannya lebih dari dua, kita tambahkan ATAU JIKA di tengahnya.' },
+
+        { s:'C', q:'Mesin membaca aturan bertingkat (JIKA – ATAU JIKA – JIKA TIDAK) dengan urutan ....',
+          o:['dari atas ke bawah', 'dari bawah ke atas', 'acak sesuka mesin', 'hanya baris paling akhir'], a:0,
+          p:'Mesin SELALU membaca dari atas ke bawah, satu per satu.' },
+
+        { s:'C', q:'Syarat pada baris JIKA paling atas ternyata sudah BENAR. Apa yang dilakukan mesin?',
+          o:['Menjalankan perintahnya, lalu berhenti mengecek syarat di bawahnya', 'Tetap mengecek semua syarat di bawahnya', 'Langsung masuk ke JIKA TIDAK', 'Mengulang program dari awal'], a:0,
+          p:'Begitu menemukan syarat yang BENAR, mesin menjalankan perintahnya dan tidak mengecek baris di bawahnya lagi.' },
+
+        { s:'C', q:'Nilai ulangan Budi 85. Nilai huruf apa yang didapat Budi?', fakta:['Nilai Budi = 85'],
+          code: NILAI_CODE,
+          o:['B', 'A', 'C', 'A dan B'], a:0,
+          p:'Baris 1: `85 >= 90` SALAH, turun. Baris 2: `85 >= 75` BENAR, jadi Budi Dapat B.' },
+
+        { s:'C', q:'Nilai ulangan Sinta 90. Nilai huruf apa yang didapat Sinta?', fakta:['Nilai Sinta = 90'],
+          code: NILAI_CODE,
+          o:['A', 'B', 'C', 'A dan B'], a:0,
+          p:'Baris 1: `90 >= 90` BENAR (ada tanda =). Sinta langsung Dapat A dan mesin berhenti mengecek.' },
+
+        { s:'C', q:'Nilai ulangan Doni 74. Nilai huruf apa yang didapat Doni?', fakta:['Nilai Doni = 74'],
+          code: NILAI_CODE,
+          o:['C', 'B', 'A', 'Tidak mendapat nilai'], a:0,
+          p:'`74 >= 90` SALAH dan `74 >= 75` juga SALAH. Semua syarat salah, jadi Doni masuk JIKA TIDAK: Dapat C.' },
+
+        { s:'C', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 60 kg', 'Suhu = 30 °C'],
+          code: PIPA3_CODE,
+          o:['Pipa MERAH', 'Pipa BIRU', 'Pipa HIJAU', 'Pipa MERAH dan BIRU'], a:0,
+          p:'Baris 1: `60 > 50` BENAR, langsung ke Pipa MERAH. Walaupun `30 > 25` juga benar, baris 2 tidak dicek lagi.' },
+
+        { s:'C', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 40 kg', 'Suhu = 30 °C'],
+          code: PIPA3_CODE,
+          o:['Pipa BIRU', 'Pipa MERAH', 'Pipa HIJAU', 'Pipa MERAH dan BIRU'], a:0,
+          p:'Baris 1: `40 > 50` SALAH, turun. Baris 2: `30 > 25` BENAR, jadi barang ke Pipa BIRU.' },
+
+        { s:'C', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 50 kg', 'Suhu = 25 °C'],
+          code: PIPA3_CODE,
+          o:['Pipa HIJAU', 'Pipa MERAH', 'Pipa BIRU', 'Pipa MERAH dan BIRU'], a:0,
+          p:'`50 > 50` SALAH dan `25 > 25` juga SALAH (angkanya sama). Semua syarat salah, jadi barang ke Pipa HIJAU.' },
+
+        { s:'C', q:'Suhu badan Lala 37 °C. Apa yang dilakukan Lala menurut program berikut?', fakta:['Suhu badan = 37 °C'],
+          code:['JIKA ( Suhu >= 38 ) {', '  Ke_Dokter();', '} ATAU JIKA ( Suhu >= 37 ) {', '  Istirahat_di_Rumah();', '} JIKA TIDAK {', '  Berangkat_Sekolah();', '}'],
+          o:['Istirahat di Rumah', 'Ke Dokter', 'Berangkat Sekolah', 'Ke Dokter lalu Istirahat di Rumah'], a:0,
+          p:'`37 >= 38` SALAH, turun. `37 >= 37` BENAR, jadi Lala Istirahat di Rumah.' },
+
+        // ================= BAGIAN D: LOGIKA AND & OR (No. 33–44) =================
+        { s:'D', q:'Pada gerbang logika AND, hasilnya BENAR jika ....',
+          o:['semua syarat BENAR', 'salah satu syarat BENAR', 'semua syarat SALAH', 'syarat pertama SALAH'], a:0,
+          p:'AND itu syarat ketat: SEMUA syarat harus BENAR. Satu saja salah, hasilnya SALAH.' },
+
+        { s:'D', q:'Pada gerbang logika OR, hasilnya BENAR jika ....',
+          o:['minimal salah satu syarat BENAR', 'semua syarat SALAH', 'syarat kedua harus SALAH', 'tidak ada syarat yang BENAR'], a:0,
+          p:'OR itu syarat santai: cukup SALAH SATU syarat BENAR, hasilnya sudah BENAR.' },
+
+        { s:'D', q:'`BENAR AND SALAH` hasilnya ....',
+          o:['SALAH', 'BENAR', 'BENAR dan SALAH', 'Tidak bisa ditentukan'], a:0,
+          p:'AND butuh semua syarat BENAR. Ada satu yang SALAH, jadi hasilnya SALAH.' },
+
+        { s:'D', q:'`BENAR OR SALAH` hasilnya ....',
+          o:['BENAR', 'SALAH', 'BENAR dan SALAH', 'Tidak bisa ditentukan'], a:0,
+          p:'OR cukup satu yang BENAR. Syarat pertama BENAR, jadi hasilnya BENAR.' },
+
+        { s:'D', q:'`SALAH OR SALAH` hasilnya ....',
+          o:['SALAH', 'BENAR', 'BENAR dan SALAH', 'Tidak bisa ditentukan'], a:0,
+          p:'Tidak ada satu pun syarat yang BENAR, jadi hasil OR juga SALAH.' },
+
+        { s:'D', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 30 kg', 'Suhu = 20 °C'],
+          code:['JIKA ( Berat > 10 AND Suhu == 30 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
+          o:['Pipa BIRU', 'Pipa MERAH', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
+          p:'`30 > 10` BENAR, tetapi `20 == 30` SALAH. Dengan AND, satu salah berarti SALAH. Barang ke Pipa BIRU.' },
+
+        { s:'D', q:'Ke pipa mana barang berikut dibuang?', fakta:['Energi = 80 %', 'Berat = 30 kg'],
+          code:['JIKA ( Energi == 100 OR Berat < 50 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
+          o:['Pipa MERAH', 'Pipa BIRU', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
+          p:'`80 == 100` SALAH, tetapi `30 < 50` BENAR. Dengan OR, satu benar sudah cukup. Barang ke Pipa MERAH.' },
+
+        { s:'D', q:'Anak boleh naik kuda poni jika memenuhi program berikut. Siapa yang BOLEH naik?',
+          code:['JIKA ( Umur >= 5 AND Berat <= 35 ) {', '  Boleh_Naik();', '} JIKA TIDAK {', '  Tidak_Boleh();', '}'],
+          o:['Dika: umur 6 tahun, berat 35 kg', 'Eka: umur 4 tahun, berat 20 kg', 'Fani: umur 8 tahun, berat 40 kg', 'Gilang: umur 3 tahun, berat 38 kg'], a:0,
+          p:'Dika: `6 >= 5` BENAR dan `35 <= 35` BENAR, keduanya benar. Eka terlalu muda, Fani terlalu berat, Gilang gagal di kedua syarat.' },
+
+        { s:'D', q:'Hari ini hari Rabu, tetapi tanggal merah (hari raya). Apa yang terjadi?', fakta:['Hari = Rabu', 'Tanggal = Merah'],
+          code:['JIKA ( Hari == Minggu OR Tanggal == Merah ) {', '  Libur();', '} JIKA TIDAK {', '  Sekolah();', '}'],
+          o:['Libur', 'Sekolah', 'Libur dan Sekolah', 'Sekolah setengah hari'], a:0,
+          p:'`Hari == Minggu` SALAH, tetapi `Tanggal == Merah` BENAR. Dengan OR, satu benar sudah cukup, jadi Libur.' },
+
+        { s:'D', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 45 kg', 'Energi = 50 %'],
+          code:['JIKA ( Berat >= 45 AND Energi <= 50 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
+          o:['Pipa MERAH', 'Pipa BIRU', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
+          p:'`45 >= 45` BENAR dan `50 <= 50` BENAR (keduanya ada tanda =). Semua benar, jadi AND BENAR. Barang ke Pipa MERAH.' },
+
+        { s:'D', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 12 kg', 'Suhu = 70 °C'],
+          code:['JIKA ( Berat > 12 OR Suhu < 70 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
+          o:['Pipa BIRU', 'Pipa MERAH', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
+          p:'`12 > 12` SALAH dan `70 < 70` juga SALAH (angkanya sama). Dengan OR pun, kalau semua salah hasilnya SALAH. Barang ke Pipa BIRU.' },
+
+        { s:'D', q:'Kapan pintu otomatis berikut akan terbuka?',
+          code:['JIKA ( Kartu == Ada AND Sidik_Jari == Cocok ) {', '  Buka_Pintu();', '} JIKA TIDAK {', '  Kunci_Pintu();', '}'],
+          o:['Kartu ada dan sidik jari cocok', 'Kartu ada, tetapi sidik jari tidak cocok', 'Kartu tidak ada, tetapi sidik jari cocok', 'Kartu tidak ada dan sidik jari tidak cocok'], a:0,
+          p:'Karena memakai AND, pintu hanya terbuka kalau KEDUA syarat benar: kartu ada DAN sidik jari cocok.' },
+
+        // ================= BAGIAN E: ANALISIS & PENALARAN / HOTS (No. 45–50) =================
+        { s:'E', q:'Tono membuat program nilai berikut. Ternyata siswa yang nilainya 95 malah mendapat B. Mengapa hal itu terjadi?', fakta:['Nilai = 95'],
+          code:['JIKA ( Nilai >= 75 ) {', '  Dapat_B();', '} ATAU JIKA ( Nilai >= 90 ) {', '  Dapat_A();', '} JIKA TIDAK {', '  Dapat_C();', '}'],
+          o:['Karena syarat Nilai >= 75 ada di atas dan sudah BENAR, jadi mesin berhenti di situ', 'Karena 95 lebih kecil dari 90', 'Karena mesin membaca dari bawah ke atas', 'Karena tanda >= artinya lebih kecil'], a:0,
+          p:'Mesin membaca dari atas. `95 >= 75` sudah BENAR, jadi langsung Dapat B. Seharusnya syarat `Nilai >= 90` diletakkan paling atas.' },
+
+        { s:'E', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 70 kg', 'Suhu = 15 °C', 'Energi = 90 %'],
+          code:['JIKA ( Berat < 50 AND Suhu < 20 ) {', '  Buang_ke_MERAH();', '} ATAU JIKA ( Suhu < 20 OR Energi < 50 ) {', '  Buang_ke_BIRU();', '} JIKA TIDAK {', '  Buang_ke_HIJAU();', '}'],
+          o:['Pipa BIRU', 'Pipa MERAH', 'Pipa HIJAU', 'Pipa MERAH dan BIRU'], a:0,
+          p:'Baris 1: `70 < 50` SALAH, jadi AND SALAH. Baris 2: `15 < 20` BENAR, jadi OR BENAR. Barang ke Pipa BIRU.' },
+
+        { s:'E', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 40 kg', 'Suhu = 25 °C', 'Energi = 60 %'],
+          code:['JIKA ( Berat >= 50 OR Energi > 60 ) {', '  Buang_ke_MERAH();', '} ATAU JIKA ( Berat > 30 AND Suhu != 25 ) {', '  Buang_ke_BIRU();', '} JIKA TIDAK {', '  Buang_ke_HIJAU();', '}'],
+          o:['Pipa HIJAU', 'Pipa MERAH', 'Pipa BIRU', 'Pipa MERAH dan BIRU'], a:0,
+          p:'Baris 1: `40 >= 50` SALAH dan `60 > 60` SALAH, jadi OR SALAH. Baris 2: `40 > 30` BENAR, tetapi `25 != 25` SALAH, jadi AND SALAH. Semua gagal, barang ke Pipa HIJAU.' },
+
+        { s:'E', q:'Agar barang dengan suhu 30 °C masuk ke Pipa MERAH, tanda yang tepat untuk mengisi ??? adalah ....', fakta:['Suhu = 30 °C'],
+          code:['JIKA ( Suhu ??? 30 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
+          o:['>=', '>', '<', '!='], a:0, mono:true,
+          p:'Hanya `30 >= 30` yang BENAR. `30 > 30`, `30 < 30`, dan `30 != 30` semuanya SALAH.' },
+
+        { s:'E', q:'Siswa mendapat hadiah jika nilainya MINIMAL 80 DAN tidak pernah terlambat (Terlambat == 0). Syarat program yang benar adalah ....',
+          o:['JIKA ( Nilai >= 80 AND Terlambat == 0 )', 'JIKA ( Nilai > 80 OR Terlambat == 0 )', 'JIKA ( Nilai >= 80 OR Terlambat != 0 )', 'JIKA ( Nilai <= 80 AND Terlambat == 0 )'], a:0, mono:true,
+          p:'"Minimal 80" ditulis `Nilai >= 80`. Kata "DAN" berarti kedua syarat harus benar, jadi pakai AND.' },
+
+        { s:'E', q:'Empat barang (P, Q, R, S) masuk ke mesin berikut. Berapa banyak barang yang dibuang ke Pipa MERAH?',
+          fakta:['P: Berat 25, Energi 50', 'Q: Berat 20, Energi 80', 'R: Berat 30, Energi 45', 'S: Berat 50, Energi 90'],
+          code:['JIKA ( Berat > 20 AND Energi >= 50 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
+          o:['2 barang', '1 barang', '3 barang', '4 barang'], a:0,
+          p:'P: `25 > 20` dan `50 >= 50`, BENAR. Q: `20 > 20` SALAH. R: `45 >= 50` SALAH. S: `50 > 20` dan `90 >= 50`, BENAR. Jadi ada 2 barang (P dan S).' }
+    ];
+
+    let ex = null;          // ujian yang sedang berjalan
+    let exTimer = null;
+    let lastResult = null;
+    let reviewFilter = 'all';
+
+    function escHTML(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function inlineFmt(s) { return escHTML(s).replace(/`([^`]+)`/g, '<code>$1</code>'); }
+
+    const HL_RE = /\b(ATAU JIKA|JIKA TIDAK|JIKA|AND|OR|NOT)\b|([A-Za-z_][A-Za-z0-9_]*\(\))|(&gt;=|&lt;=|==|!=|&gt;|&lt;)|\b(\d+)\b/g;
+    function hlCode(line) {
+        if (line.trim().startsWith('//')) return `<span class="kw-cmt">${escHTML(line)}</span>`;
+        return escHTML(line).replace(HL_RE, (m, kw, fn, op, num) => {
+            if (kw) {
+                const cls = kw === 'JIKA' ? 'kw-if' : kw === 'ATAU JIKA' ? 'kw-elif' : kw === 'JIKA TIDAK' ? 'kw-else' : 'kw-logic';
+                return `<span class="${cls}">${kw}</span>`;
+            }
+            if (fn) return `<span class="kw-act">${fn}</span>`;
+            if (op) return `<span class="kw-op">${op}</span>`;
+            return `<span class="kw-num">${num}</span>`;
+        });
+    }
+    function codeBlock(lines) { return codeTitle('PROGRAM ROBOT') + lines.map(l => `<div class="code-line">${hlCode(l)}</div>`).join(''); }
+    function faktaChips(list) { return list.map(f => `<span class="fakta">${escHTML(f)}</span>`).join(''); }
+    function shuffleArr(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+        return a;
+    }
+    function fmtDur(sec) { const m = Math.floor(sec / 60), s = sec % 60; return m ? `${m} menit ${s} detik` : `${s} detik`; }
+
+    // --- Penyimpanan (agar jawaban tidak hilang jika halaman tertutup) ---
+    const CAN_SAVE = (() => { try { const k = '__rc_test'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; } catch (e) { return false; } })();
+    function saveEx() { if (!CAN_SAVE || !ex) return; try { localStorage.setItem(SUMATIF_KEY, JSON.stringify(ex)); } catch (e) {} }
+    function clearEx() { if (!CAN_SAVE) return; try { localStorage.removeItem(SUMATIF_KEY); } catch (e) {} }
+    function loadEx() {
+        if (CAN_SAVE) {
+            try {
+                const d = JSON.parse(localStorage.getItem(SUMATIF_KEY) || 'null');
+                if (d && Array.isArray(d.answers) && d.answers.length === sumatifSoal.length &&
+                    Array.isArray(d.order) && d.order.length === sumatifSoal.length && d.deadline) return d;
+            } catch (e) {}
+        }
+        return ex; // cadangan: ujian yang masih ada di memori
+    }
+
+    // --- Layar pembuka ---
+    function openSumatifIntro() {
+        $('exFormErr').innerText = '';
+        renderResumeBox();
+        showScreen('sumatifIntroScreen');
+    }
+
+    function renderResumeBox() {
+        const box = $('resumeBox');
+        const saved = loadEx();
+        if (!saved) { box.style.display = 'none'; box.innerHTML = ''; return; }
+        const answered = saved.answers.filter(a => a !== null).length;
+        const left = Math.max(0, Math.ceil((saved.deadline - Date.now()) / 1000));
+        box.style.display = 'block';
+        box.innerHTML = `<b>⏸️ Ada ujian yang belum selesai</b>
+            <p>Atas nama <b>${escHTML(saved.nama)}</b> · terjawab ${answered}/${sumatifSoal.length} · ${left > 0 ? 'sisa waktu ' + fmtTime(left) : 'waktu sudah habis'}</p>
+            <button class="btn-main btn-secondary" onclick="resumeSumatif()">${left > 0 ? '▶️ Lanjutkan Ujian' : '📤 Kumpulkan Jawaban'}</button>`;
+    }
+
+    function startSumatif() {
+        const nama = $('exNama').value.trim().replace(/\s+/g, ' ');
+        const absen = $('exAbsen').value.trim();
+        if (nama.length < 2) { $('exFormErr').innerText = 'Tulis nama lengkapmu dulu, ya.'; $('exNama').focus(); return; }
+        $('exFormErr').innerText = '';
+
+        const begin = () => {
+            const now = Date.now();
+            ex = {
+                nama, absen,
+                order: sumatifSoal.map(s => shuffleArr(s.o.map((_, i) => i))),
+                answers: sumatifSoal.map(() => null),
+                startedAt: now,
+                deadline: now + SUMATIF_MINUTES * 60 * 1000,
+                current: 0
+            };
+            saveEx();
+            enterExam();
+        };
+
+        const saved = loadEx();
+        if (saved) {
+            askConfirm({ icon: '⚠️', title: 'Mulai ujian baru?', text: `Ujian yang belum selesai atas nama ${saved.nama} akan dihapus.`, okText: 'Ya, Mulai Baru', cancelText: 'Batal', onOk: begin });
+        } else {
+            begin();
+        }
+    }
+
+    function resumeSumatif() {
+        const saved = loadEx();
+        if (!saved) return;
+        ex = saved;
+        if (Date.now() >= ex.deadline) { submitSumatif(true); return; }
+        enterExam();
+    }
+
+    function enterExam() {
+        $('exStudent').innerText = `👤 ${ex.nama}${ex.absen ? ' · No. ' + ex.absen : ''}`;
+        showScreen('sumatifScreen');
+        renderQuestion(true);
+        startExTimer();
+    }
+
+    function startExTimer() {
+        clearInterval(exTimer);
+        resetTimerPill('exTimerPill');
+        tickEx();
+        exTimer = setInterval(tickEx, 1000);
+    }
+
+    function tickEx() {
+        if (!ex) { clearInterval(exTimer); return; }
+        const left = Math.max(0, Math.ceil((ex.deadline - Date.now()) / 1000));
+        $('exTimerText').innerText = fmtTime(left);
+        if (left < 300) warnTimerPill('exTimerPill');
+        if (left <= 0) {
+            clearInterval(exTimer);
+            showToast('⏰ Waktu habis! Jawaban dikumpulkan otomatis.');
+            submitSumatif(true);
+        }
+    }
+
+    // --- Menampilkan soal ---
+    function renderQuestion(resetScroll) {
+        const total = sumatifSoal.length, i = ex.current, s = sumatifSoal[i];
+        $('exNo').innerText = i + 1;
+        $('exTotal').innerText = total;
+        $('exSec').innerText = `Bagian ${s.s} · ${SUMATIF_SECTIONS[s.s]}`;
+        $('exQ').innerHTML = `<span class="q-num">${i + 1}.</span>${inlineFmt(s.q)}`;
+
+        const fk = $('exFakta');
+        if (s.fakta && s.fakta.length) { fk.style.display = 'flex'; fk.innerHTML = `<span class="fakta-label">Fakta:</span>` + faktaChips(s.fakta); }
+        else { fk.style.display = 'none'; fk.innerHTML = ''; }
+
+        const cd = $('exCode');
+        if (s.code) { cd.style.display = 'block'; cd.innerHTML = codeBlock(s.code); }
+        else { cd.style.display = 'none'; cd.innerHTML = ''; }
+
+        $('exOpts').innerHTML = ex.order[i].map((orig, pos) =>
+            `<button class="opt-btn" data-orig="${orig}" onclick="chooseOption(${orig})">
+                <span class="opt-letter">${'ABCDEF'[pos]}</span>
+                <span class="opt-text${s.mono ? ' mono light-code' : ''}">${s.mono ? hlCode(s.o[orig]) : inlineFmt(s.o[orig])}</span>
+            </button>`).join('');
+        updateSelection();
+
+        $('exPrev').disabled = (i === 0);
+        const nb = $('exNext');
+        if (i === total - 1) { nb.innerText = 'Kumpulkan 📤'; nb.classList.add('submit'); }
+        else { nb.innerText = 'Lanjut ➡'; nb.classList.remove('submit'); }
+
+        if (resetScroll) $('examBody').scrollTop = 0;
+    }
+
+    function updateSelection() {
+        const i = ex.current;
+        document.querySelectorAll('#exOpts .opt-btn').forEach(b => b.classList.toggle('selected', Number(b.dataset.orig) === ex.answers[i]));
+        const answered = ex.answers.filter(a => a !== null).length;
+        $('exAnswered').innerText = answered;
+        $('exProgressBar').style.width = (answered / sumatifSoal.length * 100) + '%';
+    }
+
+    function chooseOption(orig) {
+        if (!ex) return;
+        ex.answers[ex.current] = orig;
+        saveEx();
+        updateSelection();
+    }
+
+    function goQuestion(i) {
+        if (!ex) return;
+        ex.current = Math.max(0, Math.min(sumatifSoal.length - 1, i));
+        saveEx();
+        renderQuestion(true);
+    }
+    function prevQ() { goQuestion(ex.current - 1); }
+    function nextQ() { if (ex.current === sumatifSoal.length - 1) requestSubmit(); else goQuestion(ex.current + 1); }
+
+    function openNumGrid() {
+        if (!ex) return;
+        $('numGrid').innerHTML = sumatifSoal.map((_, i) =>
+            `<button class="num-btn${ex.answers[i] !== null ? ' done' : ''}${i === ex.current ? ' cur' : ''}" onclick="closeNumGrid(); goQuestion(${i});">${i + 1}</button>`).join('');
+        const kosong = ex.answers.filter(a => a === null).length;
+        $('numInfo').innerText = kosong ? `${kosong} soal belum dijawab` : 'Semua soal sudah dijawab 🎉';
+        $('numInfo').style.color = kosong ? '#b45309' : '#047857';
+        $('numOverlay').classList.add('show');
+    }
+    function closeNumGrid() { $('numOverlay').classList.remove('show'); }
+
+    function requestSubmit() {
+        if (!ex) return;
+        const kosong = ex.answers.filter(a => a === null).length;
+        if (kosong) {
+            const first = ex.answers.findIndex(a => a === null);
+            askConfirm({
+                icon: '⚠️', title: 'Masih ada soal kosong',
+                text: `Ada ${kosong} soal yang belum dijawab. Soal yang kosong tidak mendapat nilai. Tetap kumpulkan?`,
+                okText: 'Ya, Kumpulkan', cancelText: `Ke Soal No. ${first + 1}`,
+                onOk: () => submitSumatif(false), onCancel: () => goQuestion(first)
+            });
+        } else {
+            askConfirm({
+                icon: '📤', title: 'Kumpulkan jawaban?',
+                text: 'Semua soal sudah dijawab. Setelah dikumpulkan, jawaban tidak bisa diubah lagi.',
+                okText: 'Ya, Kumpulkan', cancelText: 'Periksa Lagi',
+                onOk: () => submitSumatif(false)
+            });
+        }
+    }
+
+    function exitSumatifRequest() {
+        askConfirm({
+            icon: '🚪', title: 'Keluar dari ujian?',
+            text: CAN_SAVE
+                ? 'Jawabanmu tersimpan di perangkat ini dan bisa dilanjutkan dari menu Ujian Sumatif. Waktu ujian tetap berjalan.'
+                : 'Jawabanmu bisa dilanjutkan selama halaman ini tidak ditutup. Waktu ujian tetap berjalan.',
+            okText: 'Ya, Keluar', cancelText: 'Lanjut Mengerjakan',
+            onOk: () => { clearInterval(exTimer); showScreen('classMenuScreen'); }
+        });
+    }
+
+    // --- Penilaian ---
+    function predikatOf(score) {
+        if (score >= 90) return { text: 'Sangat Baik', emoji: '🌟', bg: '#dcfce7', fg: '#166534' };
+        if (score >= SUMATIF_KKTP) return { text: 'Baik', emoji: '👍', bg: '#e0e7ff', fg: '#3730a3' };
+        if (score >= 60) return { text: 'Cukup', emoji: '🙂', bg: '#fef3c7', fg: '#92400e' };
+        return { text: 'Perlu Bimbingan', emoji: '💪', bg: '#fee2e2', fg: '#991b1b' };
+    }
+
+    function submitSumatif(auto) {
+        if (!ex) return;
+        clearInterval(exTimer);
+        const total = sumatifSoal.length;
+        let benar = 0, salah = 0, kosong = 0;
+        const perSec = {};
+        Object.keys(SUMATIF_SECTIONS).forEach(k => perSec[k] = { benar: 0, total: 0 });
+        sumatifSoal.forEach((s, i) => {
+            perSec[s.s].total++;
+            const ans = ex.answers[i];
+            if (ans === null) kosong++;
+            else if (ans === s.a) { benar++; perSec[s.s].benar++; }
+            else salah++;
+        });
+        let dateText = '';
+        try { dateText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
+        catch (e) { dateText = new Date().toDateString(); }
+
+        lastResult = {
+            nama: ex.nama, absen: ex.absen,
+            answers: ex.answers.slice(), order: ex.order,
+            benar, salah, kosong,
+            score: Math.round(benar * 100 / total),
+            perSec, auto,
+            usedSec: Math.min(SUMATIF_MINUTES * 60, Math.max(0, Math.round((Date.now() - ex.startedAt) / 1000))),
+            dateText
+        };
+        clearEx();
+        ex = null;
+        renderResult();
+        showScreen('sumatifResultScreen');
+        if (lastResult.score >= 80) createConfetti();
+    }
+
+    function renderResult() {
+        const r = lastResult;
+        const p = predikatOf(r.score);
+        const tuntas = r.score >= SUMATIF_KKTP;
+        $('srIcon').innerText = tuntas ? '🏆' : '📘';
+        $('srTitle').innerText = r.auto ? 'Waktu Habis!' : 'Ujian Selesai!';
+        $('srTitle').style.color = r.auto ? 'var(--danger)' : 'var(--primary)';
+        $('srName').innerText = `${r.nama}${r.absen ? ' · No. Absen ' + r.absen : ''}\n${r.dateText}`;
+        $('srScore').innerText = r.score;
+        const pe = $('srPredikat');
+        pe.innerText = `${p.text} ${p.emoji} · ${tuntas ? 'Tuntas' : 'Belum Tuntas'} (KKTP ${SUMATIF_KKTP})`;
+        pe.style.background = p.bg; pe.style.color = p.fg;
+        $('srBenar').innerText = r.benar;
+        $('srSalah').innerText = r.salah;
+        $('srKosong').innerText = r.kosong;
+        $('srWaktu').innerText = `${Math.floor(r.usedSec / 60)}:${String(r.usedSec % 60).padStart(2, '0')}`;
+        $('wrongCount').innerText = r.salah + r.kosong;
+
+        const weak = [];
+        const rows = Object.keys(SUMATIF_SECTIONS).map(k => {
+            const d = r.perSec[k];
+            const pct = d.total ? Math.round(d.benar / d.total * 100) : 0;
+            if (pct < 75) weak.push(SUMATIF_SECTIONS[k]);
+            const col = pct >= 75 ? 'var(--success)' : pct >= 50 ? 'var(--warning)' : 'var(--danger)';
+            return `<div class="sec-row">
+                <div class="sec-head"><span>${k}. ${escHTML(SUMATIF_SECTIONS[k])}</span><span>${d.benar}/${d.total}</span></div>
+                <div class="sec-bar"><div style="width:${pct}%; background:${col};"></div></div>
+            </div>`;
+        }).join('');
+        const tip = weak.length
+            ? `<div class="sec-tip">💡 Pelajari lagi: ${weak.map(escHTML).join(', ')}.</div>`
+            : `<div class="sec-tip" style="background:#ecfdf5; color:#065f46;">🌟 Semua bagian sudah dikuasai dengan baik!</div>`;
+        $('srSections').innerHTML = rows + tip;
+    }
+
+    function resultText() {
+        const r = lastResult;
+        const p = predikatOf(r.score);
+        return [
+            '📝 HASIL UJIAN SUMATIF LOGIKA KELAS 4',
+            `Nama     : ${r.nama}`,
+            r.absen ? `No. Absen: ${r.absen}` : null,
+            `Tanggal  : ${r.dateText}`,
+            `Nilai    : ${r.score}/100 (${p.text}, ${r.score >= SUMATIF_KKTP ? 'Tuntas' : 'Belum Tuntas'})`,
+            `Benar ${r.benar} · Salah ${r.salah} · Kosong ${r.kosong}`,
+            `Waktu    : ${fmtDur(r.usedSec)}${r.auto ? ' (waktu habis)' : ''}`,
+            'Per bagian:',
+            ...Object.keys(SUMATIF_SECTIONS).map(k => `- ${k}. ${SUMATIF_SECTIONS[k]}: ${r.perSec[k].benar}/${r.perSec[k].total}`)
+        ].filter(Boolean).join('\n');
+    }
+
+    function copyResult() {
+        if (!lastResult) return;
+        const text = resultText();
+        const done = () => showToast('✅ Hasil disalin! Tempel ke WhatsApp atau catatan guru.');
+        const fallback = () => {
+            const ta = document.createElement('textarea');
+            ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) {}
+            ta.remove();
+            ok ? done() : showToast('Gagal menyalin. Silakan foto layar hasil ini.');
+        };
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+        else fallback();
+    }
+
+    // --- Pembahasan ---
+    function openReview() { reviewFilter = 'all'; renderReview(); showScreen('reviewScreen'); }
+    function filterReview(f) { reviewFilter = f; renderReview(); }
+
+    function renderReview() {
+        const r = lastResult;
+        if (!r) return;
+        document.querySelectorAll('#reviewScreen .chip-btn').forEach(b => b.classList.toggle('active', b.dataset.f === reviewFilter));
+        const html = sumatifSoal.map((s, i) => {
+            const ans = r.answers[i];
+            const status = ans === null ? 'empty' : (ans === s.a ? 'ok' : 'bad');
+            if (reviewFilter === 'wrong' && status === 'ok') return '';
+            const statusLabel = { ok: '✅ Benar', bad: '❌ Salah', empty: '⚪ Tidak dijawab' }[status];
+            const opts = r.order[i].map((orig, pos) => {
+                const isCorrect = orig === s.a, isChosen = orig === ans;
+                const cls = isCorrect ? 'correct' : (isChosen ? 'chosen-wrong' : '');
+                const txt = s.mono ? `<span class="mono light-code">${hlCode(s.o[orig])}</span>` : inlineFmt(s.o[orig]);
+                return `<div class="rv-opt ${cls}"><b>${'ABCDEF'[pos]}.</b><span class="rv-opt-text">${txt}</span>${isChosen ? '<span class="rv-tag">jawabanmu</span>' : ''}<span>${isCorrect ? '✔' : (isChosen ? '✘' : '')}</span></div>`;
+            }).join('');
+            return `<div class="rv-item ${status}">
+                <div class="rv-head"><span class="q-sec">Soal ${i + 1} · Bagian ${s.s}</span><span class="rv-status ${status}">${statusLabel}</span></div>
+                <div class="rv-q">${inlineFmt(s.q)}</div>
+                ${s.fakta ? `<div class="fakta-row">${faktaChips(s.fakta)}</div>` : ''}
+                ${s.code ? `<div class="code-monitor">${codeBlock(s.code)}</div>` : ''}
+                ${opts}
+                <div class="rv-exp">💡 <b>Pembahasan:</b> ${inlineFmt(s.p)}</div>
+            </div>`;
+        }).join('');
+        $('reviewList').innerHTML = html || `<div class="materi-card" style="text-align:center;"><h2>Hebat! 🎉</h2><p style="text-align:center;">Semua jawabanmu benar, tidak ada yang perlu dibahas.</p></div>`;
+    }
+
+    // --- Popup konfirmasi & notifikasi ---
+    function askConfirm({ icon = '🤔', title = '', text = '', okText = 'Ya', cancelText = 'Batal', onOk, onCancel }) {
+        const ov = $('confirmOverlay');
+        $('cfIcon').innerText = icon;
+        $('cfTitle').innerText = title;
+        $('cfText').innerText = text;
+        const ok = $('cfOk'), cancel = $('cfCancel');
+        ok.innerText = okText; cancel.innerText = cancelText;
+        ok.onclick = () => { ov.classList.remove('show'); if (onOk) onOk(); };
+        cancel.onclick = () => { ov.classList.remove('show'); if (onCancel) onCancel(); };
+        ov.classList.add('show');
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+        const t = $('toast');
+        t.innerText = msg;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // Keyboard (laptop): A–D / 1–4 untuk memilih, panah kiri/kanan untuk pindah soal
+    document.addEventListener('keydown', e => {
+        if (!ex || !isActive('sumatifScreen') || document.querySelector('.feedback-overlay.show')) return;
+        const map = { a: 0, b: 1, c: 2, d: 3, '1': 0, '2': 1, '3': 2, '4': 3 };
+        const k = e.key.toLowerCase();
+        if (k in map) {
+            const orig = ex.order[ex.current][map[k]];
+            if (orig !== undefined) chooseOption(orig);
+        } else if (e.key === 'ArrowRight' && ex.current < sumatifSoal.length - 1) {
+            goQuestion(ex.current + 1);
+        } else if (e.key === 'ArrowLeft') {
+            prevQ();
+        }
+    });
+
+    // --- Inisialisasi label jumlah soal ---
+    $('c6CountLabel').innerText = `${c6Levels.length} soal · tanpa batas waktu`;
+    document.querySelectorAll('.sumatif-count').forEach(el => el.innerText = sumatifSoal.length);
+    document.querySelectorAll('.sumatif-minutes').forEach(el => el.innerText = SUMATIF_MINUTES);
 </script>
 
 </body>
