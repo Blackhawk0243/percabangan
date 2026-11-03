@@ -454,7 +454,7 @@
                     <div class="menu-group-label">Penilaian</div>
                     <button class="menu-card featured" onclick="openSumatifIntro()">
                         <span class="mc-icon" style="background:#fce7f3">📝</span>
-                        <span class="mc-body"><b>Ujian Sumatif<span class="mc-badge">BARU</span></b><small><span class="sumatif-count">50</span> soal pilihan ganda · <span class="sumatif-minutes">60</span> menit</small></span>
+                        <span class="mc-body"><b>Ujian Sumatif<span class="mc-badge">BARU</span></b><small><span class="sumatif-count">30</span> soal pilihan ganda · <span class="sumatif-minutes">60</span> menit</small></span>
                         <span class="mc-arrow">›</span>
                     </button>
                 </div>
@@ -717,7 +717,7 @@
             <p style="max-width:480px;">Uji semua yang sudah kamu pelajari: JIKA, tanda perbandingan, ATAU JIKA, serta AND &amp; OR.</p>
 
             <div class="info-grid">
-                <div class="info-chip"><b class="sumatif-count">50</b><span>Soal pilihan ganda</span></div>
+                <div class="info-chip"><b class="sumatif-count">30</b><span>Soal pilihan ganda</span></div>
                 <div class="info-chip"><b class="sumatif-minutes">60</b><span>Menit</span></div>
                 <div class="info-chip"><b>100</b><span>Nilai maksimal</span></div>
             </div>
@@ -753,9 +753,9 @@
             <div class="exam-student" id="exStudent">👤</div>
         </div>
         <div class="game-header">
-            <div class="pill level-pill">📝 Soal <span id="exNo">1</span>/<span id="exTotal">50</span></div>
+            <div class="pill level-pill">📝 Soal <span id="exNo">1</span>/<span id="exTotal">30</span></div>
             <div class="pill timer-pill" id="exTimerPill">⏳ <span id="exTimerText">60:00</span></div>
-            <div class="pill score-pill">✅ <span class="lbl-long">Terjawab </span><span id="exAnswered">0</span>/<span class="sumatif-count">50</span></div>
+            <div class="pill score-pill">✅ <span class="lbl-long">Terjawab </span><span id="exAnswered">0</span>/<span class="sumatif-count">30</span></div>
         </div>
         <div class="ex-progress"><div id="exProgressBar"></div></div>
 
@@ -1565,7 +1565,7 @@
     // =====================================================
     const SUMATIF_MINUTES = 60;   // lama ujian (menit)
     const SUMATIF_KKTP = 75;      // batas tuntas (KKTP)
-    const SUMATIF_KEY = 'roboCode_sumatif_k4_v1';
+    const SUMATIF_KEY = 'roboCode_sumatif_k4_v2';
     const SUMATIF_SECTIONS = {
         A: 'Konsep JIKA & JIKA TIDAK',
         B: 'Tanda Perbandingan',
@@ -1583,7 +1583,7 @@
     const PIPA3_CODE = ['JIKA ( Berat > 50 ) {', '  Buang_ke_MERAH();', '} ATAU JIKA ( Suhu > 25 ) {', '  Buang_ke_BIRU();', '} JIKA TIDAK {', '  Buang_ke_HIJAU();', '}'];
 
     const sumatifSoal = [
-        // ================= BAGIAN A: KONSEP JIKA & JIKA TIDAK (No. 1–10) =================
+        // ================= BAGIAN A: KONSEP JIKA & JIKA TIDAK (No. 1–6) =================
         { s:'A', q:'Perintah yang dipakai komputer untuk mengambil keputusan berdasarkan sebuah syarat adalah ....',
           o:['JIKA (IF)', 'ULANGI (LOOP)', 'CETAK (PRINT)', 'SIMPAN (SAVE)'], a:0,
           p:'JIKA (IF) dipakai untuk mengecek syarat. Kalau syaratnya BENAR, perintah di dalamnya dijalankan.' },
@@ -1602,39 +1602,17 @@
           o:['syarat pada JIKA bernilai SALAH', 'syarat pada JIKA bernilai BENAR', 'program baru saja dimulai', 'semua perintah sudah selesai'], a:0,
           p:'JIKA TIDAK adalah jalan "sisanya". Cabang ini hanya dijalankan kalau syarat pada JIKA SALAH.' },
 
-        { s:'A', q:'Dalam satu percabangan JIKA – JIKA TIDAK, berapa cabang yang dijalankan robot?',
-          o:['Hanya satu cabang', 'Kedua cabang sekaligus', 'Tidak ada cabang yang dijalankan', 'Tergantung panjang programnya'], a:0,
-          p:'Robot selalu memilih SATU jalan saja: cabang JIKA (syarat benar) atau cabang JIKA TIDAK (syarat salah).' },
-
-        { s:'A', q:'Kalimat berikut yang merupakan contoh percabangan JIKA – MAKA adalah ....',
-          o:['Jika lapar, maka makan nasi.', 'Saya makan nasi setiap pagi.', 'Nasi itu berwarna putih.', 'Ibu membeli nasi di warung.'], a:0,
-          p:'Percabangan selalu punya syarat (lapar) dan tindakan (makan nasi). Kalimat lainnya tidak punya syarat.' },
-
-        { s:'A', q:'Badan Rina sudah bersih. Apa yang dilakukan Rina sesuai program berikut?', fakta:['Badan = Bersih'],
-          code:['JIKA ( Badan == Kotor ) {', '  Mandi();', '} JIKA TIDAK {', '  Baca_Buku();', '}'],
-          o:['Baca Buku', 'Mandi', 'Mandi lalu Baca Buku', 'Tidur siang'], a:0,
-          p:'Badan Bersih, jadi syarat `Badan == Kotor` SALAH. Rina menjalankan cabang JIKA TIDAK: Baca Buku.' },
-
         { s:'A', q:'Pada program berikut, bagian yang disebut SYARAT (kondisi) adalah ....',
           code:['JIKA ( Baterai == Habis ) {', '  Cas_HP();', '} JIKA TIDAK {', '  Nonton_Video();', '}'],
           o:['Baterai == Habis', 'Cas_HP()', 'Nonton_Video()', 'JIKA TIDAK'], a:0, mono:true,
           p:'Syarat adalah bagian yang dicek di dalam tanda kurung ( ) tepat setelah kata JIKA.' },
-
-        { s:'A', q:'Hari ini tanahnya kering. Apa yang dilakukan robot penyiram tanaman?', fakta:['Tanah = Kering'],
-          code:['JIKA ( Tanah == Kering ) {', '  Siram_Tanaman();', '} JIKA TIDAK {', '  Istirahat();', '}'],
-          o:['Siram Tanaman', 'Istirahat', 'Siram Tanaman dan Istirahat', 'Mencabut Tanaman'], a:0,
-          p:'Tanah Kering, jadi syaratnya BENAR. Robot menjalankan cabang JIKA: Siram Tanaman.' },
 
         { s:'A', q:'Program berikut belum lengkap. Perintah yang paling tepat untuk mengisi ??? adalah ....',
           code:['JIKA ( Mata == Ngantuk ) {', '  ???', '} JIKA TIDAK {', '  Belajar();', '}'],
           o:['Tidur();', 'Belajar();', 'Main_Game();', 'Begadang();'], a:0, mono:true,
           p:'Kalau mata ngantuk, tindakan yang masuk akal adalah tidur. Kalau tidak ngantuk, baru belajar.' },
 
-        // ================= BAGIAN B: TANDA PERBANDINGAN (No. 11–22) =================
-        { s:'B', q:'Tanda `>` dibaca ....',
-          o:['lebih besar dari', 'lebih kecil dari', 'sama dengan', 'tidak sama dengan'], a:0,
-          p:'Tanda > artinya angka di kiri LEBIH BESAR dari angka di kanan. Contoh: `10 > 5`.' },
-
+        // ================= BAGIAN B: TANDA PERBANDINGAN (No. 7–13) =================
         { s:'B', q:'Pernyataan berikut yang bernilai BENAR adalah ....',
           o:['15 > 9', '4 > 12', '7 < 3', '20 < 20'], a:0, mono:true,
           p:'15 memang lebih besar dari 9. Pilihan lain salah: 4 tidak lebih dari 12, 7 tidak kurang dari 3, dan 20 tidak kurang dari 20 (angkanya sama).' },
@@ -1646,10 +1624,6 @@
         { s:'B', q:'Tanda `!=` artinya ....',
           o:['tidak sama dengan', 'sama persis', 'lebih besar dari', 'lebih kecil dari atau sama dengan'], a:0,
           p:'!= artinya TIDAK SAMA. Syaratnya BENAR kalau kedua angka berbeda.' },
-
-        { s:'B', q:'Pernyataan `8 == 8` bernilai ....',
-          o:['BENAR, karena kedua angka sama persis', 'SALAH, karena angkanya sama', 'BENAR, karena 8 lebih besar dari 8', 'SALAH, karena == artinya tidak sama'], a:0,
-          p:'Tanda == mengecek apakah kedua angka kembar. 8 dan 8 kembar, jadi BENAR.' },
 
         { s:'B', q:'Sebuah wahana memakai aturan berikut. Tinggi Andi tepat 130 cm. Apa yang terjadi?', fakta:['Tinggi Andi = 130 cm'],
           code:['JIKA ( Tinggi > 130 ) {', '  Boleh_Masuk();', '} JIKA TIDAK {', '  Dilarang_Masuk();', '}'],
@@ -1665,31 +1639,15 @@
           o:['Berat <= 200', 'Berat >= 200', 'Berat < 200', 'Berat != 200'], a:0, mono:true,
           p:'"Paling banyak" artinya maksimal, dan berat tepat 200 kg masih boleh. Jadi pakai tanda <=.' },
 
-        { s:'B', q:'Peserta lomba lari harus berumur MINIMAL 9 tahun. Syarat yang tepat adalah ....',
-          o:['Umur >= 9', 'Umur > 9', 'Umur <= 9', 'Umur == 9'], a:0, mono:true,
-          p:'"Minimal" artinya paling sedikit, dan anak berumur tepat 9 tahun sudah boleh ikut. Jadi pakai tanda >=.' },
-
         { s:'B', q:'Sebuah barang masuk ke mesin sortir. Ke pipa mana barang ini dibuang?', fakta:['Berat = 25 kg'],
           code:['JIKA ( Berat != 25 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
           o:['Pipa BIRU', 'Pipa MERAH', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
           p:'`25 != 25` artinya "25 tidak sama dengan 25". Itu SALAH karena angkanya sama. Barang masuk JIKA TIDAK: Pipa BIRU.' },
 
-        { s:'B', q:'Suhu ruangan saat ini 28 °C. Syarat manakah yang bernilai BENAR?', fakta:['Suhu = 28 °C'],
-          o:['Suhu <= 28', 'Suhu > 28', 'Suhu < 28', 'Suhu != 28'], a:0, mono:true,
-          p:'`28 <= 28` BENAR karena ada tanda sama dengan. Tiga syarat lainnya SALAH karena suhunya tepat 28.' },
-
-        { s:'B', q:'Angka berat berikut yang membuat syarat `Berat > 40` bernilai SALAH adalah ....',
-          o:['40', '41', '45', '60'], a:0,
-          p:'`40 > 40` itu SALAH karena angkanya sama. Angka 41, 45, dan 60 semuanya lebih besar dari 40.' },
-
-        // ================= BAGIAN C: ATURAN BERTINGKAT / ATAU JIKA (No. 23–32) =================
+        // ================= BAGIAN C: ATURAN BERTINGKAT / ATAU JIKA (No. 14–19) =================
         { s:'C', q:'Perintah ATAU JIKA (ELSE IF) dipakai ketika ....',
           o:['pilihannya lebih dari dua', 'pilihannya hanya satu', 'program ingin diulang terus-menerus', 'robot ingin berhenti bekerja'], a:0,
           p:'JIKA – JIKA TIDAK hanya punya dua jalan. Kalau pilihannya lebih dari dua, kita tambahkan ATAU JIKA di tengahnya.' },
-
-        { s:'C', q:'Mesin membaca aturan bertingkat (JIKA – ATAU JIKA – JIKA TIDAK) dengan urutan ....',
-          o:['dari atas ke bawah', 'dari bawah ke atas', 'acak sesuka mesin', 'hanya baris paling akhir'], a:0,
-          p:'Mesin SELALU membaca dari atas ke bawah, satu per satu.' },
 
         { s:'C', q:'Syarat pada baris JIKA paling atas ternyata sudah BENAR. Apa yang dilakukan mesin?',
           o:['Menjalankan perintahnya, lalu berhenti mengecek syarat di bawahnya', 'Tetap mengecek semua syarat di bawahnya', 'Langsung masuk ke JIKA TIDAK', 'Mengulang program dari awal'], a:0,
@@ -1705,32 +1663,17 @@
           o:['A', 'B', 'C', 'A dan B'], a:0,
           p:'Baris 1: `90 >= 90` BENAR (ada tanda =). Sinta langsung Dapat A dan mesin berhenti mengecek.' },
 
-        { s:'C', q:'Nilai ulangan Doni 74. Nilai huruf apa yang didapat Doni?', fakta:['Nilai Doni = 74'],
-          code: NILAI_CODE,
-          o:['C', 'B', 'A', 'Tidak mendapat nilai'], a:0,
-          p:'`74 >= 90` SALAH dan `74 >= 75` juga SALAH. Semua syarat salah, jadi Doni masuk JIKA TIDAK: Dapat C.' },
-
         { s:'C', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 60 kg', 'Suhu = 30 °C'],
           code: PIPA3_CODE,
           o:['Pipa MERAH', 'Pipa BIRU', 'Pipa HIJAU', 'Pipa MERAH dan BIRU'], a:0,
           p:'Baris 1: `60 > 50` BENAR, langsung ke Pipa MERAH. Walaupun `30 > 25` juga benar, baris 2 tidak dicek lagi.' },
-
-        { s:'C', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 40 kg', 'Suhu = 30 °C'],
-          code: PIPA3_CODE,
-          o:['Pipa BIRU', 'Pipa MERAH', 'Pipa HIJAU', 'Pipa MERAH dan BIRU'], a:0,
-          p:'Baris 1: `40 > 50` SALAH, turun. Baris 2: `30 > 25` BENAR, jadi barang ke Pipa BIRU.' },
 
         { s:'C', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 50 kg', 'Suhu = 25 °C'],
           code: PIPA3_CODE,
           o:['Pipa HIJAU', 'Pipa MERAH', 'Pipa BIRU', 'Pipa MERAH dan BIRU'], a:0,
           p:'`50 > 50` SALAH dan `25 > 25` juga SALAH (angkanya sama). Semua syarat salah, jadi barang ke Pipa HIJAU.' },
 
-        { s:'C', q:'Suhu badan Lala 37 °C. Apa yang dilakukan Lala menurut program berikut?', fakta:['Suhu badan = 37 °C'],
-          code:['JIKA ( Suhu >= 38 ) {', '  Ke_Dokter();', '} ATAU JIKA ( Suhu >= 37 ) {', '  Istirahat_di_Rumah();', '} JIKA TIDAK {', '  Berangkat_Sekolah();', '}'],
-          o:['Istirahat di Rumah', 'Ke Dokter', 'Berangkat Sekolah', 'Ke Dokter lalu Istirahat di Rumah'], a:0,
-          p:'`37 >= 38` SALAH, turun. `37 >= 37` BENAR, jadi Lala Istirahat di Rumah.' },
-
-        // ================= BAGIAN D: LOGIKA AND & OR (No. 33–44) =================
+        // ================= BAGIAN D: LOGIKA AND & OR (No. 20–26) =================
         { s:'D', q:'Pada gerbang logika AND, hasilnya BENAR jika ....',
           o:['semua syarat BENAR', 'salah satu syarat BENAR', 'semua syarat SALAH', 'syarat pertama SALAH'], a:0,
           p:'AND itu syarat ketat: SEMUA syarat harus BENAR. Satu saja salah, hasilnya SALAH.' },
@@ -1742,14 +1685,6 @@
         { s:'D', q:'`BENAR AND SALAH` hasilnya ....',
           o:['SALAH', 'BENAR', 'BENAR dan SALAH', 'Tidak bisa ditentukan'], a:0,
           p:'AND butuh semua syarat BENAR. Ada satu yang SALAH, jadi hasilnya SALAH.' },
-
-        { s:'D', q:'`BENAR OR SALAH` hasilnya ....',
-          o:['BENAR', 'SALAH', 'BENAR dan SALAH', 'Tidak bisa ditentukan'], a:0,
-          p:'OR cukup satu yang BENAR. Syarat pertama BENAR, jadi hasilnya BENAR.' },
-
-        { s:'D', q:'`SALAH OR SALAH` hasilnya ....',
-          o:['SALAH', 'BENAR', 'BENAR dan SALAH', 'Tidak bisa ditentukan'], a:0,
-          p:'Tidak ada satu pun syarat yang BENAR, jadi hasil OR juga SALAH.' },
 
         { s:'D', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 30 kg', 'Suhu = 20 °C'],
           code:['JIKA ( Berat > 10 AND Suhu == 30 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
@@ -1766,27 +1701,12 @@
           o:['Dika: umur 6 tahun, berat 35 kg', 'Eka: umur 4 tahun, berat 20 kg', 'Fani: umur 8 tahun, berat 40 kg', 'Gilang: umur 3 tahun, berat 38 kg'], a:0,
           p:'Dika: `6 >= 5` BENAR dan `35 <= 35` BENAR, keduanya benar. Eka terlalu muda, Fani terlalu berat, Gilang gagal di kedua syarat.' },
 
-        { s:'D', q:'Hari ini hari Rabu, tetapi tanggal merah (hari raya). Apa yang terjadi?', fakta:['Hari = Rabu', 'Tanggal = Merah'],
-          code:['JIKA ( Hari == Minggu OR Tanggal == Merah ) {', '  Libur();', '} JIKA TIDAK {', '  Sekolah();', '}'],
-          o:['Libur', 'Sekolah', 'Libur dan Sekolah', 'Sekolah setengah hari'], a:0,
-          p:'`Hari == Minggu` SALAH, tetapi `Tanggal == Merah` BENAR. Dengan OR, satu benar sudah cukup, jadi Libur.' },
-
-        { s:'D', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 45 kg', 'Energi = 50 %'],
-          code:['JIKA ( Berat >= 45 AND Energi <= 50 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
-          o:['Pipa MERAH', 'Pipa BIRU', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
-          p:'`45 >= 45` BENAR dan `50 <= 50` BENAR (keduanya ada tanda =). Semua benar, jadi AND BENAR. Barang ke Pipa MERAH.' },
-
         { s:'D', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 12 kg', 'Suhu = 70 °C'],
           code:['JIKA ( Berat > 12 OR Suhu < 70 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
           o:['Pipa BIRU', 'Pipa MERAH', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
           p:'`12 > 12` SALAH dan `70 < 70` juga SALAH (angkanya sama). Dengan OR pun, kalau semua salah hasilnya SALAH. Barang ke Pipa BIRU.' },
 
-        { s:'D', q:'Kapan pintu otomatis berikut akan terbuka?',
-          code:['JIKA ( Kartu == Ada AND Sidik_Jari == Cocok ) {', '  Buka_Pintu();', '} JIKA TIDAK {', '  Kunci_Pintu();', '}'],
-          o:['Kartu ada dan sidik jari cocok', 'Kartu ada, tetapi sidik jari tidak cocok', 'Kartu tidak ada, tetapi sidik jari cocok', 'Kartu tidak ada dan sidik jari tidak cocok'], a:0,
-          p:'Karena memakai AND, pintu hanya terbuka kalau KEDUA syarat benar: kartu ada DAN sidik jari cocok.' },
-
-        // ================= BAGIAN E: ANALISIS & PENALARAN / HOTS (No. 45–50) =================
+        // ================= BAGIAN E: ANALISIS & PENALARAN / HOTS (No. 27–30) =================
         { s:'E', q:'Tono membuat program nilai berikut. Ternyata siswa yang nilainya 95 malah mendapat B. Mengapa hal itu terjadi?', fakta:['Nilai = 95'],
           code:['JIKA ( Nilai >= 75 ) {', '  Dapat_B();', '} ATAU JIKA ( Nilai >= 90 ) {', '  Dapat_A();', '} JIKA TIDAK {', '  Dapat_C();', '}'],
           o:['Karena syarat Nilai >= 75 ada di atas dan sudah BENAR, jadi mesin berhenti di situ', 'Karena 95 lebih kecil dari 90', 'Karena mesin membaca dari bawah ke atas', 'Karena tanda >= artinya lebih kecil'], a:0,
@@ -1797,19 +1717,10 @@
           o:['Pipa BIRU', 'Pipa MERAH', 'Pipa HIJAU', 'Pipa MERAH dan BIRU'], a:0,
           p:'Baris 1: `70 < 50` SALAH, jadi AND SALAH. Baris 2: `15 < 20` BENAR, jadi OR BENAR. Barang ke Pipa BIRU.' },
 
-        { s:'E', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 40 kg', 'Suhu = 25 °C', 'Energi = 60 %'],
-          code:['JIKA ( Berat >= 50 OR Energi > 60 ) {', '  Buang_ke_MERAH();', '} ATAU JIKA ( Berat > 30 AND Suhu != 25 ) {', '  Buang_ke_BIRU();', '} JIKA TIDAK {', '  Buang_ke_HIJAU();', '}'],
-          o:['Pipa HIJAU', 'Pipa MERAH', 'Pipa BIRU', 'Pipa MERAH dan BIRU'], a:0,
-          p:'Baris 1: `40 >= 50` SALAH dan `60 > 60` SALAH, jadi OR SALAH. Baris 2: `40 > 30` BENAR, tetapi `25 != 25` SALAH, jadi AND SALAH. Semua gagal, barang ke Pipa HIJAU.' },
-
         { s:'E', q:'Agar barang dengan suhu 30 °C masuk ke Pipa MERAH, tanda yang tepat untuk mengisi ??? adalah ....', fakta:['Suhu = 30 °C'],
           code:['JIKA ( Suhu ??? 30 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
           o:['>=', '>', '<', '!='], a:0, mono:true,
           p:'Hanya `30 >= 30` yang BENAR. `30 > 30`, `30 < 30`, dan `30 != 30` semuanya SALAH.' },
-
-        { s:'E', q:'Siswa mendapat hadiah jika nilainya MINIMAL 80 DAN tidak pernah terlambat (Terlambat == 0). Syarat program yang benar adalah ....',
-          o:['JIKA ( Nilai >= 80 AND Terlambat == 0 )', 'JIKA ( Nilai > 80 OR Terlambat == 0 )', 'JIKA ( Nilai >= 80 OR Terlambat != 0 )', 'JIKA ( Nilai <= 80 AND Terlambat == 0 )'], a:0, mono:true,
-          p:'"Minimal 80" ditulis `Nilai >= 80`. Kata "DAN" berarti kedua syarat harus benar, jadi pakai AND.' },
 
         { s:'E', q:'Empat barang (P, Q, R, S) masuk ke mesin berikut. Berapa banyak barang yang dibuang ke Pipa MERAH?',
           fakta:['P: Berat 25, Energi 50', 'Q: Berat 20, Energi 80', 'R: Berat 30, Energi 45', 'S: Berat 50, Energi 90'],
