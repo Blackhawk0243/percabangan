@@ -451,10 +451,15 @@
                         <span class="mc-body"><b>Game 2: Logika AND &amp; OR</b><small>50 soal · 35 menit</small></span>
                         <span class="mc-arrow">›</span>
                     </button>
-                    <div class="menu-group-label">Penilaian</div>
-                    <button class="menu-card featured" onclick="openSumatifIntro()">
+                    <div class="menu-group-label">Latihan &amp; Penilaian</div>
+                    <button class="menu-card" onclick="openSumatifIntro('latihan')">
+                        <span class="mc-icon" style="background:#d1fae5">✏️</span>
+                        <span class="mc-body"><b>Latihan Soal</b><small><span class="latihan-count">30</span> soal pilihan ganda · <span class="latihan-minutes">60</span> menit</small></span>
+                        <span class="mc-arrow">›</span>
+                    </button>
+                    <button class="menu-card featured" onclick="openSumatifIntro('sumatif')">
                         <span class="mc-icon" style="background:#fce7f3">📝</span>
-                        <span class="mc-body"><b>Ujian Sumatif<span class="mc-badge">BARU</span></b><small><span class="sumatif-count">30</span> soal pilihan ganda · <span class="sumatif-minutes">60</span> menit</small></span>
+                        <span class="mc-body"><b>Ujian Sumatif<span class="mc-badge">BARU</span></b><small><span class="ujian-count">30</span> soal pilihan ganda · <span class="ujian-minutes">60</span> menit</small></span>
                         <span class="mc-arrow">›</span>
                     </button>
                 </div>
@@ -575,7 +580,8 @@
             <div class="materi-actions">
                 <button class="btn-main" onclick="startConveyorGame(4, 'math')">Main Game 1: Simbol Matematika</button>
                 <button class="btn-main" style="background:var(--primary-dark); box-shadow:0 6px 0 #312e81;" onclick="startConveyorGame(4, 'logic')">Main Game 2: Logika AND &amp; OR</button>
-                <button class="btn-main btn-exam" onclick="openSumatifIntro()">📝 Ikuti Ujian Sumatif</button>
+                <button class="btn-main btn-secondary" onclick="openSumatifIntro('latihan')">✏️ Kerjakan Latihan Soal</button>
+                <button class="btn-main btn-exam" onclick="openSumatifIntro('sumatif')">📝 Ikuti Ujian Sumatif</button>
             </div>
         </div>
 
@@ -712,9 +718,9 @@
     <div id="sumatifIntroScreen" class="screen hidden">
         <button class="btn-back" onclick="showScreen('classMenuScreen')">⬅ Kembali</button>
         <div class="center-wrap">
-            <div class="hero-emoji">📝</div>
-            <h1>Ujian Sumatif<br>Logika Kelas 4</h1>
-            <p style="max-width:480px;">Uji semua yang sudah kamu pelajari: JIKA, tanda perbandingan, ATAU JIKA, serta AND &amp; OR.</p>
+            <div class="hero-emoji" id="exIntroEmoji">📝</div>
+            <h1 id="exIntroTitle">Ujian Sumatif<br>Logika Kelas 4</h1>
+            <p style="max-width:480px;" id="exIntroDesc">Uji semua yang sudah kamu pelajari: JIKA, tanda perbandingan, ATAU JIKA, serta AND &amp; OR.</p>
 
             <div class="info-grid">
                 <div class="info-chip"><b class="sumatif-count">30</b><span>Soal pilihan ganda</span></div>
@@ -723,7 +729,7 @@
             </div>
 
             <div class="panel-card">
-                <h3>📋 Aturan Ujian</h3>
+                <h3>📋 Aturan</h3>
                 <ul>
                     <li>Jawaban <b>tidak langsung dinilai</b>. Nilai dan pembahasan muncul setelah kamu menekan <b>Kumpulkan</b>.</li>
                     <li>Kamu boleh pindah soal dan mengganti jawaban sebelum dikumpulkan.</li>
@@ -743,7 +749,7 @@
                 <div class="form-err" id="exFormErr"></div>
             </div>
 
-            <button class="btn-main btn-exam" onclick="startSumatif()">Mulai Ujian 🚀</button>
+            <button class="btn-main btn-exam" id="exStartBtn" onclick="startSumatif()">Mulai Ujian 🚀</button>
         </div>
     </div>
 
@@ -1560,12 +1566,12 @@
     }
 
     // =====================================================
-    //  UJIAN SUMATIF KELAS 4
+    //  UJIAN SUMATIF & LATIHAN SOAL KELAS 4
     //  Ubah angka di bawah ini jika perlu.
     // =====================================================
-    const SUMATIF_MINUTES = 60;   // lama ujian (menit)
+    const SUMATIF_MINUTES = 60;   // lama Ujian Sumatif (menit)
+    const LATIHAN_MINUTES = 60;   // lama Latihan Soal (menit)
     const SUMATIF_KKTP = 75;      // batas tuntas (KKTP)
-    const SUMATIF_KEY = 'roboCode_sumatif_k4_v2';
     const SUMATIF_SECTIONS = {
         A: 'Konsep JIKA & JIKA TIDAK',
         B: 'Tanda Perbandingan',
@@ -1582,7 +1588,8 @@
     const NILAI_CODE = ['JIKA ( Nilai >= 90 ) {', '  Dapat_A();', '} ATAU JIKA ( Nilai >= 75 ) {', '  Dapat_B();', '} JIKA TIDAK {', '  Dapat_C();', '}'];
     const PIPA3_CODE = ['JIKA ( Berat > 50 ) {', '  Buang_ke_MERAH();', '} ATAU JIKA ( Suhu > 25 ) {', '  Buang_ke_BIRU();', '} JIKA TIDAK {', '  Buang_ke_HIJAU();', '}'];
 
-    const sumatifSoal = [
+    // ---------- BANK 1: LATIHAN SOAL (30 soal sumatif lama, sekarang untuk latihan) ----------
+    const latihanSoal = [
         // ================= BAGIAN A: KONSEP JIKA & JIKA TIDAK (No. 1–6) =================
         { s:'A', q:'Perintah yang dipakai komputer untuk mengambil keputusan berdasarkan sebuah syarat adalah ....',
           o:['JIKA (IF)', 'ULANGI (LOOP)', 'CETAK (PRINT)', 'SIMPAN (SAVE)'], a:0,
@@ -1729,6 +1736,184 @@
           p:'P: `25 > 20` dan `50 >= 50`, BENAR. Q: `20 > 20` SALAH. R: `45 >= 50` SALAH. S: `50 > 20` dan `90 >= 50`, BENAR. Jadi ada 2 barang (P dan S).' }
     ];
 
+    // ---------- BANK 2: UJIAN SUMATIF (30 soal baru) ----------
+    const SUHU_CODE = ['JIKA ( Suhu >= 35 ) {', '  Nyalakan_AC();', '} ATAU JIKA ( Suhu >= 28 ) {', '  Nyalakan_Kipas();', '} JIKA TIDAK {', '  Buka_Jendela();', '}'];
+    const PIPA_EB_CODE = ['JIKA ( Energi < 20 ) {', '  Buang_ke_MERAH();', '} ATAU JIKA ( Berat >= 40 ) {', '  Buang_ke_BIRU();', '} JIKA TIDAK {', '  Buang_ke_HIJAU();', '}'];
+
+    const ujianSoal = [
+        // ================= BAGIAN A: KONSEP JIKA & JIKA TIDAK (No. 1–6) =================
+        { s:'A', q:'Dalam sebuah program, bagian JIKA TIDAK (ELSE) ditulis di ....',
+          o:['bawah bagian JIKA, sebagai pilihan terakhir', 'atas, sebelum kata JIKA', 'awal program, sebelum ada syarat apa pun', 'dalam tanda kurung syarat'], a:0,
+          p:'JIKA TIDAK selalu ditulis setelah bagian JIKA. Ia menjadi jalan terakhir kalau syarat di atasnya SALAH.' },
+
+        { s:'A', q:'Pintu rumah sedang terkunci. Apa yang dilakukan robot?', fakta:['Pintu = Terkunci'],
+          code:['JIKA ( Pintu == Terkunci ) {', '  Pakai_Kunci();', '} JIKA TIDAK {', '  Langsung_Masuk();', '}'],
+          o:['Pakai Kunci', 'Langsung Masuk', 'Pakai Kunci lalu Langsung Masuk', 'Pulang lagi'], a:0,
+          p:'Pintu memang Terkunci, jadi syaratnya BENAR. Robot menjalankan cabang JIKA: Pakai Kunci.' },
+
+        { s:'A', q:'Gelas Dina sudah penuh berisi air. Apa yang dilakukan Dina?', fakta:['Gelas = Penuh'],
+          code:['JIKA ( Gelas == Kosong ) {', '  Isi_Air();', '} JIKA TIDAK {', '  Minum_Air();', '}'],
+          o:['Minum Air', 'Isi Air', 'Isi Air lalu Minum Air', 'Membuang gelas'], a:0,
+          p:'Gelas Penuh, jadi syarat `Gelas == Kosong` SALAH. Dina menjalankan cabang JIKA TIDAK: Minum Air.' },
+
+        { s:'A', q:'Bayu menulis aturan: "JIKA jam sudah 6 pagi, MAKA bangun tidur." Bagian "jam sudah 6 pagi" disebut ....',
+          o:['syarat (kondisi)', 'tindakan (perintah)', 'hasil akhir', 'nama program'], a:0,
+          p:'Bagian sesudah kata JIKA adalah syarat yang dicek. Bagian sesudah MAKA ("bangun tidur") adalah tindakannya.' },
+
+        { s:'A', q:'Program berikut belum lengkap. Perintah yang paling tepat untuk mengisi ??? adalah ....',
+          code:['JIKA ( Tangan == Kotor ) {', '  ???', '} JIKA TIDAK {', '  Makan_Kue();', '}'],
+          o:['Cuci_Tangan();', 'Makan_Kue();', 'Main_Bola();', 'Tidur_Siang();'], a:0, mono:true,
+          p:'Kalau tangan kotor, kita harus cuci tangan dulu. Kalau tangan sudah bersih, baru boleh makan kue.' },
+
+        { s:'A', q:'Program robot berikut TIDAK punya bagian JIKA TIDAK. Hari ini cuacanya cerah. Apa yang dilakukan robot?', fakta:['Cuaca = Cerah'],
+          code:['JIKA ( Cuaca == Hujan ) {', '  Tutup_Jendela();', '}'],
+          o:['Tidak melakukan apa-apa, perintahnya dilewati', 'Tutup Jendela', 'Buka Jendela', 'Mengulang program terus-menerus'], a:0,
+          p:'Syarat `Cuaca == Hujan` SALAH, jadi Tutup_Jendela dilewati. Karena tidak ada JIKA TIDAK, robot tidak melakukan apa-apa.' },
+
+        // ================= BAGIAN B: TANDA PERBANDINGAN (No. 7–13) =================
+        { s:'B', q:'Tanda `<` dibaca ....',
+          o:['lebih kecil dari', 'lebih besar dari', 'sama dengan', 'lebih besar dari atau sama dengan'], a:0,
+          p:'Tanda < artinya angka di kiri LEBIH KECIL dari angka di kanan. Contoh: `3 < 8`.' },
+
+        { s:'B', q:'Pernyataan berikut yang bernilai SALAH adalah ....',
+          o:['12 <= 11', '6 < 9', '20 >= 20', '5 != 7'], a:0, mono:true,
+          p:'12 tidak lebih kecil dan tidak sama dengan 11, jadi `12 <= 11` SALAH. Tiga pernyataan lainnya BENAR.' },
+
+        { s:'B', q:'Tanda `<=` artinya ....',
+          o:['lebih kecil dari atau sama dengan (maksimal)', 'lebih besar dari atau sama dengan (minimal)', 'lebih kecil dari saja', 'sama persis'], a:0,
+          p:'<= artinya "maksimal" atau "paling banyak". Angka yang pas sama dengan batasnya juga dianggap BENAR.' },
+
+        { s:'B', q:'Tinggi badan Wulan tepat 120 cm. Ke kolam mana Wulan diarahkan?', fakta:['Tinggi Wulan = 120 cm'],
+          code:['JIKA ( Tinggi < 120 ) {', '  Kolam_Anak();', '} JIKA TIDAK {', '  Kolam_Dewasa();', '}'],
+          o:['Kolam Dewasa, karena 120 tidak lebih kecil dari 120', 'Kolam Anak, karena tingginya 120', 'Kolam Anak, karena 120 sama dengan 120', 'Tidak boleh berenang'], a:0,
+          p:'`120 < 120` itu SALAH karena angkanya sama, bukan lebih kecil. Wulan masuk ke cabang JIKA TIDAK: Kolam Dewasa.' },
+
+        { s:'B', q:'Toko memberi diskon jika belanja LEBIH DARI 50 ribu. Belanja tepat 50 ribu belum dapat diskon. Syarat yang tepat adalah ....',
+          o:['Belanja > 50', 'Belanja >= 50', 'Belanja < 50', 'Belanja == 50'], a:0, mono:true,
+          p:'"Lebih dari" ditulis dengan tanda >. Kalau memakai >=, belanja tepat 50 ribu juga ikut dapat diskon.' },
+
+        { s:'B', q:'Nilai ulangan Kiki 100. Apa yang terjadi?', fakta:['Nilai Kiki = 100'],
+          code:['JIKA ( Nilai != 100 ) {', '  Belajar_Lagi();', '} JIKA TIDAK {', '  Diberi_Bintang();', '}'],
+          o:['Diberi Bintang', 'Belajar Lagi', 'Belajar Lagi lalu Diberi Bintang', 'Tidak terjadi apa-apa'], a:0,
+          p:'`100 != 100` artinya "100 tidak sama dengan 100". Itu SALAH, jadi Kiki masuk JIKA TIDAK: Diberi Bintang.' },
+
+        { s:'B', q:'Lift hanya boleh berjalan jika `Penumpang <= 8`. Jumlah penumpang yang membuat lift TIDAK boleh berjalan adalah ....',
+          o:['9 orang', '8 orang', '7 orang', '5 orang'], a:0,
+          p:'`9 <= 8` SALAH karena 9 lebih dari 8. Angka 8, 7, dan 5 semuanya masih boleh (paling banyak 8).' },
+
+        // ================= BAGIAN C: ATURAN BERTINGKAT / ATAU JIKA (No. 14–19) =================
+        { s:'C', q:'Pada aturan bertingkat (JIKA – ATAU JIKA – JIKA TIDAK), bagian JIKA TIDAK dijalankan ketika ....',
+          o:['semua syarat di atasnya SALAH', 'syarat pertama BENAR', 'syarat ATAU JIKA BENAR', 'program baru dimulai'], a:0,
+          p:'Mesin mengecek dari atas. JIKA TIDAK baru dijalankan kalau semua syarat di atasnya SALAH.' },
+
+        { s:'C', q:'Suhu ruang kelas 30 °C. Apa yang dilakukan robot pendingin?', fakta:['Suhu = 30 °C'],
+          code: SUHU_CODE,
+          o:['Nyalakan Kipas', 'Nyalakan AC', 'Buka Jendela', 'Nyalakan AC dan Kipas'], a:0,
+          p:'Baris 1: `30 >= 35` SALAH, turun. Baris 2: `30 >= 28` BENAR, jadi robot Nyalakan Kipas.' },
+
+        { s:'C', q:'Suhu ruang kelas 35 °C. Apa yang dilakukan robot pendingin?', fakta:['Suhu = 35 °C'],
+          code: SUHU_CODE,
+          o:['Nyalakan AC', 'Nyalakan Kipas', 'Buka Jendela', 'Nyalakan AC dan Kipas'], a:0,
+          p:'Baris 1: `35 >= 35` BENAR (ada tanda =). Robot langsung Nyalakan AC dan berhenti mengecek, walaupun baris 2 juga benar.' },
+
+        { s:'C', q:'Suhu ruang kelas 27 °C. Apa yang dilakukan robot pendingin?', fakta:['Suhu = 27 °C'],
+          code: SUHU_CODE,
+          o:['Buka Jendela', 'Nyalakan Kipas', 'Nyalakan AC', 'Tidak melakukan apa-apa'], a:0,
+          p:'`27 >= 35` SALAH dan `27 >= 28` juga SALAH. Semua syarat salah, jadi robot masuk JIKA TIDAK: Buka Jendela.' },
+
+        { s:'C', q:'Ke pipa mana barang berikut dibuang?', fakta:['Energi = 15 %', 'Berat = 60 kg'],
+          code: PIPA_EB_CODE,
+          o:['Pipa MERAH', 'Pipa BIRU', 'Pipa HIJAU', 'Pipa MERAH dan BIRU'], a:0,
+          p:'Baris 1: `15 < 20` BENAR, langsung ke Pipa MERAH. Walaupun `60 >= 40` juga benar, baris 2 tidak dicek lagi.' },
+
+        { s:'C', q:'Ke pipa mana barang berikut dibuang?', fakta:['Energi = 20 %', 'Berat = 40 kg'],
+          code: PIPA_EB_CODE,
+          o:['Pipa BIRU', 'Pipa MERAH', 'Pipa HIJAU', 'Pipa MERAH dan BIRU'], a:0,
+          p:'Baris 1: `20 < 20` SALAH (angkanya sama), turun. Baris 2: `40 >= 40` BENAR, jadi barang ke Pipa BIRU.' },
+
+        // ================= BAGIAN D: LOGIKA AND & OR (No. 20–26) =================
+        { s:'D', q:'`SALAH OR BENAR` hasilnya ....',
+          o:['BENAR', 'SALAH', 'BENAR dan SALAH', 'Tidak bisa ditentukan'], a:0,
+          p:'OR cukup satu syarat yang BENAR. Syarat kedua BENAR, jadi hasilnya BENAR.' },
+
+        { s:'D', q:'Ibu berkata, "Kamu boleh main jika PR sudah selesai DAN kamar sudah rapi." Logika yang dipakai dalam aturan ini adalah ....',
+          o:['AND', 'OR', 'JIKA TIDAK', 'ATAU JIKA'], a:0,
+          p:'Kata "DAN" berarti kedua syarat harus terpenuhi. Itu adalah logika AND.' },
+
+        { s:'D', q:'Ke pipa mana barang berikut dibuang?', fakta:['Suhu = 25 °C', 'Energi = 50 %'],
+          code:['JIKA ( Suhu < 30 AND Energi > 50 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
+          o:['Pipa BIRU', 'Pipa MERAH', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
+          p:'`25 < 30` BENAR, tetapi `50 > 50` SALAH. Dengan AND, satu salah berarti SALAH. Barang ke Pipa BIRU.' },
+
+        { s:'D', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 20 kg', 'Suhu = 10 °C'],
+          code:['JIKA ( Berat > 80 OR Suhu == 10 ) {', '  Buang_ke_MERAH();', '} JIKA TIDAK {', '  Buang_ke_BIRU();', '}'],
+          o:['Pipa MERAH', 'Pipa BIRU', 'Pipa MERAH dan BIRU', 'Barang tidak dibuang'], a:0,
+          p:'`20 > 80` SALAH, tetapi `10 == 10` BENAR. Dengan OR, satu benar sudah cukup. Barang ke Pipa MERAH.' },
+
+        { s:'D', q:'Lomba mewarnai hanya untuk anak berumur 9 sampai 11 tahun. Siapa yang BOLEH ikut?',
+          code:['JIKA ( Umur >= 9 AND Umur <= 11 ) {', '  Boleh_Ikut();', '} JIKA TIDAK {', '  Belum_Boleh();', '}'],
+          o:['Rafi: umur 11 tahun', 'Sela: umur 8 tahun', 'Tegar: umur 12 tahun', 'Umi: umur 7 tahun'], a:0,
+          p:'Rafi: `11 >= 9` BENAR dan `11 <= 11` BENAR. Sela dan Umi terlalu muda, sedangkan Tegar terlalu tua.' },
+
+        { s:'D', q:'Hari ini cuaca cerah, tetapi PR Nanda belum selesai. Apa yang dilakukan Nanda?', fakta:['Cuaca = Cerah', 'PR = Belum'],
+          code:['JIKA ( Cuaca == Cerah AND PR == Selesai ) {', '  Main_di_Luar();', '} JIKA TIDAK {', '  Tetap_di_Rumah();', '}'],
+          o:['Tetap di Rumah', 'Main di Luar', 'Main di Luar lalu Tetap di Rumah', 'Mengerjakan PR di luar'], a:0,
+          p:'`Cuaca == Cerah` BENAR, tetapi `PR == Selesai` SALAH. Dengan AND, satu salah berarti SALAH, jadi Nanda Tetap di Rumah.' },
+
+        { s:'D', q:'Sekarang pukul 16.00 dan cuaca cerah. Apa yang dilakukan lampu taman?', fakta:['Jam = 16', 'Cuaca = Cerah'],
+          code:['JIKA ( Jam >= 18 OR Cuaca == Mendung ) {', '  Nyalakan_Lampu();', '} JIKA TIDAK {', '  Matikan_Lampu();', '}'],
+          o:['Matikan Lampu', 'Nyalakan Lampu', 'Nyalakan Lampu lalu Matikan Lampu', 'Lampu berkedip'], a:0,
+          p:'`16 >= 18` SALAH dan `Cuaca == Mendung` juga SALAH. Dengan OR pun, kalau semua salah hasilnya SALAH. Lampu dimatikan.' },
+
+        // ================= BAGIAN E: ANALISIS & PENALARAN / HOTS (No. 27–30) =================
+        { s:'E', q:'Program medali berikut salah: anak dengan 100 poin malah mendapat medali Perunggu. Cara memperbaikinya adalah ....',
+          code:['JIKA ( Poin >= 50 ) {', '  Medali_Perunggu();', '} ATAU JIKA ( Poin >= 80 ) {', '  Medali_Perak();', '} ATAU JIKA ( Poin >= 95 ) {', '  Medali_Emas();', '}'],
+          o:['Urutkan syaratnya: Poin >= 95 paling atas, lalu Poin >= 80, lalu Poin >= 50', 'Ganti semua tanda >= menjadi <=', 'Hapus syarat Poin >= 95', 'Minta mesin membaca dari bawah ke atas'], a:0,
+          p:'Mesin membaca dari atas. `100 >= 50` langsung BENAR, jadi syarat di bawahnya tidak pernah dicek. Syarat yang paling tinggi harus diletakkan paling atas.' },
+
+        { s:'E', q:'Ke pipa mana barang berikut dibuang?', fakta:['Berat = 35 kg', 'Suhu = 30 °C', 'Energi = 70 %'],
+          code:['JIKA ( Berat > 30 AND Suhu > 30 ) {', '  Buang_ke_MERAH();', '} ATAU JIKA ( Berat > 30 OR Energi == 100 ) {', '  Buang_ke_BIRU();', '} JIKA TIDAK {', '  Buang_ke_HIJAU();', '}'],
+          o:['Pipa BIRU', 'Pipa MERAH', 'Pipa HIJAU', 'Pipa MERAH dan BIRU'], a:0,
+          p:'Baris 1: `35 > 30` BENAR, tetapi `30 > 30` SALAH, jadi AND SALAH. Baris 2: `35 > 30` BENAR, jadi OR BENAR. Barang ke Pipa BIRU.' },
+
+        { s:'E', q:'Agar sebuah barang dibuang ke Pipa HIJAU, berat barang yang tepat adalah ....',
+          code:['JIKA ( Berat > 60 ) {', '  Buang_ke_MERAH();', '} ATAU JIKA ( Berat >= 40 ) {', '  Buang_ke_BIRU();', '} JIKA TIDAK {', '  Buang_ke_HIJAU();', '}'],
+          o:['39 kg', '40 kg', '60 kg', '61 kg'], a:0,
+          p:'39 kg: `39 > 60` SALAH dan `39 >= 40` SALAH, jadi masuk HIJAU. 40 kg dan 60 kg masuk BIRU, sedangkan 61 kg masuk MERAH.' },
+
+        { s:'E', q:'Lima siswa dicek oleh program berikut. Berapa siswa yang Naik Level?',
+          fakta:['Ari: Nilai 70, Tugas 5', 'Beni: Nilai 75, Tugas 3', 'Cici: Nilai 74, Tugas 4', 'Dodi: Nilai 60, Tugas 2', 'Eka: Nilai 90, Tugas 1'],
+          code:['JIKA ( Nilai >= 75 OR Tugas == 5 ) {', '  Naik_Level();', '} JIKA TIDAK {', '  Ulang_Latihan();', '}'],
+          o:['3 siswa', '2 siswa', '4 siswa', '5 siswa'], a:0,
+          p:'Ari: `Tugas == 5` BENAR. Beni: `75 >= 75` BENAR. Eka: `90 >= 75` BENAR. Cici dan Dodi gagal di kedua syarat. Jadi ada 3 siswa (Ari, Beni, Eka).' }
+    ];
+
+    // ---------- Pengaturan dua mode ----------
+    const EXAM_MODES = {
+        sumatif: { bank: ujianSoal, minutes: SUMATIF_MINUTES, key: 'roboCode_sumatif_k4_v3',
+                   title: 'Ujian Sumatif', heading: 'Ujian Sumatif<br>Logika Kelas 4', emoji: '📝',
+                   desc: 'Uji semua yang sudah kamu pelajari: JIKA, tanda perbandingan, ATAU JIKA, serta AND &amp; OR.' },
+        latihan: { bank: latihanSoal, minutes: LATIHAN_MINUTES, key: 'roboCode_sumatif_k4_v2',
+                   title: 'Latihan Soal', heading: 'Latihan Soal<br>Logika Kelas 4', emoji: '✏️',
+                   desc: 'Berlatih dulu sebelum ujian! Bentuk soalnya sama seperti Ujian Sumatif, lengkap dengan nilai dan pembahasan.' }
+    };
+    let examMode = 'sumatif';
+    let sumatifSoal = ujianSoal;   // bank soal yang sedang aktif
+    const MODE = () => EXAM_MODES[examMode];
+
+    function setExamMode(mode) {
+        examMode = EXAM_MODES[mode] ? mode : 'sumatif';
+        sumatifSoal = MODE().bank;
+        const m = MODE();
+        $('exIntroEmoji').innerText = m.emoji;
+        $('exIntroTitle').innerHTML = m.heading;
+        $('exIntroDesc').innerHTML = m.desc;
+        $('exStartBtn').innerText = examMode === 'latihan' ? 'Mulai Latihan 🚀' : 'Mulai Ujian 🚀';
+        $('exStartBtn').className = 'btn-main ' + (examMode === 'latihan' ? 'btn-secondary' : 'btn-exam');
+        document.querySelectorAll('.sumatif-count').forEach(el => el.innerText = m.bank.length);
+        document.querySelectorAll('.sumatif-minutes').forEach(el => el.innerText = m.minutes);
+    }
+
     let ex = null;          // ujian yang sedang berjalan
     let exTimer = null;
     let lastResult = null;
@@ -1761,21 +1946,22 @@
 
     // --- Penyimpanan (agar jawaban tidak hilang jika halaman tertutup) ---
     const CAN_SAVE = (() => { try { const k = '__rc_test'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; } catch (e) { return false; } })();
-    function saveEx() { if (!CAN_SAVE || !ex) return; try { localStorage.setItem(SUMATIF_KEY, JSON.stringify(ex)); } catch (e) {} }
-    function clearEx() { if (!CAN_SAVE) return; try { localStorage.removeItem(SUMATIF_KEY); } catch (e) {} }
+    function saveEx() { if (!CAN_SAVE || !ex) return; try { localStorage.setItem(MODE().key, JSON.stringify(ex)); } catch (e) {} }
+    function clearEx() { if (!CAN_SAVE) return; try { localStorage.removeItem(MODE().key); } catch (e) {} }
     function loadEx() {
         if (CAN_SAVE) {
             try {
-                const d = JSON.parse(localStorage.getItem(SUMATIF_KEY) || 'null');
+                const d = JSON.parse(localStorage.getItem(MODE().key) || 'null');
                 if (d && Array.isArray(d.answers) && d.answers.length === sumatifSoal.length &&
                     Array.isArray(d.order) && d.order.length === sumatifSoal.length && d.deadline) return d;
             } catch (e) {}
         }
-        return ex; // cadangan: ujian yang masih ada di memori
+        return (ex && ex.mode === examMode) ? ex : null; // cadangan: ujian yang masih ada di memori
     }
 
     // --- Layar pembuka ---
-    function openSumatifIntro() {
+    function openSumatifIntro(mode = 'sumatif') {
+        setExamMode(mode);
         $('exFormErr').innerText = '';
         renderResumeBox();
         showScreen('sumatifIntroScreen');
@@ -1788,9 +1974,9 @@
         const answered = saved.answers.filter(a => a !== null).length;
         const left = Math.max(0, Math.ceil((saved.deadline - Date.now()) / 1000));
         box.style.display = 'block';
-        box.innerHTML = `<b>⏸️ Ada ujian yang belum selesai</b>
+        box.innerHTML = `<b>⏸️ Ada ${MODE().title} yang belum selesai</b>
             <p>Atas nama <b>${escHTML(saved.nama)}</b> · terjawab ${answered}/${sumatifSoal.length} · ${left > 0 ? 'sisa waktu ' + fmtTime(left) : 'waktu sudah habis'}</p>
-            <button class="btn-main btn-secondary" onclick="resumeSumatif()">${left > 0 ? '▶️ Lanjutkan Ujian' : '📤 Kumpulkan Jawaban'}</button>`;
+            <button class="btn-main btn-secondary" onclick="resumeSumatif()">${left > 0 ? '▶️ Lanjutkan ' + (examMode === 'latihan' ? 'Latihan' : 'Ujian') : '📤 Kumpulkan Jawaban'}</button>`;
     }
 
     function startSumatif() {
@@ -1806,7 +1992,8 @@
                 order: sumatifSoal.map(s => shuffleArr(s.o.map((_, i) => i))),
                 answers: sumatifSoal.map(() => null),
                 startedAt: now,
-                deadline: now + SUMATIF_MINUTES * 60 * 1000,
+                deadline: now + MODE().minutes * 60 * 1000,
+                mode: examMode,
                 current: 0
             };
             saveEx();
@@ -1815,7 +2002,7 @@
 
         const saved = loadEx();
         if (saved) {
-            askConfirm({ icon: '⚠️', title: 'Mulai ujian baru?', text: `Ujian yang belum selesai atas nama ${saved.nama} akan dihapus.`, okText: 'Ya, Mulai Baru', cancelText: 'Batal', onOk: begin });
+            askConfirm({ icon: '⚠️', title: 'Mulai ujian baru?', text: `${MODE().title} yang belum selesai atas nama ${saved.nama} akan dihapus.`, okText: 'Ya, Mulai Baru', cancelText: 'Batal', onOk: begin });
         } else {
             begin();
         }
@@ -1825,6 +2012,7 @@
         const saved = loadEx();
         if (!saved) return;
         ex = saved;
+        ex.mode = examMode;
         if (Date.now() >= ex.deadline) { submitSumatif(true); return; }
         enterExam();
     }
@@ -1944,9 +2132,9 @@
 
     function exitSumatifRequest() {
         askConfirm({
-            icon: '🚪', title: 'Keluar dari ujian?',
+            icon: '🚪', title: `Keluar dari ${MODE().title}?`,
             text: CAN_SAVE
-                ? 'Jawabanmu tersimpan di perangkat ini dan bisa dilanjutkan dari menu Ujian Sumatif. Waktu ujian tetap berjalan.'
+                ? `Jawabanmu tersimpan di perangkat ini dan bisa dilanjutkan dari menu ${MODE().title}. Waktu tetap berjalan.`
                 : 'Jawabanmu bisa dilanjutkan selama halaman ini tidak ditutup. Waktu ujian tetap berjalan.',
             okText: 'Ya, Keluar', cancelText: 'Lanjut Mengerjakan',
             onOk: () => { clearInterval(exTimer); showScreen('classMenuScreen'); }
@@ -1985,7 +2173,8 @@
             benar, salah, kosong,
             score: Math.round(benar * 100 / total),
             perSec, auto,
-            usedSec: Math.min(SUMATIF_MINUTES * 60, Math.max(0, Math.round((Date.now() - ex.startedAt) / 1000))),
+            mode: examMode,
+            usedSec: Math.min(MODE().minutes * 60, Math.max(0, Math.round((Date.now() - ex.startedAt) / 1000))),
             dateText
         };
         clearEx();
@@ -2000,7 +2189,7 @@
         const p = predikatOf(r.score);
         const tuntas = r.score >= SUMATIF_KKTP;
         $('srIcon').innerText = tuntas ? '🏆' : '📘';
-        $('srTitle').innerText = r.auto ? 'Waktu Habis!' : 'Ujian Selesai!';
+        $('srTitle').innerText = r.auto ? 'Waktu Habis!' : (r.mode === 'latihan' ? 'Latihan Selesai!' : 'Ujian Selesai!');
         $('srTitle').style.color = r.auto ? 'var(--danger)' : 'var(--primary)';
         $('srName').innerText = `${r.nama}${r.absen ? ' · No. Absen ' + r.absen : ''}\n${r.dateText}`;
         $('srScore').innerText = r.score;
@@ -2034,7 +2223,7 @@
         const r = lastResult;
         const p = predikatOf(r.score);
         return [
-            '📝 HASIL UJIAN SUMATIF LOGIKA KELAS 4',
+            `📝 HASIL ${EXAM_MODES[r.mode].title.toUpperCase()} LOGIKA KELAS 4`,
             `Nama     : ${r.nama}`,
             r.absen ? `No. Absen: ${r.absen}` : null,
             `Tanggal  : ${r.dateText}`,
@@ -2071,7 +2260,7 @@
         const r = lastResult;
         if (!r) return;
         document.querySelectorAll('#reviewScreen .chip-btn').forEach(b => b.classList.toggle('active', b.dataset.f === reviewFilter));
-        const html = sumatifSoal.map((s, i) => {
+        const html = EXAM_MODES[r.mode].bank.map((s, i) => {
             const ans = r.answers[i];
             const status = ans === null ? 'empty' : (ans === s.a ? 'ok' : 'bad');
             if (reviewFilter === 'wrong' && status === 'ok') return '';
@@ -2133,8 +2322,11 @@
 
     // --- Inisialisasi label jumlah soal ---
     $('c6CountLabel').innerText = `${c6Levels.length} soal · tanpa batas waktu`;
-    document.querySelectorAll('.sumatif-count').forEach(el => el.innerText = sumatifSoal.length);
-    document.querySelectorAll('.sumatif-minutes').forEach(el => el.innerText = SUMATIF_MINUTES);
+    document.querySelectorAll('.ujian-count').forEach(el => el.innerText = ujianSoal.length);
+    document.querySelectorAll('.ujian-minutes').forEach(el => el.innerText = SUMATIF_MINUTES);
+    document.querySelectorAll('.latihan-count').forEach(el => el.innerText = latihanSoal.length);
+    document.querySelectorAll('.latihan-minutes').forEach(el => el.innerText = LATIHAN_MINUTES);
+    setExamMode('sumatif');
 </script>
 
 </body>
